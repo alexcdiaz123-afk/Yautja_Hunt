@@ -1,0 +1,8 @@
+{
+  "system": "OWLF Project Stargazer - Internal Secure Bus",
+  "facility": "Outpost 74 - Sector 42",
+  "clearance_level": "LEVEL_5_RESTRICTED",
+  "internal_service_key": "stargazer_plasma_matrix_token_87",
+  "craneo_elite_09": "SKULL{ELITE_09_HIDDEN_SECRETS_FOUND}",
+  "note": "Token para autorizar override en el microservicio interno de escudos (Puerto 9090)."
+}

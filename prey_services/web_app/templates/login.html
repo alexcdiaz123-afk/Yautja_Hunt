@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}OWLF - Acceso Científico Clasificado{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 3rem auto;">
+  <div class="card">
+    <div class="card-header">
+      <h2>[+] AUTENTICACIÓN OWLF</h2>
+      <span class="badge-warning">NIVEL 3 REQUERIDO</span>
+    </div>
+
+    <form method="POST" action="/login">
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; margin-bottom: 6px; font-family: var(--owlf-font-mono); color: #00d2ff; font-size: 0.9rem;">
+          IDENTIFICADOR DE CIENTÍFICO / AGENTE:
+        </label>
+        <input type="text" name="username" placeholder="ej. dr_keys" required autofocus autocomplete="off">
+      </div>
+
+      <div style="margin-bottom: 1.5rem;">
+        <label style="display: block; margin-bottom: 6px; font-family: var(--owlf-font-mono); color: #00d2ff; font-size: 0.9rem;">
+          CÓDIGO DE ACCESO / LLAVE TÉRMICA:
+        </label>
+        <input type="password" name="password" placeholder="••••••••••••" required>
+      </div>
+
+      <button type="submit" style="width: 100%;">VALIDAR CREDENCIALES MILITARES</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

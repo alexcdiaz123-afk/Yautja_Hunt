@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}OWLF - Templo Ancestral // Ultimate Hunt{% endblock %}
+
+{% block content %}
+<div class="card" style="border: 2px solid #ff1744; box-shadow: 0 0 25px rgba(255, 23, 68, 0.3);">
+  <div class="card-header" style="border-bottom-color: #ff1744;">
+    <h2 style="color: #ff1744; margin: 0; display: flex; align-items: center; gap: 10px;">
+      <span>[+] TERMINAL DE COMANDO SUPREMO — ULTIMATE HUNT</span>
+    </h2>
+    <span class="badge-skull" style="background: rgba(255, 23, 68, 0.2); border-color: #ff1744; color: #ff1744;">
+      NIVEL ANCESTRAL
+    </span>
+  </div>
+
+  <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6;">
+    Has neutralizado el reactor principal y vulnerado todas las defensas de la presa humana en Outpost 74.
+    Para activar la secuencia de honor ancestral y obtener el <strong>Cráneo Supremo (Skull 15)</strong>, debes introducir la clave de coordenadas ancestrales obtenida tras la sobrecarga del reactor.
+  </p>
+
+  <form method="POST" action="/ultimate_hunt" style="margin: 2rem 0;">
+    <label style="display: block; margin-bottom: 8px; font-family: var(--owlf-font-mono); color: #00e5ff; font-weight: bold; font-size: 0.9rem;">
+      &gt;&gt; INGRESE LA SECUENCIA DE COORDENADAS ANCESTRALES:
+    </label>
+    <div style="display: flex; gap: 10px;">
+      <input type="text" name="ancestral_code" value="{{ entered_code }}" placeholder="ej: YAUTJA_PRIME_ELDER_COORDINATES_X87" required style="margin-bottom: 0;">
+      <button type="submit" class="btn" style="background: #e63946; color: #fff; border-color: #ff1744; white-space: nowrap;">
+        VERIFICAR HONOR ANCESTRAL
+      </button>
+    </div>
+  </form>
+
+  {% if success %}
+    <div style="background: rgba(0, 255, 119, 0.08); border: 2px solid #00ff77; padding: 1.5rem; border-radius: 6px; margin-top: 1.5rem; text-align: center;">
+      <h3 style="color: #00ff77; margin-top: 0; font-size: 1.3rem;">[!] CACERÍA DEFINITIVA COMPLETADA — PROTOCOLO DE HONOR ACTIVADO</h3>
+      <p style="color: #e2e8f0; font-size: 0.95rem;">
+        La presa humana ha sido derrotada en todos los frentes. Tu nombre se inscribe en el salón sagrado de Yautja Prime.
+      </p>
+      <div style="font-family: var(--owlf-font-mono); font-size: 1.4rem; color: #00ff77; font-weight: 900; letter-spacing: 2px; padding: 1rem; background: #000; border: 1px dashed #00ff77; border-radius: 4px; display: inline-block; margin: 1rem 0;">
+        SKULL{ANCESTRAL_15_ULTIMATE_HUNT}
+      </div>
+      <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 0;">
+        Registra este último cráneo en tu Brazalete Yautja para ascender al rango legendario de <strong>Cazador Ancestral (+1000 Honor)</strong>.
+      </p>
+    </div>
+  {% elif error %}
+    <div style="background: rgba(230, 57, 70, 0.15); border: 1px solid #e63946; padding: 1rem; border-radius: 4px; color: #ff6b81; font-family: var(--owlf-font-mono);">
+      {{ error }}
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

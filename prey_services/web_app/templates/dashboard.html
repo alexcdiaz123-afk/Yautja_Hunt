@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}OWLF - Panel Central de Mando{% endblock %}
+
+{% block content %}
+<div class="card" style="border-left: 4px solid #ff4d6d;">
+  <div class="card-header">
+    <h2>[+] ACCESO AUTORIZADO - BIENVENIDO DR. PETER KEYES</h2>
+    <span class="badge-skull">PRESA VULNERADA</span>
+  </div>
+  <p style="color: #cad2c5;">
+    Has penetrado la autenticación perimetral de la presa humana utilizando sus credenciales expuestas.
+  </p>
+
+  <div style="background: rgba(230, 57, 70, 0.1); border: 1px dashed #e63946; padding: 1.2rem; border-radius: 4px; margin: 1.5rem 0;">
+    <h3 style="color: #ff4d6d; margin-bottom: 0.5rem;">[!] CRÁNEO DE CACERÍA OBTENIDO (SKULL 05)</h3>
+    <p style="color: #e0e1dd; margin: 0; font-size: 0.95rem;">
+      Has capturado la llave de la presa. Registra esta flag en tu consola Yautja Engine:
+    </p>
+    <div style="margin-top: 10px; font-size: 1.2rem; font-family: var(--owlf-font-mono); color: #00ff66; font-weight: bold; letter-spacing: 1px;">
+      SKULL{BLOODED_05_PREY_KEY_FOUND}
+    </div>
+  </div>
+
+  <p style="color: #8da9c4; font-size: 0.9rem;">
+    El sistema clasificado de la presa contiene dos herramientas operativas de alto valor táctico:
+  </p>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem;">
+    <div style="background: #080c14; border: 1px solid #1a273b; padding: 1.2rem; border-radius: 4px;">
+      <h3 style="color: #00d2ff; font-size: 1rem;">BÓVEDA DE ESPECÍMENES (SKULL 06)</h3>
+      <p style="color: #9cb3c9; font-size: 0.85rem;">
+        Catálogo de muestras de combate y restos tecnológicos recuperados. El motor de consulta interna es vulnerable a manipulaciones lógicas de consulta.
+      </p>
+      <a href="/specimens" class="btn" style="margin-top: 0.5rem;">EXPLORAR ESPECÍMENES &rarr;</a>
+    </div>
+
+    <div style="background: #080c14; border: 1px solid #1a273b; padding: 1.2rem; border-radius: 4px;">
+      <h3 style="color: #00d2ff; font-size: 1rem;">DIAGNÓSTICO TÉRMICO (SKULLS 07-11)</h3>
+      <p style="color: #9cb3c9; font-size: 0.85rem;">
+        Consola de mantenimiento de enlace de sensores. Ejecuta verificaciones de red e interactúa con el sistema base de la estación para fases de escalada.
+      </p>
+      <a href="/diagnostic" class="btn" style="margin-top: 0.5rem;">CONSOLA DE DIAGNÓSTICO &rarr;</a>
+    </div>
+  </div>
+
+  <div style="margin-top: 1.5rem; background: #080c14; border: 1px solid #2d1a3b; padding: 1.2rem; border-radius: 4px;">
+    <h3 style="color: #d946ef; font-size: 1rem;">[+] FASES FINALES: DEFENSAS INTERNAS & TERMINAL ANCESTRAL (SKULLS 12-15)</h3>
+    <p style="color: #a78bfa; font-size: 0.85rem;">
+      Las defensas internas de plasma y el terminal de mando supremo se encuentran en los sectores profundos de la instalación:
+    </p>
+    <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+      <a href="/internal_plasma_matrix" class="btn" style="border-color: #a855f7; color: #d8b4fe;" target="_blank">MATRIZ DE PLASMA (SKULL 12-14) &rarr;</a>
+      <a href="/ultimate_hunt" class="btn" style="border-color: #ef4444; color: #fca5a5;">TEMPLO ANCESTRAL (SKULL 15) &rarr;</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

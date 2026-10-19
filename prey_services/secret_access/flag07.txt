@@ -1,0 +1,15 @@
+================================================================================
+           OTHER WORLD LIFEFORM TASKFORCE (OWLF) - INTERNAL SYSTEM SHELL
+================================================================================
+[+] ACCESO INICIAL AL HOST DE LA PRESA CONFIRMADO.
+[+] PRIVILEGIO: owlf-agent (UID 1001)
+
+[!] CRÁNEO DE SANGRE OBTENIDO:
+    SKULL{BLOODED_07_INITIAL_ACCESS_GRANTED}
+
+--------------------------------------------------------------------------------
+Has desmantelado las defensas iniciales de la base humana y obtenido acceso
+a su terminal interna. 
+Tu honor como cazador asciende: ¡Ahora portas el rango de CAZADOR ÉLITE!
+Prepárate para la siguiente fase: Enumeración local y escalada de privilegios.
+================================================================================

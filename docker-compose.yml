@@ -1,0 +1,31 @@
+services:
+  # Plataforma Central CTF: Tablero, Rangos, Cráneos, Pistas y Brazalete Yautja
+  yautja-engine:
+    build:
+      context: ./yautja_engine
+      dockerfile: Dockerfile
+    container_name: yautja-engine
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+    networks:
+      - yautja-net
+
+  # Objetivo Vulnerable de la Presa: Portal OWLF Stargazer + Baliza Radar 1987 MHz
+  prey-services:
+    build:
+      context: ./prey_services
+      dockerfile: Dockerfile
+    container_name: prey-target
+    restart: unless-stopped
+    ports:
+      - "8080:80"      # Portal web vulnerable de la presa humana
+      - "1987:1987"    # Baliza de radar de vigilancia perimetral
+    networks:
+      - yautja-net
+
+networks:
+  yautja-net:
+    driver: bridge

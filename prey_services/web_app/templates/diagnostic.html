@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}OWLF - Diagnóstico de Enlace Térmico{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <h2>[+] HERRAMIENTA DE DIAGNÓSTICO DE ENLACE TÉRMICO</h2>
+    <span class="badge-warning">UTILIDAD DE SISTEMA OWLF-NET</span>
+  </div>
+  <p style="color: #9cb3c9; font-size: 0.9rem;">
+    Esta utilidad ejecuta una verificación de conectividad ICMP por socket directo hacia las direcciones IP o nombres de host de las estaciones de sensores térmicos en el perímetro.
+  </p>
+
+  <form method="POST" action="/diagnostic" style="margin: 1.5rem 0;">
+    <label style="display: block; margin-bottom: 6px; font-family: var(--owlf-font-mono); color: #00d2ff; font-size: 0.9rem;">
+      DIRECCIÓN IP O NODO DEL SENSOR TÉRMICO:
+    </label>
+    <div style="display: flex; gap: 10px;">
+      <input type="text" name="target" value="{{ target or '127.0.0.1' }}" placeholder="ej: 127.0.0.1" style="margin-bottom: 0;" required>
+      <button type="submit" style="white-space: nowrap;">EJECUTAR TEST DE ENLACE</button>
+    </div>
+  </form>
+
+  {% if output %}
+    <h3 style="color: #00d2ff; font-size: 0.95rem; margin-top: 1.5rem;">[+] SALIDA DEL SUBSISTEMA DE RED / TERMINAL:</h3>
+    <div class="terminal-box">{{ output }}</div>
+  {% endif %}
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>[!] REGISTRO DE SEGURIDAD INTERNA</h3>
+  </div>
+  <p style="color: #8fa0b5; font-size: 0.85rem; margin: 0;">
+    Aviso: Los registros de acceso y ejecución de comandos en el host se almacenan en <code>secret_access/flag07.txt</code>. Cualquier alteración de delimitadores será auditada.
+  </p>
+</div>
+{% endblock %}

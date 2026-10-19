@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}OWLF Project Stargazer - Outpost 74{% endblock %}</title>
+  <link rel="stylesheet" href="/static/css/owlf_theme.css">
+</head>
+<body>
+  <header>
+    <div class="brand-badge">
+      <span class="indicator"></span>
+      OWLF // STARGAZER OUTPOST 74
+    </div>
+    <nav>
+      <a href="/">[ESTADO BASE]</a>
+      <a href="/telemetry_vault/">[TELEMETRÍA]</a>
+      {% if session.get('user') %}
+        <a href="/dashboard">[PANEL CONTROL]</a>
+        <a href="/specimens">[ESPECÍMENES]</a>
+        <a href="/diagnostic">[DIAGNÓSTICO]</a>
+        <a href="/logout" style="color: #ff4d6d;">[SALIR ({{ session.get('user') }})]</a>
+      {% else %}
+        <a href="/login">[ACCESO CIENTÍFICO]</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  <div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="card" style="border-left: 4px solid {% if category == 'error' %}#e63946{% else %}#00ff66{% endif %}; padding: 1rem; margin-bottom: 1rem;">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </div>
+
+  <footer>
+    OTHER WORLD LIFEFORM TASKFORCE // PROJECT STARGAZER DIVISION<br>
+    CONFIDENTIAL SYSTEM RECORD &copy; 1987-2026 VAL VERDE SURVEILLANCE SECTOR
+  </footer>
+</body>
+</html>

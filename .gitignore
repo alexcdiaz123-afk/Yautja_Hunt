@@ -1,0 +1,27 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# OS and temporary files
+.DS_Store
+Thumbs.db
+*.tmp
+*.log
+!prey_services/secret_access/cron_audit.log
+
+# Exclude documentation and report generator per user request
+docs/
+*.docx
+scripts/build_informe_docx.py
+
+# Vital hidden files for challenges
+!prey_services/secret_access/.internal_token

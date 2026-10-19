@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YAUTJA HUNT - Plataforma CTF de Hacking Ético</title>
+  <link rel="icon" type="image/png" href="/static/assets/predator_logo.png">
+  <link rel="stylesheet" href="/static/css/yautja_theme.css">
+</head>
+<body>
+  <header>
+    <div class="brand-title">
+      <img src="/static/assets/predator_logo.png" alt="Predator Mask Logo" class="predator-header-logo" title="Clan Yautja">
+      <span>YAUTJA HUNT // MOTOR CTF</span>
+    </div>
+
+    <div class="hud-stats-bar">
+      <div class="stat-item">
+        <span class="stat-label">HONOR YAUTJA</span>
+        <span class="stat-value" id="hudHonor">1000</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">CRÁNEOS COBRADOS</span>
+        <span class="stat-value" id="hudSkullsCount" style="color: #ff3b3b;">0 / 15</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">RANGO ACTUAL</span>
+        <span class="stat-value" id="hudRank" style="color: #ff7733; font-size: 0.95rem;">Iniciado</span>
+      </div>
+
+      <button class="btn-hunt" onclick="openArmasModal()" style="padding: 6px 12px; font-size: 0.85rem; border-color: #ff9900; color: #ffaa00;" title="Arsenal de cacería y herramientas de Kali Linux">
+        ⚔️ ARMAS YAUTJA
+      </button>
+
+      <button class="btn-hunt" onclick="openBrazaleteModal()" style="padding: 6px 12px; font-size: 0.85rem; border-color: #00d2ff; color: #00d2ff;">
+        📟 BRAZALETE YAUTJA
+      </button>
+
+      <button class="btn-hunt" id="btnVision" onclick="toggleVisionMode()" style="padding: 6px 12px; font-size: 0.85rem;">
+        VISIÓN: BIOMÁSCARA
+      </button>
+
+      <button class="btn-hunt" onclick="resetLab()" style="padding: 6px 10px; font-size: 0.75rem; border-color: #555; color: #888;">
+        ↺ REINICIAR
+      </button>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Rank Progression Banner -->
+    <div class="rank-banner" style="position: relative; overflow: hidden;">
+      <img src="/static/assets/predator_logo.png" alt="" class="predator-watermark">
+      <div>
+        <div style="font-size: 0.75rem; color: #885555; letter-spacing: 2px;">ASCENSO DE CACERÍA</div>
+        <div class="rank-title" id="rankBannerTitle">RANGO ACTUAL: INICIADO</div>
+      </div>
+      <div style="font-size: 0.85rem; color: #a89494; text-align: right; z-index: 2;">
+        Sangre Joven (1-3) &rarr; Sangrado (4-7) &rarr; Élite (8-11) &rarr; Anciano (12-14) &rarr; Ancestral (15)
+      </div>
+    </div>
+
+    <!-- Trophy Skulls Display (15 Cráneos) -->
+    <div class="trophy-section">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+        <span style="font-size: 0.85rem; font-weight: bold; color: var(--y-red); letter-spacing: 2px;">
+          [ SALA DE TROFEOS - CRÁNEOS DE CACERÍA ]
+        </span>
+        <span style="font-size: 0.75rem; color: var(--y-text-muted);">
+          Cada flag representa un cráneo capturado de la presa
+        </span>
+      </div>
+      <div class="trophy-grid" id="trophyRack">
+        <!-- Rendered dynamically by JS -->
+      </div>
+    </div>
+
+    <!-- Flag Submission Console -->
+    <div class="submission-card">
+      <div style="font-size: 0.85rem; font-weight: bold; color: var(--y-red); margin-bottom: 8px; letter-spacing: 1px;">
+        &gt;&gt; CONSOLA DE REGISTRO DE CRÁNEO (ENVIAR FLAG)
+      </div>
+      <form class="submission-form" id="flagForm">
+        <input type="text" class="flag-input" id="flagInput" placeholder="Ingresa la flag encontrada (ej: SKULL{YOUNG_BLOOD_01_...})" autocomplete="off" required>
+        <button type="submit" class="btn-hunt">RECLAMAR CRÁNEO</button>
+      </form>
+      <div id="flagStatusMsg" style="margin-top: 8px; font-size: 0.85rem; min-height: 20px;"></div>
+    </div>
+
+    <!-- Tactical Scanner Theory Banner (Active in Thermal Mode) -->
+    <div id="thermalModeBanner" class="thermal-mode-banner" style="display: none;">
+      <span class="thermal-triangle-icon">▲</span>
+      <div>
+        <div style="color: #00e5ff; font-weight: 900; font-size: 1.05rem; letter-spacing: 1px;">
+          ESCÁNER TÁCTICO ACTIVADO — GUÍA TEÓRICA DE PENTESTING
+        </div>
+        <div style="font-size: 0.85rem; color: #80d8ff; margin-top: 4px; line-height: 1.4;">
+          El visor térmico analiza los vectores de ataque y expone el marco conceptual, herramientas y buenas prácticas de seguridad para orientar la cacería sin revelar las flags directas.
+        </div>
+      </div>
+    </div>
+
+    <!-- Challenges Grid -->
+    <div style="font-size: 1rem; font-weight: bold; color: var(--y-red); letter-spacing: 2px; margin-bottom: 1rem;">
+      [ RETOS ACTIVOS DE CACERÍA ]
+    </div>
+    <div class="challenges-grid" id="challengesList">
+      <!-- Injected by app.js -->
+    </div>
+  </div>
+
+  <!-- Brazalete Yautja Modal (Wrist Gauntlet Computer) -->
+  <div class="modal-overlay" id="brazaleteModal">
+    <div class="modal-card">
+      <button class="btn-close-modal" onclick="closeBrazaleteModal()">✕ CERRAR</button>
+      <div style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #331111; padding-bottom: 0.8rem; margin-bottom: 1rem;">
+        <img src="/static/assets/predator_logo.png" alt="Predator Emblem" style="height: 38px; filter: drop-shadow(0 0 8px rgba(255, 34, 34, 0.8));">
+        <h2 style="color: var(--y-red); margin: 0; letter-spacing: 2px; font-size: 1.25rem;">
+          BRAZALETE DE MUÑECA YAUTJA (GAUNTLET INTERACTIVO)
+        </h2>
+      </div>
+      <p style="color: #bbb; font-size: 0.85rem; line-height: 1.5;">
+        Computadora táctica de muñeca del cazador Yautja. Contiene la matriz de correspondencia del sistema de escritura (Alfabeto A-Z y Números 0-9) y el transceptor de telemetría. Utiliza este brazalete para descifrar las pistas de los cráneos o transcribir órdenes en glifos.
+      </p>
+
+      <div style="margin: 1.5rem 0;">
+        <label style="display: block; font-size: 0.8rem; color: #ff5500; margin-bottom: 6px;">
+          INTERFAZ DE ENTRADA DEL BRAZALETE (ESCRIBE TEXTO LATINO):
+        </label>
+        <input type="text" id="translatorInput" class="flag-input" style="font-size: 0.95rem; padding: 8px 12px; margin-bottom: 10px;" placeholder="Escribe aquí para transcribir a glifos en tu muñequera...">
+        <div id="translatorOutput" style="background: #000; border: 1px solid #331111; padding: 12px; border-radius: 4px; min-height: 48px;">
+          <!-- Live glyph translation preview -->
+        </div>
+      </div>
+
+      <h3 style="color: #00d2ff; font-size: 0.95rem; margin-bottom: 0.8rem;">
+        MATRIZ DE GLIFOS Y SÍMBOLOS DEL BRAZALETE:
+      </h3>
+      <div id="brazaleteAlphabetGrid"></div>
+    </div>
+  </div>
+
+  <!-- Armas Yautja Modal (Arsenal de Cacería / Kali Linux) -->
+  <div class="modal-overlay" id="armasModal">
+    <div class="modal-card" style="max-width: 950px;">
+      <button class="btn-close-modal" onclick="closeArmasModal()">✕ CERRAR</button>
+      <div style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #441818; padding-bottom: 0.8rem; margin-bottom: 1rem;">
+        <span style="font-size: 1.8rem;">⚔️</span>
+        <div>
+          <h2 style="color: #ff9900; margin: 0; letter-spacing: 2px; font-size: 1.25rem;">
+            ARSENAL YAUTJA // HERRAMIENTAS DE CACERÍA EN KALI LINUX
+          </h2>
+          <div style="color: #aa7777; font-size: 0.8rem; margin-top: 2px;">
+            Armamento tecnológico alienígena homologado con las herramientas estándar de pentesting disponibles en Kali Linux.
+          </div>
+        </div>
+      </div>
+      <p style="color: #bbb; font-size: 0.85rem; line-height: 1.5; margin-bottom: 1rem;">
+        Cada arma de la casta Yautja representa un vector de ataque y reconocimiento. Haz clic en <strong>[VER EN KALI DOCS ↗]</strong> para acceder a la guía oficial de la herramienta, o copia el comando sugerido para ejecutarlo en tu terminal de Kali Linux.
+      </p>
+
+      <div class="armas-grid">
+        <!-- Arma 1: Plasmacaster / Nmap -->
+        <div class="arma-card">
+          <div>
+            <div class="arma-header">
+              <span class="arma-title">💥 CAÑÓN DE PLASMA</span>
+              <span class="arma-kali-badge">KALI: NMAP</span>
+            </div>
+            <div class="arma-target-tag">🎯 OBJETIVO: SKULL 01 (RECONOCIMIENTO)</div>
+            <p class="arma-desc">
+              Escaneo electromagnético perimetral de frecuencias y puertos TCP/UDP abiertos en la presa, identificando servicios y firmas de versión.
+            </p>
+            <div class="arma-cmd-box">
+              <code>nmap -p- -sV -T4 &lt;IP_PRESA&gt;</code>
+              <button class="btn-copy-cmd" onclick="copyArmaCmd('nmap -p- -sV -T4 127.0.0.1')">Copiar</button>
+            </div>
+          </div>
+          <a href="https://www.kali.org/tools/nmap/" target="_blank" rel="noopener noreferrer" class="arma-link-btn">
+            VER EN KALI DOCS ↗
+          </a>
+        </div>
+
+        <!-- Arma 2: Wrist Blades / Netcat -->
+        <div class="arma-card">
+          <div>
+            <div class="arma-header">
+              <span class="arma-title">🗡️ CUCHILLAS DE MUÑECA</span>
+              <span class="arma-kali-badge">KALI: NETCAT (NC)</span>
+            </div>
+            <div class="arma-target-tag">🎯 OBJETIVO: SKULL 01 (BALIZA RADAR)</div>
+            <p class="arma-desc">
+              Conexión directa cuerpo a cuerpo contra puertos y sockets TCP crudos. Permite interceptar transmisiones de radar y banners sin intermediarios.
+            </p>
+            <div class="arma-cmd-box">
+              <code>nc -vn &lt;IP_PRESA&gt; 1987</code>
+              <button class="btn-copy-cmd" onclick="copyArmaCmd('nc -vn 127.0.0.1 1987')">Copiar</button>
+            </div>
+          </div>
+          <a href="https://www.kali.org/tools/netcat/" target="_blank" rel="noopener noreferrer" class="arma-link-btn">
+            VER EN KALI DOCS ↗
+          </a>
+        </div>
+
+        <!-- Arma 3: Biomask Spectral Zoom / cURL -->
+        <div class="arma-card">
+          <div>
+            <div class="arma-header">
+              <span class="arma-title">👁️ ZOOM ESPECTRAL</span>
+              <span class="arma-kali-badge">KALI: CURL / WHATWEB</span>
+            </div>
+            <div class="arma-target-tag">🎯 OBJETIVO: SKULL 02 &amp; SKULL 12/13</div>
+            <p class="arma-desc">
+              Inspección de metadatos invisibles en cabeceras HTTP (Banner Grabbing) y consumo de microservicios REST internos con paso de tokens.
+            </p>
+            <div class="arma-cmd-box">
+              <code>curl -I http://&lt;IP&gt;:8080/</code>
+              <button class="btn-copy-cmd" onclick="copyArmaCmd('curl -I http://127.0.0.1:8080/')">Copiar</button>
+            </div>
+          </div>
+          <a href="https://www.kali.org/tools/curl/" target="_blank" rel="noopener noreferrer" class="arma-link-btn">
+            VER EN KALI DOCS ↗
+          </a>
+        </div>
+
+        <!-- Arma 4: Net Launcher / Gobuster -->
+        <div class="arma-card">
+          <div>
+            <div class="arma-header">
+              <span class="arma-title">🕸️ LANZADOR DE RED</span>
+              <span class="arma-kali-badge">KALI: GOBUSTER / DIRB</span>
+            </div>
+            <div class="arma-target-tag">🎯 OBJETIVO: SKULL 03 &amp; SKULL 04</div>
+            <p class="arma-desc">
+              Fuzzing de alta velocidad para atrapar directorios ocultos, rutas denegadas en robots.txt y copias de seguridad (.env, .bak) huérfanas en el servidor.
+            </p>
+            <div class="arma-cmd-box">
+              <code>gobuster dir -u http://&lt;IP&gt;:8080 -w /usr/share/wordlists/dirb/common.txt -x env,bak,txt</code>
+              <button class="btn-copy-cmd" onclick="copyArmaCmd('gobuster dir -u http://127.0.0.1:8080 -w /usr/share/wordlists/dirb/common.txt -x env,bak,txt')">Copiar</button>
+            </div>
+          </div>
+          <a href="https://www.kali.org/tools/gobuster/" target="_blank" rel="noopener noreferrer" class="arma-link-btn">
+            VER EN KALI DOCS ↗
+          </a>
+        </div>
+
+        <!-- Arma 5: Combistick / Burp Suite -->
+        <div class="arma-card">
+          <div>
+            <div class="arma-header">
+              <span class="arma-title">🪓 LANZA COMBISTICK</span>
+              <span class="arma-kali-badge">KALI: BURP SUITE</span>
+            </div>
+            <div class="arma-target-tag">🎯 OBJETIVO: SKULL 05 &amp; SKULL 07</div>
+            <p class="arma-desc">
+              Interceptación precisa de transmisiones HTTP. Permite manipular parámetros en peticiones de login, inyectar comandos de sistema operativo y evadir defensas.
+            </p>
+            <div class="arma-cmd-box">
+              <code>burpsuite &amp;</code>
+              <button class="btn-copy-cmd" onclick="copyArmaCmd('burpsuite &')">Copiar</button>
+            </div>
+          </div>
+          <a href="https://www.kali.org/tools/burpsuite/" target="_blank" rel="noopener noreferrer" class="arma-link-btn">
+            VER EN KALI DOCS ↗
+          </a>
+        </div>
+
+        <!-- Arma 6: Smart Disc / SQLMap -->
+        <div class="arma-card">
+          <div>
+            <div class="arma-header">
+              <span class="arma-title">💿 DISCO INTELIGENTE</span>
+              <span class="arma-kali-badge">KALI: SQLMAP</span>
+            </div>
+            <div class="arma-target-tag">🎯 OBJETIVO: SKULL 06 (INYECCIÓN SQL)</div>
+            <p class="arma-desc">
+              Proyectil guiado contra bases de datos relacionales (SQLite/MySQL). Automatiza la extracción de tablas clasificadas mediante inyecciones booleanas y UNION.
+            </p>
+            <div class="arma-cmd-box">
+              <code>sqlmap -u "http://&lt;IP&gt;:8080/specimens?q=test" --batch</code>
+              <button class="btn-copy-cmd" onclick="copyArmaCmd('sqlmap -u \"http://127.0.0.1:8080/specimens?q=test\" --batch')">Copiar</button>
+            </div>
+          </div>
+          <a href="https://www.kali.org/tools/sqlmap/" target="_blank" rel="noopener noreferrer" class="arma-link-btn">
+            VER EN KALI DOCS ↗
+          </a>
+        </div>
+
+        <!-- Arma 7: Dispositivo de Autodestrucción / LinPEAS & GTFOBins -->
+        <div class="arma-card">
+          <div>
+            <div class="arma-header">
+              <span class="arma-title">⚡ SECUENCIA DE MUÑECA</span>
+              <span class="arma-kali-badge">KALI: GTFOBINS / SUID</span>
+            </div>
+            <div class="arma-target-tag">🎯 OBJETIVO: SKULLS 08, 09, 10 &amp; 11</div>
+            <p class="arma-desc">
+              Escalada vertical de privilegios. Audita el sistema en busca de scripts SUID, tareas cron desatendidas y binarios vulnerables para reclamar el control de ROOT.
+            </p>
+            <div class="arma-cmd-box">
+              <code>find / -perm -4000 -type f 2&gt;/dev/null</code>
+              <button class="btn-copy-cmd" onclick="copyArmaCmd('find / -perm -4000 -type f 2>/dev/null')">Copiar</button>
+            </div>
+          </div>
+          <a href="https://gtfobins.github.io/" target="_blank" rel="noopener noreferrer" class="arma-link-btn">
+            VER EN GTFOBINS ↗
+          </a>
+        </div>
+
+        <!-- Arma 8: Camuflaje Óptico / Pivoting & Proxychains -->
+        <div class="arma-card">
+          <div>
+            <div class="arma-header">
+              <span class="arma-title">🌀 CAMUFLAJE ÓPTICO</span>
+              <span class="arma-kali-badge">KALI: PROXYCHAINS / CHISEL</span>
+            </div>
+            <div class="arma-target-tag">🎯 OBJETIVO: SKULLS 12, 13, 14 &amp; 15</div>
+            <p class="arma-desc">
+              Invisibilidad y túneles de movimiento lateral. Enruta tráfico a través de proxies para acceder a servicios que solo escuchan en la interfaz loopback (127.0.0.1).
+            </p>
+            <div class="arma-cmd-box">
+              <code>proxychains curl -s http://127.0.0.1:8080/internal_plasma_matrix</code>
+              <button class="btn-copy-cmd" onclick="copyArmaCmd('proxychains curl -s http://127.0.0.1:8080/internal_plasma_matrix')">Copiar</button>
+            </div>
+          </div>
+          <a href="https://www.kali.org/tools/proxychains-ng/" target="_blank" rel="noopener noreferrer" class="arma-link-btn">
+            VER EN KALI DOCS ↗
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer style="text-align: center; padding: 2.5rem 0; color: #553333; font-size: 0.8rem;">
+    YAUTJA HUNT &copy; 2026 - CAPTURA LA BANDERA DE HACKING ÉTICO // UNIVERSIDAD DE CUNDINAMARCA
+  </footer>
+
+  <script src="/static/js/yautja_glyphs.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,604 @@
+{
+  "challenges": [
+    {
+      "id": "skull_01",
+      "number": 1,
+      "title": "Skull 01 — Reconocimiento del Territorio",
+      "rank": "Sangre Joven",
+      "difficulty": "Baja",
+      "points": 100,
+      "skill": "Descubrimiento de servicios y mapeo de red",
+      "flag": "SKULL{YOUNG_BLOOD_01_TERRITORY_RECON}",
+      "description": "El cazador Yautja llega a la órbita de un puesto de avanzada humano de investigación clasificada (OWLF Outpost 74). Antes de descender a cazar, debes escanear el espectro electromagnético e identificar los puertos y servicios activos de la presa.",
+      "theory": {
+        "concept": "El reconocimiento activo en pruebas de penetración consiste en mapear la superficie de ataque e identificar puertos TCP/UDP abiertos y servicios expuestos sin interactuar de forma intrusiva.",
+        "tools": "Nmap (escaneo SYN, Connect y rango completo -p-), Netcat, Masscan.",
+        "approach": "Realizar un barrido de puertos sobre el host objetivo. Prestar atención a puertos no estándar o altos fuera de los primeros 1024, donde los administradores suelen ubicar balizas o servicios de telemetría.",
+        "mitigation": "Cerrar todo puerto no esencial, configurar reglas de firewall perimetral (iptables/UFW) y aplicar el principio de superficie mínima de exposición."
+      },
+      "hints": [
+        {
+          "level": 1,
+          "title": "Pista Narrativa",
+          "cost": 10,
+          "yautja_text": "EL CAZADOR DEBE OBSERVAR EL ESPECTRO DE LA PRESA EN EL ANO DEL PRIMER CONTACTO",
+          "plain_text": "El cazador debe observar el espectro de la presa en el año del primer contacto (1987)."
+        },
+        {
+          "level": 2,
+          "title": "Pista Técnica",
+          "cost": 25,
+          "yautja_text": "UN RADAR MILITAR OWLF TRANSMITE EN EL PUERTO 1987",
+          "plain_text": "Un radar militar OWLF transmite en el puerto 1987. Realiza un escaneo de puertos con Nmap (-p-) o prueba puertos altos."
+        },
+        {
+          "level": 3,
+          "title": "Pista Directa",
+          "cost": 50,
+          "yautja_text": "EJECUTA NC IP 1987 PARA RECIBIR LA TELEMETRIA Y EL CRANEO",
+          "plain_text": "Conéctate mediante netcat o telnet: 'nc <IP_OBJETIVO> 1987' para recibir la transmisión del radar y el primer cráneo."
+        }
+      ]
+    },
+    {
+      "id": "skull_02",
+      "number": 2,
+      "title": "Skull 02 — Huellas de la Presa",
+      "rank": "Sangre Joven",
+      "difficulty": "Baja",
+      "points": 100,
+      "skill": "Banner grabbing e identificación de versiones/cabeceras",
+      "flag": "SKULL{YOUNG_BLOOD_02_BANNER_TRACES}",
+      "description": "Los humanos dejan marcas sutiles en sus transmisiones. Analiza a fondo las cabeceras HTTP y banners de los servicios web expuestos para detectar la firma del laboratorio secreto.",
+      "theory": {
+        "concept": "El Banner Grabbing es la inspección de cadenas de texto y metadatos que los servidores web y demonios de red transmiten en sus encabezados para anunciar versiones de software, arquitecturas o variables de depuración interna.",
+        "tools": "cURL (curl -I / curl -v), WhatWeb, Nmap (-sV), Burp Suite.",
+        "approach": "Inspeccionar las respuestas del servidor HTTP en busca de cabeceras no estándar (con prefijos como 'X-') que los desarrolladores suelen olvidar activas.",
+        "mitigation": "Deshabilitar las firmas del servidor web (ServerTokens Prod) y eliminar cabeceras de depuración interna antes de desplegar en producción."
+      },
+      "hints": [
+        {
+          "level": 1,
+          "title": "Pista Narrativa",
+          "cost": 10,
+          "yautja_text": "CADA PRESA DEJA SU HUELLA INVISIBLE EN EL ENCABEZADO DE SUS MENSAJES",
+          "plain_text": "Cada presa deja su huella invisible en el encabezado de sus mensajes."
+        },
+        {
+          "level": 2,
+          "title": "Pista Técnica",
+          "cost": 25,
+          "yautja_text": "INSPECCIONA LAS CABECERAS HTTP DEL PUERTO 8080 CON CURL",
+          "plain_text": "Inspecciona las cabeceras HTTP del servidor web (puerto 8080 / 80) utilizando 'curl -I http://<IP>:8080/'."
+        },
+        {
+          "level": 3,
+          "title": "Pista Directa",
+          "cost": 50,
+          "yautja_text": "REVISA LA CABECERA X SPECIMEN TRACES EN LA RESPUESTA HTTP",
+          "plain_text": "La cabecera 'X-Specimen-Traces' contiene directamente la flag del Cráneo 02."
+        }
+      ]
+    },
+    {
+      "id": "skull_03",
+      "number": 3,
+      "title": "Skull 03 — La Entrada",
+      "rank": "Sangre Joven",
+      "difficulty": "Baja",
+      "points": 100,
+      "skill": "Descubrimiento de recursos web y enumeración de rutas",
+      "flag": "SKULL{YOUNG_BLOOD_03_WEB_ENTRY_DISCOVERED}",
+      "description": "El puesto de investigación científica de la presa cuenta con un portal web. Encuentra las entradas que los ingenieros intentaron ocultar a los rastreadores automáticos y explora las bóvedas de telemetría.",
+      "theory": {
+        "concept": "El archivo robots.txt instruye a los motores de búsqueda sobre qué rutas no deben indexar públicamente. Sin embargo, no proporciona control de acceso; al ser público, a menudo revela la ubicación exacta de rutas confidenciales.",
+        "tools": "Inspección de código fuente HTML (Ctrl+U), cURL, Gobuster, Dirb, Feroxbuster.",
+        "approach": "Consultar la raíz del servidor en busca de `/robots.txt` para identificar directorios 'Disallow'. Luego, navegar hacia ellos e inspeccionar comentarios ocultos en el código HTML.",
+        "mitigation": "Nunca usar robots.txt para ocultar información sensible. La protección de rutas debe implementarse con autenticación y autorización en el servidor."
+      },
+      "hints": [
+        {
+          "level": 1,
+          "title": "Pista Narrativa",
+          "cost": 10,
+          "yautja_text": "LOS HUMANOS ESCRIBEN REGLAS PARA QUE LOS AUTOMATAS NO VEAN SUS SECRETOS",
+          "plain_text": "Los humanos escriben reglas para que los autómatas no vean sus secretos (robots.txt)."
+        },
+        {
+          "level": 2,
+          "title": "Pista Técnica",
+          "cost": 25,
+          "yautja_text": "CONSULTA ROBOTS TXT Y ENTRA EN TELEMETRY VAULT",
+          "plain_text": "Consulta 'http://<IP>:8080/robots.txt' para ver las rutas deshabilitadas e ingresa a '/telemetry_vault/'."
+        },
+        {
+          "level": 3,
+          "title": "Pista Directa",
+          "cost": 50,
+          "yautja_text": "INSPECCIONA EL CODIGO FUENTE HTML EN TELEMETRY VAULT",
+          "plain_text": "En '/telemetry_vault/', haz clic derecho y mira el código fuente HTML (Ctrl+U); la flag está oculta en un comentario de registro de avistamiento."
+        }
+      ]
+    },
+    {
+      "id": "skull_04",
+      "number": 4,
+      "title": "Skull 04 — Información Expuesta",
+      "rank": "Sangrado",
+      "difficulty": "Baja-media",
+      "points": 100,
+      "skill": "Análisis de información expuesta y fugas de configuración",
+      "flag": "SKULL{BLOODED_04_EXPOSED_INTEL}",
+      "description": "Los científicos humanos del Proyecto Stargazer cometieron un grave error de seguridad operacional al dejar copias de seguridad de sus archivos de configuración y notas clasificados al alcance del cazador.",
+      "theory": {
+        "concept": "La fuga de información en archivos de respaldo (.env, .bak, .old) ocurre cuando copias temporales o archivos de variables de entorno quedan accesibles en el árbol web sin restricción de descarga (CWE-552).",
+        "tools": "cURL, FFUF, Gobuster con listas de extensiones sensibles (.env, .bak, .sql, .conf).",
+        "approach": "Examinar directorios de respaldo o almacenamiento identificados en fases anteriores. Descargar y auditar archivos de configuración en busca de contraseñas, usuarios y parámetros del sistema.",
+        "mitigation": "Bloquear en el servidor web el acceso a extensiones como .env y .bak, y ubicar las copias de seguridad fuera del directorio raíz web público."
+      },
+      "hints": [
+        {
+          "level": 1,
+          "title": "Pista Narrativa",
+          "cost": 10,
+          "yautja_text": "UN COBARDE DEJA SUS COPIAS DE SEGURIDAD AL DESCUBIERTO EN EL CAMPAMENTO",
+          "plain_text": "Un cobarde deja sus copias de seguridad al descubierto en el campamento."
+        },
+        {
+          "level": 2,
+          "title": "Pista Técnica",
+          "cost": 25,
+          "yautja_text": "REVISA LA CARPETA SPECIMEN BACKUP REVELADA EN ROBOTS",
+          "plain_text": "Revisa la carpeta '/specimen_backup/' indicada en el archivo robots.txt o busca archivos con extensión .env y .bak."
+        },
+        {
+          "level": 3,
+          "title": "Pista Directa",
+          "cost": 50,
+          "yautja_text": "DESCARGA SYSTEM KEYS ENV O RESEARCH NOTES BAK",
+          "plain_text": "Descarga 'http://<IP>:8080/specimen_backup/system_keys.env'. Contiene la flag del Cráneo 04 y las credenciales del Dr. Keyes."
+        }
+      ]
+    },
+    {
+      "id": "skull_05",
+      "number": 5,
+      "title": "Skull 05 — La Presa Tiene una Llave",
+      "rank": "Sangrado",
+      "difficulty": "Baja-media",
+      "points": 100,
+      "skill": "Identificación y validación de credenciales débiles/expuestas",
+      "flag": "SKULL{BLOODED_05_PREY_KEY_FOUND}",
+      "description": "Utiliza las credenciales descubiertas en la información expuesta para infiltrarte en el panel científico central del Dr. Peter Keyes.",
+      "theory": {
+        "concept": "Las vulnerabilidades de autenticación rota (Broken Authentication) permiten a un atacante comprometer contraseñas débiles, valores por defecto o credenciales temporales documentadas en notas operativas.",
+        "tools": "Burp Suite, verificación manual de credenciales descubiertas en fases previas, Hydra.",
+        "approach": "Correlacionar los nombres de usuario y contraseñas filtrados en archivos de notas o variables de entorno con los portales de autenticación descubiertos.",
+        "mitigation": "Exigir contraseñas robustas, obligar al cambio en el primer inicio de sesión, implementar bloqueo de cuentas por intentos fallidos y autenticación multifactor (MFA)."
+      },
+      "hints": [
+        {
+          "level": 1,
+          "title": "Pista Narrativa",
+          "cost": 10,
+          "yautja_text": "EL LIDER HUMANO GUARDA LA LLAVE DE SU BASTION CON EL NOMBRE DE SU CIENCIA",
+          "plain_text": "El líder humano guarda la llave de su bastión con el nombre de su ciencia."
+        },
+        {
+          "level": 2,
+          "title": "Pista Técnica",
+          "cost": 25,
+          "yautja_text": "USA EL USUARIO DR KEYS EN EL FORMULARIO DE LOGIN",
+          "plain_text": "Revisa las notas del archivo .env; el usuario es 'dr_keys' y su contraseña temporal es 'thermal1987'. Inicia sesión en '/login'."
+        },
+        {
+          "level": 3,
+          "title": "Pista Directa",
+          "cost": 50,
+          "yautja_text": "LOGUEATE CON DR KEYS Y THERMAL1987 PARA RECIBIR EL CRANEO",
+          "plain_text": "Ingresa a '/login' con usuario 'dr_keys' y contraseña 'thermal1987'. En el panel de control se desbloqueará el Cráneo 05."
+        }
+      ]
+    },
+    {
+      "id": "skull_06",
+      "number": 6,
+      "title": "Skull 06 — La Herida",
+      "rank": "Sangrado",
+      "difficulty": "Baja-media",
+      "points": 100,
+      "skill": "Identificación y explotación de vulnerabilidad web (SQL Injection)",
+      "flag": "SKULL{BLOODED_06_VULN_EXPLOITED}",
+      "description": "Una vez dentro del panel del Dr. Keyes, el cazador descubre el catálogo de especímenes alienígenas y armamento biológico. La base de datos es vulnerable a inyección SQL.",
+      "theory": {
+        "concept": "La inyección SQL (SQLi) se genera cuando entradas suministradas por el usuario se concatenan directamente en la consulta a la base de datos sin parametrización, permitiendo manipular la lógica de la consulta.",
+        "tools": "Inyecciones lógicas manuales (' OR 1=1 --), sentencias UNION SELECT, SQLMap.",
+        "approach": "Probar delimitadores como comillas simples (') en formularios de búsqueda o parámetros GET. Analizar si la aplicación arroja errores SQL o si un operador booleano (OR 1=1) devuelve registros ocultos de mayor clasificación.",
+        "mitigation": "Utilizar consultas preparadas (Prepared Statements) con parámetros vinculados y restringir privilegios del usuario de la base de datos."
+      },
+      "hints": [
+        {
+          "level": 1,
+          "title": "Pista Narrativa",
+          "cost": 10,
+          "yautja_text": "LA HERIDA SE ABRE CUANDO EL METAL DE UNA COMILLA PARTE LA LOGICA",
+          "plain_text": "La herida se abre cuando el metal de una comilla simple parte la lógica de la base de datos."
+        },
+        {
+          "level": 2,
+          "title": "Pista Técnica",
+          "cost": 25,
+          "yautja_text": "EL BUSCADOR DE ESPECIMENES TIENE SQL INJECTION BOOLEANA O UNION",
+          "plain_text": "El buscador en '/specimens' concatena la entrada directamente. Prueba con: ' OR 1=1 -- o ataques UNION SELECT."
+        },
+        {
+          "level": 3,
+          "title": "Pista Directa",
+          "cost": 50,
+          "yautja_text": "BUSCA COMILLA OR 1 IGUAL 1 GUION GUION PARA VOLCAR EL ESPECIMEN CLASIFICADO",
+          "plain_text": "Ingresa `' OR 1=1 --` en el cuadro de búsqueda de especímenes. Se revelará el registro de máxima seguridad con la flag del Cráneo 06."
+        }
+      ]
+    },
+    {
+      "id": "skull_07",
+      "number": 7,
+      "title": "Skull 07 — Acceso Inicial",
+      "rank": "Sangrado",
+      "difficulty": "Baja-media",
+      "points": 100,
+      "skill": "Explotación de Command Injection y obtención de shell/acceso",
+      "flag": "SKULL{BLOODED_07_INITIAL_ACCESS_GRANTED}",
+      "description": "El panel cuenta con una consola de diagnóstico de enlace térmico para verificar conectividad con los sensores de campo. Explotando esta brecha, el cazador ejecutará comandos directos en el servidor y tomará el control.",
+      "theory": {
+        "concept": "La inyección de comandos en el sistema operativo (CWE-78) ocurre cuando una aplicación pasa datos no validados a una shell del sistema (como bash o sh) para ejecutar comandos del host (como ping o traceroute).",
+        "tools": "Delimitadores de shell (';', '&&', '|', '`'), Reverse Shells, Netcat, cURL.",
+        "approach": "Identificar utilidades del sistema que acepten parámetros de red. Concatenar operadores delimitadores para forzar la ejecución de una segunda orden arbitraria (como `whoami` o `cat`).",
+        "mitigation": "Evitar invocar el shell del sistema operativo (`shell=False`), utilizar bibliotecas nativas de red y aplicar validación estricta de formato (expresiones regulares)."
+      },
+      "hints": [
+        {
+          "level": 1,
+          "title": "Pista Narrativa",
+          "cost": 10,
+          "yautja_text": "EL DIAGNOSTICO TERMICO ESCUCHA LA VOZ DEL SISTEMA PRINCIPAL",
+          "plain_text": "El diagnóstico térmico escucha la voz del sistema principal sin filtrar los delimitadores de órdenes."
+        },
+        {
+          "level": 2,
+          "title": "Pista Técnica",
+          "cost": 25,
+          "yautja_text": "CONCATENA COMANDOS CON PUNTO Y COMA EN LA DIRECCION IP DEL DIAGNOSTICO",
+          "plain_text": "En '/diagnostic', la utilidad ejecuta 'ping -c 1 <ip>'. Inyecta delimitadores como ';', '&&' o '|' para ejecutar comandos de sistema (ej: ; whoami)."
+        },
+        {
+          "level": 3,
+          "title": "Pista Directa",
+          "cost": 50,
+          "yautja_text": "ENVIA 127.0.0.1 PUNTO Y COMA CAT SECRET ACCESS FLAG07 TXT",
+          "plain_text": "Ingresa en el formulario de diagnóstico: `127.0.0.1; cat secret_access/flag07.txt` para leer el cráneo y completar el ascenso a Élite."
+        }
+      ]
+    },
+    {
+      "id": "skull_08",
+      "number": 8,
+      "title": "Skull 08 — Rastros en el Sistema",
+      "rank": "Élite",
+      "difficulty": "Media-alta",
+      "points": 250,
+      "skill": "Enumeración local de Linux y análisis de tareas cron",
+      "flag": "SKULL{ELITE_08_LINUX_RECON_FOOTPRINTS}",
+      "description": "El cazador ha obtenido una brecha de ejecución en el host humano. Ahora debe enumerar las tareas programadas y los registros de auditoría del sistema operativo para rastrear las rutinas de la presa.",
+      "theory": {
+        "concept": "La enumeración local post-acceso analiza procesos en ejecución, archivos de registro (logs) y tareas programadas (cronjobs) que puedan revelar actividades automatizadas y datos confidenciales del sistema.",
+        "tools": "Comandos de enumeración: `crontab -l`, `cat /etc/crontab`, `ls -la /var/log`, `ps aux`, LinPEAS.",
+        "approach": "Inspeccionar las carpetas de registro del sistema y los archivos generados por cronjobs automáticos. Buscar logs con nombres como 'cron_audit' o 'stargazer_cron'.",
+        "mitigation": "Restringir los permisos de lectura de los logs del sistema (`chmod 640 /var/log/*`) y auditar la creación de cronjobs en el host."
+      },
+      "hints": [
+        {
+          "level": 1,
+          "title": "Pista Narrativa",
+          "cost": 10,
+          "yautja_text": "LOS AUTOMATAS HUMANOS CORREN EN HORAS EXACTAS Y DEJAN HUELLAS EN LOS ARCHIVOS DE AUDITORIA",
+          "plain_text": "Los autómatas humanos corren en horas exactas y dejan huellas en los archivos de auditoría."
+        },
+        {
+          "level": 2,
+          "title": "Pista Técnica",
+          "cost": 25,
+          "yautja_text": "BUSCA TAREAS CRON O ARCHIVOS DE REGISTRO CON LA PALABRA CRON EN SECRET ACCESS O VAR LOG",
+          "plain_text": "Busca tareas cron o archivos de registro con la palabra cron en secret_access o /var/log."
+        },
+        {
+          "level": 3,
+          "title": "Pista Directa",
+          "cost": 50,
+          "yautja_text": "EJECUTA EN EL DIAGNOSTICO CAT SECRET ACCESS CRON AUDIT LOG PARA LEER EL CRANEO",
+          "plain_text": "Ejecuta en la consola de diagnóstico: `cat secret_access/cron_audit.log` para leer el cráneo 08."
+        }
+      ]
+    },
+    {
+      "id": "skull_09",
+      "number": 9,
+      "title": "Skull 09 — Secretos de la Presa",
+      "rank": "Élite",
+      "difficulty": "Media-alta",
+      "points": 250,
+      "skill": "Búsqueda de archivos ocultos y tokens de autorización",
+      "flag": "SKULL{ELITE_09_HIDDEN_SECRETS_FOUND}",
+      "description": "Los ingenieros de OWLF protegen sus microservicios internos mediante tokens de paso. Inspecciona los archivos ocultos en el sistema para encontrar la llave maestra de la matriz de defensa.",
+      "theory": {
+        "concept": "Los archivos ocultos (cuyo nombre inicia con un punto '.') en sistemas UNIX frecuentemente albergan configuraciones de usuario, claves privadas SSH o tokens de autenticación de servicios internos dejados por comodidad de los desarrolladores.",
+        "tools": "Comandos: `ls -la`, `find / -name '.*' 2>/dev/null`, `grep -rn 'token\\|key' /opt /home`.",
+        "approach": "Listar archivos ocultos en directorios de la aplicación o del sistema. Buscar tokens JSON o llaves nombradas como '.internal_token' que puedan abrir microservicios internos.",
+        "mitigation": "Almacenar tokens y secretos en gestores centralizados con cifrado en reposo (KMS/Vault) en lugar de ficheros planos en el sistema de archivos."
+      },
+      "hints": [
+        {
+          "level": 1,
+          "title": "Pista Narrativa",
+          "cost": 10,
+          "yautja_text": "LO QUE EL OJO HUMANO OCULTA DETRAS DE UN PUNTO CONTIENE LA LLAVE DE SUS DEFENSAS",
+          "plain_text": "Lo que el ojo humano oculta detrás de un punto contiene la llave de sus defensas."
+        },
+        {
+          "level": 2,
+          "title": "Pista Técnica",
+          "cost": 25,
+          "yautja_text": "LOCALIZA ARCHIVOS QUE EMPIECEN POR PUNTO EN SECRET ACCESS COMO INTERNAL TOKEN",
+          "plain_text": "Localiza archivos que empiecen por punto en secret_access, como .internal_token."
+        },
+        {
+          "level": 3,
+          "title": "Pista Directa",
+          "cost": 50,
+          "yautja_text": "EJECUTA EN EL DIAGNOSTICO CAT SECRET ACCESS INTERNAL TOKEN PARA OBTENER EL TOKEN Y EL CRANEO",
+          "plain_text": "Ejecuta en la consola de diagnóstico: `cat secret_access/.internal_token` para obtener el token de servicio y el cráneo 09."
+        }
+      ]
+    },
+    {
+      "id": "skull_10",
+      "number": 10,
+      "title": "Skull 10 — La Marca",
+      "rank": "Élite",
+      "difficulty": "Media-alta",
+      "points": 250,
+      "skill": "Identificación de configuraciones inseguras y binarios SUID",
+      "flag": "SKULL{ELITE_10_SUID_VULNERABILITY_MARKED}",
+      "description": "Los cazadores veteranos reconocen las marcas de descuido del enemigo. Identifica los scripts y utilidades con permisos de superusuario indebidos (SUID) que permitirán la escalada.",
+      "theory": {
+        "concept": "El bit SUID (Set User ID) permite a los usuarios ejecutar un binario con los privilegios del propietario del archivo (frecuentemente root). Si el binario o script contiene fallos lógicos o rutas relativas, se convierte en un vector de escalada directa (CWE-732).",
+        "tools": "Comando: `find / -perm -4000 -type f 2>/dev/null`, GTFOBins, `strings`, `ls -la`.",
+        "approach": "Buscar ejecutables con permisos SUID. Auditar scripts de mantenimiento del escáner térmico en el sistema para identificar la marca de vulnerabilidad.",
+        "mitigation": "Remover el bit SUID de binarios y scripts no esenciales (`chmod u-s`), e implementar monitoreo de integridad de archivos con herramientas como AIDE."
+      },
+      "hints": [
+        {
+          "level": 1,
+          "title": "Pista Narrativa",
+          "cost": 10,
+          "yautja_text": "EL CAZADOR DEBE MARCAR EL BINARIO QUE POSEE EL ALIENTO DE ROOT SIN SU VIGILANCIA",
+          "plain_text": "El cazador debe marcar el binario que posee el aliento de root sin su vigilancia."
+        },
+        {
+          "level": 2,
+          "title": "Pista Técnica",
+          "cost": 25,
+          "yautja_text": "INSPECCIONA SCRIPTS DE ESCANEO DE SENSORES EN SECRET ACCESS CON PERMISOS SUID O SCANNER AUDIT",
+          "plain_text": "Inspecciona scripts de escaneo de sensores en secret_access, como scanner_audit.sh."
+        },
+        {
+          "level": 3,
+          "title": "Pista Directa",
+          "cost": 50,
+          "yautja_text": "EJECUTA EN EL DIAGNOSTICO CAT SECRET ACCESS SCANNER AUDIT SH PARA LEER LA MARCA DEL CRANEO",
+          "plain_text": "Ejecuta en la consola de diagnóstico: `cat secret_access/scanner_audit.sh` para examinar el script SUID y capturar el cráneo 10."
+        }
+      ]
+    },
+    {
+      "id": "skull_11",
+      "number": 11,
+      "title": "Skull 11 — Ascenso",
+      "rank": "Élite",
+      "difficulty": "Media-alta",
+      "points": 250,
+      "skill": "Escalada de privilegios y control total de root",
+      "flag": "SKULL{ELITE_11_ROOT_PRIVILEGE_ASCENSION}",
+      "description": "La culminación del rango Élite. Utiliza los privilegios elevados para quebrar la última bóveda protegida y tomar posesión del cráneo maestro de la presa.",
+      "theory": {
+        "concept": "La escalada de privilegios vertical (Privilege Escalation) es la culminación de la fase de post-explotación en la que el analista aprovecha una mala configuración para obtener el nivel de superusuario (root / UID 0).",
+        "tools": "LinPEAS, inspección de `/root/`, `sudo -l`, comandos privilegiados.",
+        "approach": "Aprovechar los privilegios de superusuario obtenidos para acceder a los directorios protegidos del sistema (como `/root` o la bóveda de trofeos de administración).",
+        "mitigation": "Aplicar el principio de mínimo privilegio, deshabilitar logins directos como root y confinar aplicaciones mediante AppArmor o SELinux."
+      },
+      "hints": [
+        {
+          "level": 1,
+          "title": "Pista Narrativa",
+          "cost": 10,
+          "yautja_text": "EL RANGO DE ELITE SE CONSUMA CUANDO LA CORONA DEL SUPERUSUARIO CAE EN TUS MANOS",
+          "plain_text": "El rango de Élite se consuma cuando la corona del superusuario cae en tus manos."
+        },
+        {
+          "level": 2,
+          "title": "Pista Técnica",
+          "cost": 25,
+          "yautja_text": "ACCEDE AL ARCHIVO DE TROFEO ROOT PROTEGIDO EN SECRET ACCESS ROOT TROPHY TXT",
+          "plain_text": "Accede al archivo de trofeo protegido de root en secret_access/root_trophy.txt."
+        },
+        {
+          "level": 3,
+          "title": "Pista Directa",
+          "cost": 50,
+          "yautja_text": "EJECUTA EN EL DIAGNOSTICO CAT SECRET ACCESS ROOT TROPHY TXT PARA COMPLETAR EL ASCENSO A ANCIANO",
+          "plain_text": "Ejecuta en la consola de diagnóstico: `cat secret_access/root_trophy.txt` para reclamar el cráneo 11 y ascender a Anciano."
+        }
+      ]
+    },
+    {
+      "id": "skull_12",
+      "number": 12,
+      "title": "Skull 12 — El Camino Oculto",
+      "rank": "Anciano",
+      "difficulty": "Alta",
+      "points": 250,
+      "skill": "Descubrimiento de servicios internos y APIs ocultas",
+      "flag": "SKULL{ELDER_12_HIDDEN_PATHWAY_DISCOVERED}",
+      "description": "Los humanos resguardan su tecnología crítica en microservicios internos que no son visibles desde el perímetro exterior. Descubre la Matriz de Defensa de Plasma operando en el bus interno.",
+      "theory": {
+        "concept": "Los servicios internos ocultos son APIs y demonios configurados para escuchar exclusivamente en la interfaz de bucle local (`127.0.0.1`) o redes internas. El descubrimiento de estos puertos revela sistemas de control críticos.",
+        "tools": "Comandos: `ss -tuln`, `netstat -tuln`, cURL hacia localhost, técnicas de port-forwarding y pivoting con Chisel o SSH tunneling.",
+        "approach": "Inspeccionar las conexiones internas del host comprometido o navegar a rutas internas como `/internal_plasma_matrix` para localizar la API de control de la matriz de plasma.",
+        "mitigation": "Exigir autenticación mutua (mTLS) en servicios internos e implementar segmentación estricta de red (Zero Trust)."
+      },
+      "hints": [
+        {
+          "level": 1,
+          "title": "Pista Narrativa",
+          "cost": 10,
+          "yautja_text": "EL VERDADERO PODER HUMANO SE COMUNICA POR UN CANAL PRIVADO EN EL NODO NOVECIENTOS NOVENTA",
+          "plain_text": "El verdadero poder humano se comunica por un canal privado en la matriz interna."
+        },
+        {
+          "level": 2,
+          "title": "Pista Técnica",
+          "cost": 25,
+          "yautja_text": "CONSULTA LA RUTA INTERNAL PLASMA MATRIX O EL PUERTO 9090 EN LA PRESA",
+          "plain_text": "Consulta la ruta '/internal_plasma_matrix' o el bus interno en el puerto 9090 del servidor de la presa."
+        },
+        {
+          "level": 3,
+          "title": "Pista Directa",
+          "cost": 50,
+          "yautja_text": "VISITA HTTP IP 8080 INTERNAL PLASMA MATRIX PARA RECIBIR LA TELEMETRIA DE LA MATRIZ",
+          "plain_text": "Accede a `http://<IP>:8080/internal_plasma_matrix` para capturar la flag del cráneo 12."
+        }
+      ]
+    },
+    {
+      "id": "skull_13",
+      "number": 13,
+      "title": "Skull 13 — Dos Presas, Una Cacería",
+      "rank": "Anciano",
+      "difficulty": "Alta",
+      "points": 250,
+      "skill": "Pivoting y explotación de APIs internas con credenciales encadenadas",
+      "flag": "SKULL{ELDER_13_TWO_PREYS_ONE_HUNT}",
+      "description": "Aprovecha el token de autorización interno descubierto en la fase Élite para ejecutar una anulación de emergencia (override) y derribar el escudo de plasma de la instalación.",
+      "theory": {
+        "concept": "El pivoting de credenciales y movimiento lateral explota la reutilización de tokens o llaves maestras obtenidas en un subsistema para autenticarse y tomar el control de otros componentes de la infraestructura.",
+        "tools": "cURL (peticiones REST GET/POST con tokens), Burp Suite Repeater, scripts de automatización en Python.",
+        "approach": "Tomar el token de autorización extraído en el Skull 09 (`stargazer_plasma_matrix_token_87`) y enviarlo al endpoint `/api/override` para neutralizar el escudo.",
+        "mitigation": "Implementar tokens de corta duración con ámbito limitado (Scoped Tokens) y validar rigurosamente la dirección IP de origen de las peticiones administrativas."
+      },
+      "hints": [
+        {
+          "level": 1,
+          "title": "Pista Narrativa",
+          "cost": 10,
+          "yautja_text": "UTILIZA LA LLAVE DEL ESCLAVO PARA DERRIBAR LA PUERTA DEL BASTION",
+          "plain_text": "Utiliza la llave del esclavo descubierta anteriormente para derribar la puerta del bastión."
+        },
+        {
+          "level": 2,
+          "title": "Pista Técnica",
+          "cost": 25,
+          "yautja_text": "ENVIA EL TOKEN OBTENIDO EN EL SKULL 09 AL ENDPOINT API OVERRIDE",
+          "plain_text": "Envía el token obtenido en el Skull 09 al endpoint '/api/override' como parámetro de consulta o cuerpo."
+        },
+        {
+          "level": 3,
+          "title": "Pista Directa",
+          "cost": 50,
+          "yautja_text": "ENVIA UNA PETICION A API OVERRIDE TOKEN STARGAZER PLASMA MATRIX TOKEN 87 PARA DESACTIVAR EL ESCUDO",
+          "plain_text": "Accede a `/api/override?token=stargazer_plasma_matrix_token_87` para desactivar el escudo y capturar el cráneo 13."
+        }
+      ]
+    },
+    {
+      "id": "skull_14",
+      "number": 14,
+      "title": "Skull 14 — El Juicio del Anciano",
+      "rank": "Anciano",
+      "difficulty": "Alta",
+      "points": 250,
+      "skill": "Cadena completa de ataque y colapso del reactor humano",
+      "flag": "SKULL{ELDER_14_THE_ELDER_TRIAL_PASSED}",
+      "description": "El cazador Anciano no solo infiltra; aniquila la resistencia del enemigo. Conduce el reactor de la base humana a una sobrecarga térmica incontrolada para forzar la apertura del búnker central.",
+      "theory": {
+        "concept": "Las cadenas de ataque (Exploit Chaining) consisten en enlazar múltiples vulnerabilidades descubiertas a lo largo de un pentesting (fuga de información &rarr; credenciales &rarr; RCE &rarr; pivoting &rarr; override de API) para cumplir el objetivo final de compromiso total.",
+        "tools": "Metodología PTES (Penetration Testing Execution Standard), Burp Suite, cURL, scripts de encadenamiento de endpoints.",
+        "approach": "Combinar el código de purga del reactor devuelto por el override del escudo (`STG_REACTOR_PURGE_1987`) con el parámetro de temperatura crítica (1987) en `/api/reactor_overload`.",
+        "mitigation": "Diseñar mecanismos de seguridad física y lógica desacoplados ('Fail-Safe Defaults'), requiriendo múltiples autorizaciones independientes antes de ejecutar órdenes destructivas."
+      },
+      "hints": [
+        {
+          "level": 1,
+          "title": "Pista Narrativa",
+          "cost": 10,
+          "yautja_text": "CALIENTA EL CORAZON DE LA PRESA HASTA EL ANO DEL PRIMER ENCUENTRO CON LA CLAVE DE PURGA",
+          "plain_text": "Calienta el corazón de la presa hasta el año del primer encuentro con la clave de purga."
+        },
+        {
+          "level": 2,
+          "title": "Pista Técnica",
+          "cost": 25,
+          "yautja_text": "ENVIA EL CODIGO STG REACTOR PURGE 1987 Y TEMPERATURA 1987 A API REACTOR OVERLOAD",
+          "plain_text": "Envía el código 'STG_REACTOR_PURGE_1987' y temperatura '1987' al endpoint '/api/reactor_overload'."
+        },
+        {
+          "level": 3,
+          "title": "Pista Directa",
+          "cost": 50,
+          "yautja_text": "CONSUME API REACTOR OVERLOAD CON REACTOR CODE STG REACTOR PURGE 1987 Y TEMPERATURE 1987",
+          "plain_text": "Accede a `/api/reactor_overload?reactor_code=STG_REACTOR_PURGE_1987&temperature=1987` para provocar la sobrecarga y obtener el cráneo 14."
+        }
+      ]
+    },
+    {
+      "id": "skull_15",
+      "number": 15,
+      "title": "Skull 15 — Cráneo Ancestral (Ultimate Hunt)",
+      "rank": "Ancestral",
+      "difficulty": "Muy alta",
+      "points": 1000,
+      "skill": "Cacería definitiva e integración total de conocimientos",
+      "flag": "SKULL{ANCESTRAL_15_ULTIMATE_HUNT}",
+      "description": "El desafío final de honor. Ingresa al templo ancestral de la instalación humana, introduce las coordenadas sagradas descifradas del colapso del reactor y reclama el Cráneo Supremo que te convertirá en Cazador Ancestral.",
+      "theory": {
+        "concept": "La fase final o 'Ultimate Hunt' integra todas las habilidades desarrolladas en el laboratorio: reconocimiento, descifrado con el Brazalete Yautja, auditoría web, explotación controlada, escalada y desactivación de defensas perimetrales.",
+        "tools": "Brazalete Yautja, análisis criptográfico de coordenadas, navegador web, cURL.",
+        "approach": "Tomar las coordenadas reveladas durante el colapso del reactor (`YAUTJA_PRIME_ELDER_COORDINATES_X87`), ingresar al portal `/ultimate_hunt` y activar la secuencia final de honor.",
+        "mitigation": "Garantizar una defensa en profundidad (Defense in Depth) donde la caída de una capa no comprometa el núcleo entero del sistema."
+      },
+      "hints": [
+        {
+          "level": 1,
+          "title": "Pista Narrativa",
+          "cost": 10,
+          "yautja_text": "LAS COORDENADAS DESCUBIERTAS EN LA PURGA DEL REACTOR ABREN EL TEMPLO DEL CAZADOR",
+          "plain_text": "Las coordenadas descubiertas en la purga del reactor abren el templo del cazador."
+        },
+        {
+          "level": 2,
+          "title": "Pista Técnica",
+          "cost": 25,
+          "yautja_text": "INGRESA AL PORTAL ULTIMATE HUNT E INTRODUCE LA CLAVE DE COORDENADAS OBTENIDA EN EL SKULL 14",
+          "plain_text": "Ingresa al portal '/ultimate_hunt' e introduce la clave de coordenadas obtenida en el Skull 14."
+        },
+        {
+          "level": 3,
+          "title": "Pista Directa",
+          "cost": 50,
+          "yautja_text": "ENVIA EN ULTIMATE HUNT EL CODIGO YAUTJA PRIME ELDER COORDINATES X87 PARA OBTENER EL CRANEO FINAL",
+          "plain_text": "Ingresa en `/ultimate_hunt` el código `YAUTJA_PRIME_ELDER_COORDINATES_X87` para reclamar el Cráneo Ancestral de 1000 puntos."
+        }
+      ]
+    }
+  ]
+}

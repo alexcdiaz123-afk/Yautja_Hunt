@@ -1,0 +1,7 @@
+# OWLF Outpost 74 - Robots Access Configuration
+# PROJECT STARGAZER - DO NOT CRAWL CLASSIFIED DIRECTORIES
+User-agent: *
+Disallow: /telemetry_vault/
+Disallow: /specimen_backup/
+Disallow: /restricted_records/
+Disallow: /secret_access/

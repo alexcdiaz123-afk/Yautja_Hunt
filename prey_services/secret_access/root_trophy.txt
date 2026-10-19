@@ -1,0 +1,15 @@
+================================================================================
+           OTHER WORLD LIFEFORM TASKFORCE (OWLF) - ROOT VAULT TERMINAL
+================================================================================
+[+] PRIVILEGIO SUPERUSUARIO CONFIRMADO (UID: 0 / ROOT).
+[+] EL CAZADOR HA TOMADO EL CONTROL TOTAL DEL SISTEMA DE LA PRESA.
+
+[!] CRÁNEO DE ESCALADA DE PRIVILEGIOS OBTENIDO:
+    SKULL{ELITE_11_ROOT_PRIVILEGE_ASCENSION}
+
+--------------------------------------------------------------------------------
+Has completado la fase ÉLITE del laboratorio Yautja Hunt.
+Tu reputacion como cazador alcanza el nivel de ANCIANO (ELDER).
+Ahora debes enfrentarte a cadenas de ataque, descubrimiento de servicios
+internos y destruccion del reactor en las etapas finales.
+================================================================================

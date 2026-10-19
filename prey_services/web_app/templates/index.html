@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <h2>[+] ESTADO PERIMETRAL DEL PUESTO DE AVANZADA 74</h2>
+    <span class="badge-warning">ALERTA AMARILLA - ACTIVIDAD ANÓMALA</span>
+  </div>
+  <p>
+    Bienvenido a la terminal de enlace perimetral del <strong>Proyecto Stargazer</strong> de la división OWLF.
+    Nuestras matrices de sensores en el dosel de la selva han detectado distorsiones electromagnéticas y firmas de calor fluctuantes en las últimas 72 horas.
+  </p>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
+    <div style="background: #080c14; border: 1px solid #1a273b; padding: 1rem; border-radius: 4px;">
+      <h3 style="color: #00d2ff; font-size: 1rem;">RADAR TELEMÉTRICO</h3>
+      <p style="font-size: 0.85rem; color: #8fa0b5;">Frecuencia activa: 1987.00 MHz (Sector 42-Alpha)</p>
+      <p style="font-size: 0.85rem; color: #ffb703;">Estado: Rastreo de pulso continuo.</p>
+    </div>
+
+    <div style="background: #080c14; border: 1px solid #1a273b; padding: 1rem; border-radius: 4px;">
+      <h3 style="color: #00d2ff; font-size: 1rem;">SENSORES TÉRMICOS</h3>
+      <p style="font-size: 0.85rem; color: #8fa0b5;">Micro-ondas e infrarrojo de banda ancha.</p>
+      <p style="font-size: 0.85rem; color: #00ff66;">Sensores en línea: 14/14 nodos operativos.</p>
+    </div>
+
+    <div style="background: #080c14; border: 1px solid #1a273b; padding: 1rem; border-radius: 4px;">
+      <h3 style="color: #00d2ff; font-size: 1rem;">DIVISIÓN XENOBIOLÓGICA</h3>
+      <p style="font-size: 0.85rem; color: #8fa0b5;">Director: Dr. Peter Keyes</p>
+      <p style="font-size: 0.85rem; color: #ff4d6d;">Protocolo de captura en frío: ACTIVO</p>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>[!] DIRECTIVAS DE SEGURIDAD OPERACIONAL</h3>
+  </div>
+  <ul style="color: #9cb3c9; font-size: 0.9rem; line-height: 1.7;">
+    <li>El acceso al banco de especímenes clasificados está reservado exclusivamente al personal científico acreditado.</li>
+    <li>Queda prohibida la indexación pública de directorios de laboratorio en motores de búsqueda (Verificar políticas en <code>robots.txt</code>).</li>
+    <li>Las copias de seguridad de claves operativas y memorandos deben almacenarse únicamente en almacenes seguros cifrados.</li>
+  </ul>
+</div>
+{% endblock %}

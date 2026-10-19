@@ -1,0 +1,845 @@
+:root {
+  --y-bg: #070404;
+  --y-card: #0f0808;
+  --y-border: #4d1010;
+  --y-border-glow: #ff2222;
+  --y-red: #ff2a2a;
+  --y-plasma: #ff5500;
+  --y-green: #00ff77;
+  --y-cyan: #00e5ff;
+  --y-text: #eae0e0;
+  --y-text-muted: #997878;
+  --y-font-hud: 'Consolas', 'Courier New', monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--y-bg);
+  color: var(--y-text);
+  font-family: var(--y-font-hud);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Predator CRT Scanlines & Vignette */
+body::before {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+  z-index: 999;
+  background-size: 100% 3px, 6px 100%;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* Tri-laser Biomask Reticle in Top Corner */
+.biomask-reticle {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.biomask-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--y-red);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--y-red);
+  animation: pulse-laser 1.5s infinite alternate;
+}
+@keyframes pulse-laser {
+  0% { opacity: 0.4; transform: scale(0.9); }
+  100% { opacity: 1; transform: scale(1.1); box-shadow: 0 0 12px #ff0000; }
+}
+
+.predator-header-logo {
+  height: 44px;
+  width: auto;
+  filter: drop-shadow(0 0 10px rgba(255, 34, 34, 0.85));
+  vertical-align: middle;
+  transition: transform 0.3s ease, filter 0.3s ease;
+  cursor: pointer;
+}
+
+.predator-header-logo:hover {
+  transform: scale(1.1) rotate(-2deg);
+  filter: drop-shadow(0 0 16px #ff0033);
+}
+
+.predator-watermark {
+  opacity: 0.15;
+  position: absolute;
+  right: 25px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 90px;
+  pointer-events: none;
+  filter: drop-shadow(0 0 10px rgba(255, 42, 42, 0.4));
+}
+
+header {
+  background: #0d0606;
+  border-bottom: 2px solid var(--y-border);
+  box-shadow: 0 4px 20px rgba(255, 34, 34, 0.15);
+  padding: 0.8rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.brand-title {
+  font-size: 1.4rem;
+  font-weight: 900;
+  letter-spacing: 3px;
+  color: var(--y-red);
+  text-shadow: 0 0 10px rgba(255, 42, 42, 0.7);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hud-stats-bar {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  color: var(--y-text-muted);
+  letter-spacing: 1px;
+}
+
+.stat-value {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--y-green);
+  text-shadow: 0 0 8px rgba(0, 255, 119, 0.4);
+}
+
+.container {
+  max-width: 1300px;
+  margin: 1.5rem auto;
+  padding: 0 1.5rem;
+}
+
+/* Rank Banner */
+.rank-banner {
+  background: linear-gradient(90deg, #1f0b0b 0%, #120606 50%, #1f0b0b 100%);
+  border: 1px solid var(--y-border);
+  border-left: 5px solid var(--y-red);
+  padding: 1rem 1.5rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 0 15px rgba(255, 42, 42, 0.1);
+}
+
+.rank-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: var(--y-red);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Flag Submission Bar */
+.submission-card {
+  background: #110707;
+  border: 1px solid var(--y-border);
+  padding: 1.2rem;
+  border-radius: 4px;
+  margin-bottom: 2rem;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+.submission-form {
+  display: flex;
+  gap: 10px;
+}
+
+.flag-input {
+  flex: 1;
+  background: #080404;
+  border: 1px solid #5a1515;
+  color: #00ff77;
+  font-family: var(--y-font-hud);
+  font-size: 1.1rem;
+  padding: 12px 16px;
+  border-radius: 4px;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.flag-input:focus {
+  border-color: var(--y-red);
+  box-shadow: 0 0 14px rgba(255, 42, 42, 0.4);
+}
+
+.btn-hunt {
+  background: #3d0d0d;
+  color: #ff3b3b;
+  border: 1px solid var(--y-red);
+  font-family: var(--y-font-hud);
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 12px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all 0.2s;
+}
+
+.btn-hunt:hover {
+  background: var(--y-red);
+  color: #000;
+  box-shadow: 0 0 15px rgba(255, 42, 42, 0.8);
+}
+
+/* Trophy Skulls Gallery */
+.trophy-section {
+  margin-bottom: 2.5rem;
+}
+
+.trophy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+  gap: 12px;
+  margin-top: 1rem;
+}
+
+.skull-trophy {
+  background: #0d0606;
+  border: 1px solid #331111;
+  border-radius: 6px;
+  padding: 10px 4px 8px 4px;
+  text-align: center;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.skull-trophy:hover {
+  transform: translateY(-3px);
+}
+
+.skull-trophy.claimed {
+  border-color: var(--y-green);
+  background: linear-gradient(180deg, rgba(0, 255, 119, 0.08) 0%, #0d0606 100%);
+  box-shadow: 0 0 16px rgba(0, 255, 119, 0.35);
+}
+
+.skull-trophy.active-target {
+  border-color: var(--y-red);
+  background: linear-gradient(180deg, rgba(255, 42, 42, 0.08) 0%, #0d0606 100%);
+  box-shadow: 0 0 12px rgba(255, 42, 42, 0.35);
+  animation: pulse-trophy-target 2.5s infinite alternate;
+}
+
+@keyframes pulse-trophy-target {
+  0% { box-shadow: 0 0 8px rgba(255, 42, 42, 0.25); border-color: #661111; }
+  100% { box-shadow: 0 0 18px rgba(255, 42, 42, 0.6); border-color: var(--y-red); }
+}
+
+.skull-trophy.locked {
+  opacity: 0.35;
+  filter: grayscale(0.8);
+  border-color: #220b0b;
+}
+
+.skull-icon-wrapper {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.skull-status-badge {
+  font-size: 0.62rem;
+  letter-spacing: 0.5px;
+  margin-top: 3px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+/* Challenge Cards Grid */
+.challenges-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.challenge-card {
+  background: var(--y-card);
+  border: 1px solid var(--y-border);
+  border-radius: 6px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+  position: relative;
+  transition: border-color 0.2s;
+}
+
+.challenge-card:hover {
+  border-color: #7a1a1a;
+}
+
+.challenge-card.completed {
+  border-left: 6px solid var(--y-green);
+  background: linear-gradient(90deg, rgba(0, 255, 119, 0.03) 0%, var(--y-card) 40%);
+}
+
+.challenge-card.hunting {
+  border-left: 6px solid var(--y-red);
+}
+
+.challenge-card.locked-rank {
+  border-left: 6px solid #441818;
+  border-color: #240d0d;
+  background: #090404;
+  opacity: 0.82;
+}
+
+.challenge-card.locked-rank:hover {
+  border-color: #3d1414;
+}
+
+.locked-rank-notice {
+  background: rgba(28, 9, 9, 0.7);
+  border: 1px dashed #661a1a;
+  border-radius: 4px;
+  padding: 1rem 1.25rem;
+  margin-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: #d18080;
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+
+.badge-locked-rank {
+  background: rgba(60, 20, 20, 0.7);
+  color: #ff5555;
+  border: 1px solid #772222;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.challenge-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #290a0a;
+  padding-bottom: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.challenge-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--y-red);
+  letter-spacing: 1px;
+}
+
+.badge-tag {
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
+.badge-rank-young {
+  background: rgba(255, 85, 0, 0.15);
+  color: #ff7733;
+  border: 1px solid #ff5500;
+}
+
+.badge-rank-blooded {
+  background: rgba(255, 0, 68, 0.15);
+  color: #ff3366;
+  border: 1px solid #ff0044;
+}
+
+.badge-rank-elite {
+  background: rgba(168, 85, 247, 0.15);
+  color: #c084fc;
+  border: 1px solid #a855f7;
+}
+
+.badge-rank-elder {
+  background: rgba(234, 179, 8, 0.15);
+  color: #facc15;
+  border: 1px solid #eab308;
+}
+
+.badge-rank-ancestral {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border: 1px solid #ef4444;
+  font-weight: bold;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+}
+
+/* Hints Drawer */
+.hints-container {
+  margin-top: 1.2rem;
+  border-top: 1px dashed #331111;
+  padding-top: 1rem;
+}
+
+.hint-row {
+  background: #090404;
+  border: 1px solid #2b0b0b;
+  border-radius: 4px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.btn-unlock-hint {
+  background: #240a0a;
+  border: 1px solid #5a1515;
+  color: #e0a899;
+  font-family: var(--y-font-hud);
+  font-size: 0.85rem;
+  padding: 6px 12px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-unlock-hint:hover {
+  background: #4a1212;
+  color: #fff;
+  border-color: var(--y-red);
+}
+
+.hint-content {
+  width: 100%;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dotted #3d1010;
+}
+
+/* Brazalete Modal */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(1, 4, 15, 0.9);
+  z-index: 99999 !important;
+  pointer-events: auto !important;
+  backdrop-filter: blur(5px);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-card {
+  background: #0f0606;
+  border: 2px solid var(--y-red);
+  box-shadow: 0 0 30px rgba(255, 42, 42, 0.5);
+  width: 90%;
+  max-width: 920px;
+  max-height: 88vh;
+  overflow-y: auto;
+  border-radius: 8px;
+  padding: 1.8rem;
+  position: relative;
+  z-index: 100000 !important;
+  pointer-events: auto !important;
+}
+
+.btn-close-modal {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #2b0b0b;
+  border: 1px solid var(--y-red);
+  color: var(--y-red);
+  font-weight: bold;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 100001;
+}
+
+.btn-close-modal:hover {
+  background: var(--y-red);
+  color: #000;
+}
+
+/* ==========================================================================
+   Thermal Vision Mode — Paleta Inspirada en el Cazador Yautja (Pintura Térmica)
+   Colores: Azul Noche Real (#020726), Cian Eléctrico (#00e5ff), Verde Ácido (#39ff14),
+            Naranja Térmico (#ff6600) y Rojo Núcleo (#ff1744)
+   ========================================================================== */
+body.thermal-vision {
+  --y-bg: #020726;
+  --y-card: #050f38;
+  --y-border: #00e5ff;
+  --y-border-glow: #00e5ff;
+  --y-red: #ff1744;
+  --y-plasma: #ff6600;
+  --y-green: #39ff14;
+  --y-cyan: #00e5ff;
+  --y-text: #e1f5fe;
+  --y-text-muted: #80d8ff;
+  background-color: #020726 !important;
+  background-image: radial-gradient(circle at 50% 10%, #06134a 0%, #020726 80%) !important;
+  color: #e1f5fe !important;
+}
+
+body.thermal-vision::before {
+  background: linear-gradient(rgba(0, 229, 255, 0) 50%, rgba(2, 7, 38, 0.4) 50%), 
+              linear-gradient(90deg, rgba(0, 229, 255, 0.04), rgba(57, 255, 20, 0.02), rgba(255, 102, 0, 0.03));
+  background-size: 100% 3px, 6px 100%;
+}
+
+body.thermal-vision header {
+  background: #040c30 !important;
+  border-bottom: 2px solid #00e5ff !important;
+  box-shadow: 0 4px 25px rgba(0, 229, 255, 0.35) !important;
+}
+
+body.thermal-vision .brand-title {
+  color: #00e5ff !important;
+  text-shadow: 0 0 12px rgba(0, 229, 255, 0.8) !important;
+}
+
+body.thermal-vision .predator-header-logo {
+  filter: drop-shadow(0 0 12px #ff1744) drop-shadow(0 0 20px #ff6600) !important;
+}
+
+body.thermal-vision .rank-banner {
+  background: linear-gradient(90deg, #07164d 0%, #040c30 50%, #07164d 100%) !important;
+  border: 1px solid #00e5ff !important;
+  border-left: 6px solid #ff1744 !important;
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.25) !important;
+}
+
+body.thermal-vision .rank-title {
+  color: #ff6600 !important;
+  text-shadow: 0 0 10px rgba(255, 102, 0, 0.6) !important;
+}
+
+body.thermal-vision .submission-card {
+  background: #040c30 !important;
+  border: 1px solid #00e5ff !important;
+  box-shadow: 0 0 25px rgba(0, 229, 255, 0.2) !important;
+}
+
+body.thermal-vision .flag-input {
+  background: #020722 !important;
+  border: 1px solid #00b4d8 !important;
+  color: #39ff14 !important;
+}
+
+body.thermal-vision .flag-input:focus {
+  border-color: #00e5ff !important;
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.6) !important;
+}
+
+body.thermal-vision .btn-hunt {
+  background: #ff6600 !important;
+  color: #020726 !important;
+  border: 1px solid #00e5ff !important;
+  font-weight: 900 !important;
+  box-shadow: 0 0 14px rgba(255, 102, 0, 0.6) !important;
+}
+
+body.thermal-vision .btn-hunt:hover {
+  background: #ff1744 !important;
+  color: #fff !important;
+  box-shadow: 0 0 20px rgba(255, 23, 68, 0.9) !important;
+}
+
+body.thermal-vision .challenge-card {
+  background: #050f38 !important;
+  border: 1px solid #00b4d8 !important;
+  box-shadow: 0 4px 20px rgba(0, 229, 255, 0.2) !important;
+}
+
+body.thermal-vision .challenge-card.hunting {
+  border-left: 6px solid #ff6600 !important;
+}
+
+body.thermal-vision .challenge-card.completed {
+  border-left: 6px solid #39ff14 !important;
+  background: linear-gradient(90deg, rgba(57, 255, 20, 0.05) 0%, #050f38 40%) !important;
+}
+
+body.thermal-vision .challenge-title {
+  color: #00e5ff !important;
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.5) !important;
+}
+
+/* Modal en Visión Térmica */
+body.thermal-vision .modal-card {
+  background: #040c30 !important;
+  border: 2px solid #00e5ff !important;
+  box-shadow: 0 0 35px rgba(0, 229, 255, 0.5) !important;
+}
+
+body.thermal-vision .btn-close-modal {
+  background: #0b1d5c !important;
+  border-color: #ff1744 !important;
+  color: #ff1744 !important;
+}
+
+body.thermal-vision .btn-close-modal:hover {
+  background: #ff1744 !important;
+  color: #fff !important;
+}
+
+body.thermal-vision .codex-card {
+  background: #020722 !important;
+  border: 1px solid #00b4d8 !important;
+}
+
+body.thermal-vision .codex-card:hover {
+  border-color: #39ff14 !important;
+  box-shadow: 0 0 12px rgba(57, 255, 20, 0.4) !important;
+}
+
+/* Banner de Modo Escáner Térmico (Guía Teórica) */
+.thermal-mode-banner {
+  background: linear-gradient(90deg, #071954 0%, #030b2e 50%, #071954 100%);
+  border: 2px solid #00e5ff;
+  border-radius: 6px;
+  padding: 1.2rem 1.6rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 0 25px rgba(0, 229, 255, 0.35);
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  animation: thermal-glow 2s infinite alternate;
+}
+
+@keyframes thermal-glow {
+  0% { box-shadow: 0 0 15px rgba(0, 229, 255, 0.3); }
+  100% { box-shadow: 0 0 28px rgba(0, 229, 255, 0.6); }
+}
+
+.thermal-triangle-icon {
+  font-size: 2.2rem;
+  color: #ff1744;
+  text-shadow: 0 0 15px #ff1744, 0 0 25px #ff6600;
+  display: inline-block;
+  transform: scaleY(0.9);
+}
+
+.thermal-theory-box {
+  background: #020722;
+  border: 1px solid #00b4d8;
+  border-left: 4px solid #39ff14;
+  border-radius: 6px;
+  padding: 1.2rem;
+  margin-top: 1rem;
+}
+
+.theory-section-title {
+  color: #39ff14;
+  font-size: 0.88rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin-top: 0.8rem;
+  margin-bottom: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.theory-section-title:first-child {
+  margin-top: 0;
+}
+
+.theory-text {
+  color: #c9e8ff;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  margin: 0;
+}
+
+/* ========================================================
+   ARSENAL YAUTJA (HERRAMIENTAS KALI LINUX) MODAL
+   ======================================================== */
+.armas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+  margin-top: 1.2rem;
+}
+
+.arma-card {
+  background: #0d0606;
+  border: 1px solid #441818;
+  border-radius: 6px;
+  padding: 1rem 1.1rem;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.arma-card:hover {
+  border-color: #ff7700;
+  box-shadow: 0 0 16px rgba(255, 119, 0, 0.35);
+  transform: translateY(-2px);
+}
+
+.arma-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+  gap: 8px;
+}
+
+.arma-title {
+  color: #ff9900;
+  font-weight: 900;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.arma-kali-badge {
+  background: rgba(0, 229, 255, 0.15);
+  color: #00e5ff;
+  border: 1px solid #00e5ff;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.arma-desc {
+  color: #cfbcbc;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  margin-bottom: 10px;
+}
+
+.arma-target-tag {
+  color: #ff5555;
+  font-size: 0.75rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.arma-cmd-box {
+  background: #050202;
+  border: 1px solid #2d1010;
+  border-radius: 4px;
+  padding: 7px 10px;
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: #39ff14;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  word-break: break-all;
+}
+
+.arma-cmd-box code {
+  color: #39ff14;
+}
+
+.btn-copy-cmd {
+  background: #1a0808;
+  color: #ff7700;
+  border: 1px solid #552200;
+  border-radius: 3px;
+  padding: 2px 7px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  margin-left: 8px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-copy-cmd:hover {
+  background: #ff7700;
+  color: #000;
+}
+
+.arma-link-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #200d05;
+  color: #ffaa33;
+  border: 1px solid #ff7700;
+  border-radius: 4px;
+  padding: 7px 12px;
+  font-size: 0.82rem;
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.2s;
+  cursor: pointer;
+  text-align: center;
+}
+
+.arma-link-btn:hover {
+  background: #ff7700;
+  color: #000;
+  box-shadow: 0 0 12px rgba(255, 119, 0, 0.7);
+}
+
+body.thermal-vision .arma-card {
+  background: #04092b;
+  border-color: #00b4d8;
+}
+
+body.thermal-vision .arma-card:hover {
+  border-color: #39ff14;
+  box-shadow: 0 0 18px rgba(57, 255, 20, 0.4);
+}
+
+body.thermal-vision .arma-title {
+  color: #00e5ff;
+}
+
+body.thermal-vision .arma-link-btn {
+  background: #06183a;
+  color: #00e5ff;
+  border-color: #00e5ff;
+}
+
+body.thermal-vision .arma-link-btn:hover {
+  background: #00e5ff;
+  color: #020726;
+}

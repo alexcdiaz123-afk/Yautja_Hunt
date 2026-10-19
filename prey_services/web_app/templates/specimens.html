@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}OWLF - Catálogo de Especímenes Bio-Armamentísticos{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <h2>[+] BASE DE DATOS DE ESPECÍMENES (PROYECTO STARGAZER)</h2>
+    <span class="badge-warning">MOTOR SQL CLASIFICADO</span>
+  </div>
+  <p style="color: #9cb3c9; font-size: 0.9rem;">
+    Utilice el filtro de búsqueda para consultar los registros biológicos y tecnológicos clasificados recuperados de zonas de contacto extraterrestre.
+  </p>
+
+  <form method="GET" action="/specimens" style="margin: 1.5rem 0; display: flex; gap: 10px;">
+    <input type="text" name="q" value="{{ query }}" placeholder="Buscar por nombre o descripción (ej: Fragment, Bio-Mask...)" style="margin-bottom: 0;">
+    <button type="submit" style="white-space: nowrap;">BUSCAR EN BASE DE DATOS</button>
+  </form>
+
+  {% if sql_error %}
+    <div style="background: rgba(230, 57, 70, 0.2); border: 1px solid #e63946; padding: 1rem; border-radius: 4px; margin-bottom: 1.5rem; font-family: var(--owlf-font-mono); color: #ff6b81; font-size: 0.85rem;">
+      <strong>[ERROR SQL DEL SERVIDOR]:</strong> {{ sql_error }}
+    </div>
+  {% endif %}
+
+  {% if results %}
+    <div style="overflow-x: auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>NOMBRE CLAVE</th>
+            <th>NIVEL DE PELIGRO</th>
+            <th>NOTAS DE LABORATORIO</th>
+            <th>CLASIFICACIÓN</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in results %}
+            <tr {% if 'SKULL{' in row[3] or 'SKULL{' in row[1] %}style="background: rgba(0, 255, 102, 0.08); border-left: 3px solid #00ff66;"{% endif %}>
+              <td>{{ row[0] }}</td>
+              <td style="color: #00d2ff; font-weight: bold;">{{ row[1] }}</td>
+              <td>
+                <span class="badge-warning" {% if 'OMEGA' in row[2] or 'LETHAL' in row[2] %}style="color: #ff4d6d; border-color: #ff4d6d;"{% endif %}>
+                  {{ row[2] }}
+                </span>
+              </td>
+              <td style="max-width: 400px;">{{ row[3] }}</td>
+              <td style="color: #cad2c5; font-size: 0.8rem;">{{ row[4] }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p style="color: #718096; font-style: italic;">No se encontraron especímenes coincidentes en la base de datos.</p>
+  {% endif %}
+</div>
+{% endblock %}

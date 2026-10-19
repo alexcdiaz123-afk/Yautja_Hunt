@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}OWLF - Bóveda de Telemetría{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <h2>[+] REGISTROS DE TELEMETRÍA Y AVISTAMIENTOS</h2>
+    <span class="badge-warning">ARCHIVO NO INDEXADO</span>
+  </div>
+  <p style="color: #9cb3c9;">
+    Esta boveda contiene las trazas de sensores infrarrojos registradas en el sector de la jungla durante las patrullas nocturnas.
+  </p>
+
+  <!-- CLASSIFIED LOG ENTRY: Subject demonstrated active optical camouflage. Recovered marker: SKULL{YOUNG_BLOOD_03_WEB_ENTRY_DISCOVERED} -->
+  <!-- NOTA DEL TÉCNICO: Recuerde que el respaldo de llaves del Dr. Keyes se guardó en la ruta /specimen_backup/ -->
+
+  <div style="background: #080c14; border: 1px solid #1a273b; border-radius: 4px; padding: 1rem; margin-top: 1.5rem;">
+    <h3 style="color: #00d2ff; font-size: 0.95rem; margin-bottom: 0.5rem;">REGISTROS DE EVENTOS RECIENTES</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>TIMESTAMP</th>
+          <th>SENSOR ID</th>
+          <th>LECTURA TÉRMICA</th>
+          <th>ESTADO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>02:14:09 UTC</td>
+          <td>IR-CANOPY-04</td>
+          <td>Firma difusa (+41.5&deg;C)</td>
+          <td><span style="color: #ffb703;">DISTORSIÓN ÓPTICA</span></td>
+        </tr>
+        <tr>
+          <td>02:45:22 UTC</td>
+          <td>RADAR-1987-SECTOR-B</td>
+          <td>Eco electromagnético pulsante</td>
+          <td><span style="color: #00ff66;">CONFIRMADO</span></td>
+        </tr>
+        <tr>
+          <td>03:12:51 UTC</td>
+          <td>AUDIO-MIC-7</td>
+          <td>Chasquido gutural y rugido resonante</td>
+          <td><span style="color: #ff4d6d;">AMENAZA ALTA</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
