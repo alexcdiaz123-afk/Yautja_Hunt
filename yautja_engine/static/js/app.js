@@ -728,14 +728,6 @@ function closeTrophyCelebration(e) {
   }
 }
 
-function demoTrophyAnimation() {
-  const sampleData = {
-    message: "Skull 03 — La Entrada (Bóveda Descubierta)",
-    points_added: 100,
-    new_rank: "Sangrado (Blooded)"
-  };
-  triggerSkullTrophyCelebration(sampleData, "Sangre Joven (Young Blood)");
-}
 
 // Synthesize authentic 8-bit arcade Yautja triumph audio using Web Audio API
 function playYautjaTrophySound() {
