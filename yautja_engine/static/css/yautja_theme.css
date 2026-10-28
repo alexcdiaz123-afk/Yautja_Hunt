@@ -345,15 +345,36 @@ header {
   border: 1px solid #772222;
   font-size: 0.75rem;
   font-weight: 700;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
 }
 
 .challenge-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
   border-bottom: 1px solid #290a0a;
   padding-bottom: 0.8rem;
   margin-bottom: 1rem;
+}
+
+.challenge-header-left {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  flex: 1 1 auto;
+  min-width: 240px;
+}
+
+.challenge-header-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .challenge-title {
@@ -364,10 +385,15 @@ header {
 }
 
 .badge-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
   font-size: 0.75rem;
-  padding: 3px 8px;
+  padding: 4px 10px;
   border-radius: 3px;
   text-transform: uppercase;
+  line-height: 1.2;
 }
 
 .badge-rank-young {

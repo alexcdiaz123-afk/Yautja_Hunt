@@ -29,11 +29,11 @@
       </div>
 
       <button class="btn-hunt" onclick="openArmasModal()" style="padding: 6px 12px; font-size: 0.85rem; border-color: #ff9900; color: #ffaa00;" title="Arsenal de cacería y herramientas de Kali Linux">
-        ⚔️ ARMAS YAUTJA
+        ARMAS YAUTJA
       </button>
 
       <button class="btn-hunt" onclick="openBrazaleteModal()" style="padding: 6px 12px; font-size: 0.85rem; border-color: #00d2ff; color: #00d2ff;">
-        📟 BRAZALETE YAUTJA
+        BRAZALETE YAUTJA
       </button>
 
       <button class="btn-hunt" id="btnVision" onclick="toggleVisionMode()" style="padding: 6px 12px; font-size: 0.85rem;">
@@ -41,7 +41,7 @@
       </button>
 
       <button class="btn-hunt" onclick="resetLab()" style="padding: 6px 10px; font-size: 0.75rem; border-color: #555; color: #888;">
-        ↺ REINICIAR
+        REINICIAR
       </button>
     </div>
   </header>
@@ -182,8 +182,8 @@
   <div class="modal-overlay" id="armasModal">
     <div class="modal-card" style="max-width: 950px;">
       <button class="btn-close-modal" onclick="closeArmasModal()">✕ CERRAR</button>
-      <div style="display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #441818; padding-bottom: 0.8rem; margin-bottom: 1rem;">
-        <span style="font-size: 1.8rem;">⚔️</span>
+      <div style="display: flex; align-items: center; gap: 14px; border-bottom: 1px solid #441818; padding-bottom: 0.8rem; margin-bottom: 1rem;">
+        <img src="/static/assets/predator_logo.png" alt="Armas Yautja" style="height: 38px; filter: drop-shadow(0 0 8px rgba(255, 153, 0, 0.8));">
         <div>
           <h2 style="color: #ff9900; margin: 0; letter-spacing: 2px; font-size: 1.25rem;">
             ARSENAL YAUTJA // HERRAMIENTAS DE CACERÍA EN KALI LINUX
@@ -202,10 +202,10 @@
         <div class="arma-card">
           <div>
             <div class="arma-header">
-              <span class="arma-title">💥 CAÑÓN DE PLASMA</span>
+              <span class="arma-title">[01] CAÑÓN DE PLASMA</span>
               <span class="arma-kali-badge">KALI: NMAP</span>
             </div>
-            <div class="arma-target-tag">🎯 OBJETIVO: SKULL 01 (RECONOCIMIENTO)</div>
+            <div class="arma-target-tag">OBJETIVO: SKULL 01 // RECONOCIMIENTO</div>
             <p class="arma-desc">
               Escaneo electromagnético perimetral de frecuencias y puertos TCP/UDP abiertos en la presa, identificando servicios y firmas de versión.
             </p>
@@ -223,10 +223,10 @@
         <div class="arma-card">
           <div>
             <div class="arma-header">
-              <span class="arma-title">🗡️ CUCHILLAS DE MUÑECA</span>
+              <span class="arma-title">[02] CUCHILLAS DE MUÑECA</span>
               <span class="arma-kali-badge">KALI: NETCAT (NC)</span>
             </div>
-            <div class="arma-target-tag">🎯 OBJETIVO: SKULL 01 (BALIZA RADAR)</div>
+            <div class="arma-target-tag">OBJETIVO: SKULL 01 // BALIZA RADAR</div>
             <p class="arma-desc">
               Conexión directa cuerpo a cuerpo contra puertos y sockets TCP crudos. Permite interceptar transmisiones de radar y banners sin intermediarios.
             </p>
@@ -244,10 +244,10 @@
         <div class="arma-card">
           <div>
             <div class="arma-header">
-              <span class="arma-title">👁️ ZOOM ESPECTRAL</span>
+              <span class="arma-title">[03] ZOOM ESPECTRAL</span>
               <span class="arma-kali-badge">KALI: CURL / WHATWEB</span>
             </div>
-            <div class="arma-target-tag">🎯 OBJETIVO: SKULL 02 &amp; SKULL 12/13</div>
+            <div class="arma-target-tag">OBJETIVO: SKULL 02 &amp; SKULL 12/13</div>
             <p class="arma-desc">
               Inspección de metadatos invisibles en cabeceras HTTP (Banner Grabbing) y consumo de microservicios REST internos con paso de tokens.
             </p>
@@ -265,10 +265,10 @@
         <div class="arma-card">
           <div>
             <div class="arma-header">
-              <span class="arma-title">🕸️ LANZADOR DE RED</span>
+              <span class="arma-title">[04] LANZADOR DE RED</span>
               <span class="arma-kali-badge">KALI: GOBUSTER / DIRB</span>
             </div>
-            <div class="arma-target-tag">🎯 OBJETIVO: SKULL 03 &amp; SKULL 04</div>
+            <div class="arma-target-tag">OBJETIVO: SKULL 03 &amp; SKULL 04</div>
             <p class="arma-desc">
               Fuzzing de alta velocidad para atrapar directorios ocultos, rutas denegadas en robots.txt y copias de seguridad (.env, .bak) huérfanas en el servidor.
             </p>
@@ -286,10 +286,10 @@
         <div class="arma-card">
           <div>
             <div class="arma-header">
-              <span class="arma-title">🪓 LANZA COMBISTICK</span>
+              <span class="arma-title">[05] LANZA COMBISTICK</span>
               <span class="arma-kali-badge">KALI: BURP SUITE</span>
             </div>
-            <div class="arma-target-tag">🎯 OBJETIVO: SKULL 05 &amp; SKULL 07</div>
+            <div class="arma-target-tag">OBJETIVO: SKULL 05 &amp; SKULL 07</div>
             <p class="arma-desc">
               Interceptación precisa de transmisiones HTTP. Permite manipular parámetros en peticiones de login, inyectar comandos de sistema operativo y evadir defensas.
             </p>
@@ -307,10 +307,10 @@
         <div class="arma-card">
           <div>
             <div class="arma-header">
-              <span class="arma-title">💿 DISCO INTELIGENTE</span>
+              <span class="arma-title">[06] DISCO INTELIGENTE</span>
               <span class="arma-kali-badge">KALI: SQLMAP</span>
             </div>
-            <div class="arma-target-tag">🎯 OBJETIVO: SKULL 06 (INYECCIÓN SQL)</div>
+            <div class="arma-target-tag">OBJETIVO: SKULL 06 // INYECCIÓN SQL</div>
             <p class="arma-desc">
               Proyectil guiado contra bases de datos relacionales (SQLite/MySQL). Automatiza la extracción de tablas clasificadas mediante inyecciones booleanas y UNION.
             </p>
@@ -328,10 +328,10 @@
         <div class="arma-card">
           <div>
             <div class="arma-header">
-              <span class="arma-title">⚡ SECUENCIA DE MUÑECA</span>
+              <span class="arma-title">[07] SECUENCIA DE MUÑECA</span>
               <span class="arma-kali-badge">KALI: GTFOBINS / SUID</span>
             </div>
-            <div class="arma-target-tag">🎯 OBJETIVO: SKULLS 08, 09, 10 &amp; 11</div>
+            <div class="arma-target-tag">OBJETIVO: SKULLS 08, 09, 10 &amp; 11</div>
             <p class="arma-desc">
               Escalada vertical de privilegios. Audita el sistema en busca de scripts SUID, tareas cron desatendidas y binarios vulnerables para reclamar el control de ROOT.
             </p>
@@ -349,10 +349,10 @@
         <div class="arma-card">
           <div>
             <div class="arma-header">
-              <span class="arma-title">🌀 CAMUFLAJE ÓPTICO</span>
+              <span class="arma-title">[08] CAMUFLAJE ÓPTICO</span>
               <span class="arma-kali-badge">KALI: PROXYCHAINS / CHISEL</span>
             </div>
-            <div class="arma-target-tag">🎯 OBJETIVO: SKULLS 12, 13, 14 &amp; 15</div>
+            <div class="arma-target-tag">OBJETIVO: SKULLS 12, 13, 14 &amp; 15</div>
             <p class="arma-desc">
               Invisibilidad y túneles de movimiento lateral. Enruta tráfico a través de proxies para acceder a servicios que solo escuchan en la interfaz loopback (127.0.0.1).
             </p>
@@ -379,9 +379,9 @@
       <div class="celebration-plasma-scanline"></div>
       
       <div class="celebration-badge-pill">
-        <span class="pulse-red-glow">⚡</span>
+        <span class="pulse-red-glow">▲</span>
         <span>¡TROFEO DE CACERÍA RECLAMADO!</span>
-        <span class="pulse-red-glow">⚡</span>
+        <span class="pulse-red-glow">▲</span>
       </div>
 
       <!-- Predator raising severed human head with spine -->
@@ -401,13 +401,13 @@
         </div>
 
         <div class="celebration-rank-up-box" id="celebrationRankUpBox" style="display: none;">
-          <span class="rank-up-icon">🔥</span>
+          <span class="rank-up-icon">▲</span>
           <span id="celebrationRankUpText">¡ASCENSO DE RANGO! AHORA ERES CAZADOR SANGRADO</span>
         </div>
 
         <div style="margin-top: 1.5rem; display: flex; justify-content: center; gap: 12px;">
           <button type="button" class="btn-hunt celebration-btn" onclick="closeTrophyCelebration()">
-            CONTINUAR CACERÍA ⚔️
+            CONTINUAR CACERÍA &gt;&gt;
           </button>
         </div>
       </div>

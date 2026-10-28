@@ -172,7 +172,7 @@ function renderTrackerTrack() {
 
   if (claimedCount === 15) {
     if (targetLabel) targetLabel.textContent = '¡CACERÍA SUPREMA! TODOS LOS CRÁNEOS COBRADOS';
-    if (hunterCallout) hunterCallout.textContent = 'ANCESTRAL 👑';
+    if (hunterCallout) hunterCallout.textContent = 'ANCESTRAL';
   } else {
     if (targetLabel) targetLabel.textContent = `ACECHANDO SKULL ${String(currentTargetIndex + 1).padStart(2, '0')}`;
     if (hunterCallout) hunterCallout.textContent = `SKULL ${currentTargetIndex + 1}`;
@@ -192,7 +192,7 @@ function renderTrackerTrack() {
     else if (!isUnlocked) wpClass += ' locked';
 
     wpHTML += `
-      <div class="${wpClass}" title="Sector Skull ${i}${isClaimed ? ' (Cobrado ✓)' : (isTarget ? ' (En la Mira 🎯)' : ' (Bloqueado 🔒)')}">
+      <div class="${wpClass}" title="Sector Skull ${i}${isClaimed ? ' (Cobrado ✓)' : (isTarget ? ' [OBJETIVO]' : ' [BLOQUEADO]')}">
         ${isClaimed ? '✓' : i}
       </div>
     `;
@@ -247,10 +247,10 @@ function renderTrophyRack() {
       tooltip = 'Cráneo Capturado (✓)';
     } else if (isTarget) {
       statusKey = 'active';
-      statusBadgeText = '🎯 BLANCO';
+      statusBadgeText = '>> BLANCO';
       statusBadgeColor = '#ff2222';
       labelColor = '#ff2222';
-      tooltip = '🎯 Objetivo actual fijado por el Cazador Yautja';
+      tooltip = '[OBJETIVO] Actual fijado por el Cazador Yautja';
     } else if (!isUnlocked) {
       statusKey = 'locked';
       statusBadgeText = 'BLOQUEADO';
@@ -310,19 +310,19 @@ function renderChallenges() {
         html += `
           <div class="challenge-card locked-rank" id="card_${c.id}">
             <div class="challenge-header">
-              <div>
-                <span class="challenge-title" style="color: #668899;">🔒 ${c.title}</span>
-                <span class="badge-tag ${rankBadgeClass}" style="margin-left: 10px;">${c.rank}</span>
-                <span class="badge-tag" style="background: rgba(80,80,80,0.2); color: #888; border: 1px solid #555; margin-left: 6px;">
+              <div class="challenge-header-left">
+                <span class="challenge-title" style="color: #668899;">[BLOQUEADO] ${c.title}</span>
+                <span class="badge-tag ${rankBadgeClass}">${c.rank}</span>
+                <span class="badge-tag" style="background: rgba(80,80,80,0.2); color: #888; border: 1px solid #555;">
                   ${c.skill}
                 </span>
               </div>
-              <div>
-                <span class="badge-tag badge-locked-rank">🔒 FRECUENCIA BLOQUEADA</span>
+              <div class="challenge-header-right">
+                <span class="badge-tag badge-locked-rank">[ FRECUENCIA BLOQUEADA ]</span>
               </div>
             </div>
             <div class="locked-rank-notice" style="border-color: rgba(0,229,255,0.2); background: rgba(0,229,255,0.03);">
-              <div style="font-size: 1.6rem;">🔒</div>
+              <div style="font-size: 1.3rem; font-family: monospace; font-weight: bold; color: #00e5ff;">[ ⊘ ]</div>
               <div>
                 <div style="font-weight: bold; color: #00e5ff; letter-spacing: 1px;">ESCÁNER TÁCTICO // FRECUENCIA BLOQUEADA</div>
                 <div style="font-size: 0.82rem; color: #80d8ff; margin-top: 3px;">
@@ -336,17 +336,17 @@ function renderChallenges() {
         html += `
           <div class="challenge-card locked-rank" id="card_${c.id}">
             <div class="challenge-header">
-              <div>
-                <span class="challenge-title" style="color: #774444;">🔒 ${c.title}</span>
-                <span class="badge-tag ${rankBadgeClass}" style="margin-left: 10px;">${c.rank}</span>
-                <span class="badge-tag" style="background: rgba(40,15,15,0.6); color: #885555; margin-left: 6px;">${c.skill}</span>
+              <div class="challenge-header-left">
+                <span class="challenge-title" style="color: #774444;">[BLOQUEADO] ${c.title}</span>
+                <span class="badge-tag ${rankBadgeClass}">${c.rank}</span>
+                <span class="badge-tag" style="background: rgba(40,15,15,0.6); color: #885555;">${c.skill}</span>
               </div>
-              <div style="text-align: right;">
-                <span class="badge-tag badge-locked-rank">🔒 REQUIERE RANGO ${c.rank.toUpperCase()}</span>
+              <div class="challenge-header-right">
+                <span class="badge-tag badge-locked-rank">[ REQUIERE RANGO ${c.rank.toUpperCase()} ]</span>
               </div>
             </div>
             <div class="locked-rank-notice">
-              <div style="font-size: 1.6rem;">🔒</div>
+              <div style="font-size: 1.3rem; font-family: monospace; font-weight: bold; color: var(--y-red);">[ ⊘ ]</div>
               <div>
                 <div style="font-weight: bold; color: #ff5555; letter-spacing: 1px;">PRESA BLOQUEADA — RANGO INSUFICIENTE</div>
                 <div style="font-size: 0.82rem; color: #aa7777; margin-top: 3px;">
@@ -362,31 +362,31 @@ function renderChallenges() {
       html += `
         <div class="challenge-card ${isClaimed ? 'completed' : 'hunting'}" id="card_${c.id}">
           <div class="challenge-header">
-            <div>
+            <div class="challenge-header-left">
               <span class="challenge-title" style="color: #00e5ff;">${c.title}</span>
-              <span class="badge-tag ${rankBadgeClass}" style="margin-left: 10px;">${c.rank}</span>
-              <span class="badge-tag" style="background: rgba(0,229,255,0.15); color: #00e5ff; border: 1px solid #00e5ff; margin-left: 6px;">
+              <span class="badge-tag ${rankBadgeClass}">${c.rank}</span>
+              <span class="badge-tag" style="background: rgba(0,229,255,0.15); color: #00e5ff; border: 1px solid #00e5ff;">
                 ${c.skill}
               </span>
             </div>
-            <div style="text-align: right;">
+            <div class="challenge-header-right">
               <span class="badge-tag" style="background: rgba(255, 102, 0, 0.25); color: #ff6600; border: 1px solid #ff6600; font-weight: bold;">
-                🔬 ESCÁNER TÁCTICO // MARCO TEÓRICO
+                [ ESCÁNER TÁCTICO // MARCO TEÓRICO ]
               </span>
             </div>
           </div>
 
           <div class="thermal-theory-box">
-            <div class="theory-section-title">📘 CONCEPTO DE SEGURIDAD & VULNERABILIDAD:</div>
+            <div class="theory-section-title">[+] CONCEPTO DE SEGURIDAD & VULNERABILIDAD:</div>
             <p class="theory-text">${c.theory ? c.theory.concept : 'Análisis teórico no disponible.'}</p>
 
-            <div class="theory-section-title">🛠️ METODOLOGÍA Y HERRAMIENTAS RECOMENDADAS:</div>
+            <div class="theory-section-title">[+] METODOLOGÍA Y HERRAMIENTAS RECOMENDADAS:</div>
             <p class="theory-text">${c.theory ? c.theory.tools : 'N/A'}</p>
 
-            <div class="theory-section-title">💡 ENFOQUE Y RAZONAMIENTO DEL ANALISTA:</div>
+            <div class="theory-section-title">[+] ENFOQUE Y RAZONAMIENTO DEL ANALISTA:</div>
             <p class="theory-text" style="color: #80d8ff;">${c.theory ? c.theory.approach : 'N/A'}</p>
 
-            <div class="theory-section-title">🛡️ MEDIDAS DE MITIGACIÓN Y HARDENING:</div>
+            <div class="theory-section-title">[+] MEDIDAS DE MITIGACIÓN Y HARDENING:</div>
             <p class="theory-text" style="color: #69f0ae;">${c.theory ? c.theory.mitigation : 'N/A'}</p>
           </div>
 
@@ -403,16 +403,18 @@ function renderChallenges() {
       html += `
         <div class="challenge-card ${isClaimed ? 'completed' : 'hunting'}" id="card_${c.id}">
           <div class="challenge-header">
-            <div>
+            <div class="challenge-header-left">
               <span class="challenge-title">${c.title}</span>
-              <span class="badge-tag ${rankBadgeClass}" style="margin-left: 10px;">${c.rank}</span>
-              <span class="badge-tag" style="background: rgba(0,210,255,0.1); color: #00d2ff; margin-left: 6px;">${c.skill}</span>
+              <span class="badge-tag ${rankBadgeClass}">${c.rank}</span>
+              <span class="badge-tag" style="background: rgba(0,210,255,0.1); color: #00d2ff;">${c.skill}</span>
             </div>
-            <div style="text-align: right;">
-              <div style="color: ${isClaimed ? '#00ff77' : '#ff4d6d'}; font-weight: bold; font-size: 1.1rem;">
-                ${isClaimed ? '✓ CRÁNEO RECLAMADO' : `+${c.points} HONOR`}
+            <div class="challenge-header-right">
+              <div style="text-align: right;">
+                <div style="color: ${isClaimed ? '#00ff77' : '#ff4d6d'}; font-weight: bold; font-size: 1.1rem;">
+                  ${isClaimed ? '✓ CRÁNEO RECLAMADO' : `+${c.points} HONOR`}
+                </div>
+                <div style="font-size: 0.75rem; color: #886666;">Dificultad: ${c.difficulty}</div>
               </div>
-              <div style="font-size: 0.75rem; color: #886666;">Dificultad: ${c.difficulty}</div>
             </div>
           </div>
 
@@ -452,7 +454,7 @@ function renderHintsForChallenge(challenge) {
           <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
             <span style="color: #ff9999; font-weight: bold; font-size: 0.85rem;">[PISTA NIVEL ${h.level}: ${h.title.toUpperCase()}]</span>
             <button class="btn-unlock-hint" onclick="toggleHintTranslation('${challenge.id}', ${h.level})" style="font-size: 0.75rem; padding: 3px 8px;">
-              🔄 Traducir / Alternar
+              [ TRADUCIR / ALTERNAR ]
             </button>
           </div>
           <div class="hint-content" id="hint_content_${challenge.id}_${h.level}">
