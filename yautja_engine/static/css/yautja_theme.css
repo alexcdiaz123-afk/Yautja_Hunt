@@ -843,3 +843,503 @@ body.thermal-vision .arma-link-btn:hover {
   background: #00e5ff;
   color: #020726;
 }
+
+/* ========================================================
+   PREDATOR STALKER PROGRESSION TRACK (BARRA DE SKULLS)
+   ======================================================== */
+.predator-tracker-hud {
+  background: linear-gradient(180deg, #120606 0%, #080303 100%);
+  border: 1px solid #3d1414;
+  border-left: 4px solid var(--y-red);
+  border-radius: 6px;
+  padding: 12px 18px 16px 18px;
+  margin-top: 10px;
+  margin-bottom: 18px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+}
+
+.tracker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tracker-status-text {
+  display: flex;
+  align-items: center;
+}
+
+.tracker-status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+  display: inline-block;
+}
+
+.pulse-red {
+  background: #ff2a2a;
+  box-shadow: 0 0 8px #ff2a2a;
+  animation: pulseLed 1.2s infinite alternate;
+}
+
+@keyframes pulseLed {
+  0% { opacity: 0.4; transform: scale(0.9); }
+  100% { opacity: 1; transform: scale(1.15); box-shadow: 0 0 12px #ff2a2a; }
+}
+
+.btn-demo-trophy {
+  background: rgba(255, 42, 42, 0.12);
+  color: #ff6666;
+  border: 1px solid #661a1a;
+  border-radius: 4px;
+  padding: 3px 10px;
+  font-size: 0.72rem;
+  font-family: var(--y-font-hud);
+  font-weight: bold;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  transition: all 0.2s;
+}
+
+.btn-demo-trophy:hover {
+  background: var(--y-red);
+  color: #000;
+  box-shadow: 0 0 10px rgba(255, 42, 42, 0.7);
+}
+
+.tracker-rail-wrapper {
+  position: relative;
+  padding: 42px 12px 12px 12px;
+}
+
+.tracker-rail {
+  height: 8px;
+  background: #180808;
+  border: 1px solid #331111;
+  border-radius: 4px;
+  position: relative;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.8);
+}
+
+.tracker-rail-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, #ff2a2a, #ff7700, #00ff77);
+  border-radius: 4px;
+  box-shadow: 0 0 10px rgba(255, 60, 0, 0.8);
+  transition: width 0.75s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tracker-waypoints {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  padding: 0 2px;
+}
+
+.rail-waypoint {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #140707;
+  border: 1.5px solid #4a1515;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.58rem;
+  font-family: monospace;
+  font-weight: 900;
+  color: #663333;
+  transition: all 0.3s;
+  position: relative;
+  user-select: none;
+}
+
+.rail-waypoint.claimed {
+  background: #00ff77;
+  border-color: #00ff77;
+  color: #051a0d;
+  box-shadow: 0 0 8px #00ff77;
+}
+
+.rail-waypoint.active-target {
+  background: #ff2a2a;
+  border-color: #ff5555;
+  color: #fff;
+  box-shadow: 0 0 12px #ff2a2a;
+  animation: targetNodePulse 1.2s infinite alternate;
+}
+
+@keyframes targetNodePulse {
+  0% { transform: scale(1); box-shadow: 0 0 6px #ff2a2a; }
+  100% { transform: scale(1.35); box-shadow: 0 0 16px #ff4444; }
+}
+
+.rail-waypoint.locked {
+  background: #0a0303;
+  border-color: #220808;
+  color: #331515;
+}
+
+/* Animated Predator Hunter Sprite on the Rail */
+.predator-runner-avatar {
+  position: absolute;
+  bottom: 0px;
+  transform: translateX(-50%);
+  transition: left 0.75s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.hunter-pixel-sprite {
+  width: 44px;
+  height: 48px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  filter: drop-shadow(0 0 8px rgba(255, 42, 42, 0.85));
+  animation: hunterStalkHop 0.9s infinite ease-in-out;
+}
+
+@keyframes hunterStalkHop {
+  0%, 100% {
+    transform: translateY(0) scaleY(1);
+  }
+  50% {
+    transform: translateY(-6px) scaleY(0.95);
+  }
+}
+
+.hunter-callout {
+  background: rgba(255, 42, 42, 0.95);
+  color: #fff;
+  font-family: var(--y-font-hud);
+  font-size: 0.62rem;
+  font-weight: 900;
+  padding: 2px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+  box-shadow: 0 0 8px rgba(255, 42, 42, 0.9);
+  margin-bottom: 2px;
+  position: relative;
+  animation: calloutBob 0.9s infinite ease-in-out;
+}
+
+.hunter-callout::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 4px 4px 0 4px;
+  border-style: solid;
+  border-color: rgba(255, 42, 42, 0.95) transparent transparent transparent;
+}
+
+@keyframes calloutBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+.hunter-tri-laser {
+  display: flex;
+  gap: 2.5px;
+  margin-top: 2px;
+}
+
+.laser-dot {
+  width: 3.5px;
+  height: 3.5px;
+  background: #ff1111;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #ff0000, 0 0 10px #ff3333;
+  animation: laserSweep 0.8s infinite alternate;
+}
+
+.laser-dot:nth-child(2) { animation-delay: 0.15s; }
+.laser-dot:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes laserSweep {
+  0% { opacity: 0.5; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1.3); }
+}
+
+/* ========================================================
+   PREDATOR TROPHY CELEBRATION OVERLAY (HEAD & SPINE ANIMATION)
+   ======================================================== */
+.predator-celebration-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  background: rgba(5, 1, 1, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: overlayFadeIn 0.3s ease-out forwards;
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.trophy-celebration-card {
+  background: radial-gradient(circle at center, #1b0707 0%, #0a0303 80%, #040101 100%);
+  border: 2px solid var(--y-red);
+  border-radius: 12px;
+  box-shadow: 0 0 50px rgba(255, 42, 42, 0.6), inset 0 0 35px rgba(255, 42, 42, 0.2);
+  padding: 2.2rem 2.5rem;
+  max-width: 620px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  animation: trophyCardPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes trophyCardPop {
+  0% { transform: scale(0.7) translateY(40px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.celebration-plasma-scanline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #ff2a2a, #ff9900, #ff2a2a, transparent);
+  box-shadow: 0 0 15px #ff2a2a;
+  animation: scanlineSweep 2.5s infinite linear;
+}
+
+@keyframes scanlineSweep {
+  0% { top: 0%; opacity: 0.8; }
+  50% { top: 100%; opacity: 0.4; }
+  100% { top: 0%; opacity: 0.8; }
+}
+
+.celebration-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 42, 42, 0.15);
+  border: 1px solid var(--y-red);
+  color: #ff5555;
+  font-family: var(--y-font-hud);
+  font-weight: 900;
+  font-size: 0.82rem;
+  letter-spacing: 2px;
+  padding: 5px 16px;
+  border-radius: 20px;
+  margin-bottom: 1.2rem;
+  text-transform: uppercase;
+  box-shadow: 0 0 15px rgba(255, 42, 42, 0.3);
+}
+
+.pulse-red-glow {
+  color: #ff2a2a;
+  animation: glowPulse 0.8s infinite alternate;
+}
+
+@keyframes glowPulse {
+  0% { transform: scale(1); filter: drop-shadow(0 0 2px #ff0000); }
+  100% { transform: scale(1.3); filter: drop-shadow(0 0 8px #ff4444); }
+}
+
+.trophy-sprite-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.8rem 0 1.2rem 0;
+  min-height: 210px;
+}
+
+.trophy-glow-aura {
+  position: absolute;
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 42, 42, 0.35) 0%, rgba(255, 102, 0, 0.15) 50%, transparent 70%);
+  filter: blur(14px);
+  animation: auraPulsate 2s infinite alternate;
+}
+
+@keyframes auraPulsate {
+  0% { transform: scale(0.9); opacity: 0.6; }
+  100% { transform: scale(1.25); opacity: 1; }
+}
+
+.trophy-pixel-sprite {
+  width: 180px;
+  height: auto;
+  max-height: 220px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 0 16px rgba(255, 42, 42, 0.95)) drop-shadow(0 0 35px rgba(255, 60, 0, 0.6));
+  animation: trophySpriteRise 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, trophyVictoryIdle 1.5s infinite ease-in-out 0.6s;
+}
+
+@keyframes trophySpriteRise {
+  0% {
+    transform: translateY(80px) scale(0.5);
+    opacity: 0;
+  }
+  60% {
+    transform: translateY(-12px) scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes trophyVictoryIdle {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    filter: drop-shadow(0 0 16px rgba(255, 42, 42, 0.95)) drop-shadow(0 0 35px rgba(255, 60, 0, 0.6));
+  }
+  50% {
+    transform: translateY(-8px) scale(1.03);
+    filter: drop-shadow(0 0 24px rgba(255, 80, 80, 1)) drop-shadow(0 0 50px rgba(255, 120, 0, 0.85));
+  }
+}
+
+.celebration-title {
+  color: #fff;
+  font-family: var(--y-font-hud);
+  font-size: 1.35rem;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  margin: 0 0 6px 0;
+  text-shadow: 0 0 15px rgba(255, 42, 42, 0.7);
+}
+
+.celebration-rank-tag {
+  color: #ff9900;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.celebration-points-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.celebration-honor-glow {
+  color: #00ff77;
+  font-weight: 900;
+  font-family: var(--y-font-hud);
+  font-size: 1.2rem;
+  text-shadow: 0 0 14px rgba(0, 255, 119, 0.8);
+  animation: pointsGlow 1.2s infinite alternate;
+}
+
+@keyframes pointsGlow {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.08); text-shadow: 0 0 22px #00ff77; }
+}
+
+.celebration-rank-up-box {
+  background: linear-gradient(90deg, rgba(255, 119, 0, 0.2), rgba(255, 42, 42, 0.3), rgba(255, 119, 0, 0.2));
+  border: 1px solid #ff7700;
+  border-radius: 6px;
+  padding: 10px 14px;
+  color: #ffcc00;
+  font-weight: bold;
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  margin: 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 0 20px rgba(255, 119, 0, 0.4);
+  animation: rankUpPulse 1s infinite alternate;
+}
+
+@keyframes rankUpPulse {
+  0% { box-shadow: 0 0 10px rgba(255, 119, 0, 0.3); }
+  100% { box-shadow: 0 0 25px rgba(255, 119, 0, 0.7); }
+}
+
+.celebration-btn {
+  padding: 12px 32px;
+  font-size: 1rem;
+  background: var(--y-red);
+  color: #000;
+  border: none;
+  font-weight: 900;
+  box-shadow: 0 0 20px rgba(255, 42, 42, 0.8);
+}
+
+.celebration-btn:hover {
+  background: #ff5555;
+  color: #fff;
+  box-shadow: 0 0 30px rgba(255, 42, 42, 1);
+}
+
+/* Thermal Vision Theme Adaptations for Animations */
+body.thermal-vision .predator-tracker-hud {
+  background: linear-gradient(180deg, #050e38 0%, #020726 100%);
+  border-color: #00e5ff;
+  border-left-color: #39ff14;
+}
+
+body.thermal-vision .tracker-rail {
+  background: #06183a;
+  border-color: #00b4d8;
+}
+
+body.thermal-vision .tracker-rail-fill {
+  background: linear-gradient(90deg, #00e5ff, #39ff14);
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.9);
+}
+
+body.thermal-vision .hunter-pixel-sprite {
+  filter: drop-shadow(0 0 10px #00e5ff) drop-shadow(0 0 20px #39ff14);
+}
+
+body.thermal-vision .trophy-celebration-card {
+  background: radial-gradient(circle at center, #051440 0%, #020726 100%);
+  border-color: #00e5ff;
+  box-shadow: 0 0 50px rgba(0, 229, 255, 0.7);
+}
+
+body.thermal-vision .trophy-pixel-sprite {
+  filter: drop-shadow(0 0 20px #00e5ff) drop-shadow(0 0 40px #39ff14);
+}

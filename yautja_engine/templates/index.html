@@ -69,6 +69,48 @@
           Cada flag representa un cráneo capturado de la presa
         </span>
       </div>
+
+      <!-- Predator Stalker Progression Track (Barra de Infiltración Yautja) -->
+      <div class="predator-tracker-hud" id="predatorTrackerHud">
+        <div class="tracker-header">
+          <div class="tracker-status-text">
+            <span class="tracker-status-indicator pulse-red"></span>
+            <span style="color: #ff5555; font-weight: bold; font-size: 0.8rem; letter-spacing: 1.5px;">INFILTRACIÓN TÁCTICA YAUTJA:</span>
+            <span id="trackerTargetLabel" style="color: #ff9900; font-size: 0.8rem; font-weight: bold; margin-left: 6px;">ACECHANDO SKULL 01</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <button type="button" class="btn-demo-trophy" onclick="demoTrophyAnimation()" title="Probar animación de cráneo cobrado">
+              🎬 PROBAR ANIMACIÓN
+            </button>
+            <span id="trackerProgressCount" style="color: #00ff77; font-size: 0.8rem; font-weight: bold;">
+              0 / 15 CRÁNEOS
+            </span>
+          </div>
+        </div>
+
+        <div class="tracker-rail-wrapper">
+          <div class="tracker-rail">
+            <div class="tracker-rail-fill" id="trackerRailFill" style="width: 0%;"></div>
+            
+            <!-- Dynamic Waypoints (1 to 15) -->
+            <div class="tracker-waypoints" id="trackerWaypoints">
+              <!-- Rendered dynamically by JS -->
+            </div>
+
+            <!-- Animated Hunter Sprite -->
+            <div class="predator-runner-avatar" id="predatorRunnerAvatar" style="left: 0%;">
+              <div class="hunter-callout" id="hunterCallout">SKULL 1</div>
+              <img src="/static/assets/predator_hunter_pixel.png" alt="Yautja Hunter" class="hunter-pixel-sprite">
+              <div class="hunter-tri-laser">
+                <span class="laser-dot"></span>
+                <span class="laser-dot"></span>
+                <span class="laser-dot"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="trophy-grid" id="trophyRack">
         <!-- Rendered dynamically by JS -->
       </div>
@@ -333,6 +375,47 @@
   <footer style="text-align: center; padding: 2.5rem 0; color: #553333; font-size: 0.8rem;">
     YAUTJA HUNT &copy; 2026 - CAPTURA LA BANDERA DE HACKING ÉTICO // UNIVERSIDAD DE CUNDINAMARCA
   </footer>
+
+  <!-- Predator Trophy Claimed Celebration Overlay (Animación al Conseguir Cráneo) -->
+  <div class="predator-celebration-overlay" id="predatorCelebrationOverlay" onclick="closeTrophyCelebration(event)">
+    <div class="trophy-celebration-card" onclick="event.stopPropagation()">
+      <div class="celebration-plasma-scanline"></div>
+      
+      <div class="celebration-badge-pill">
+        <span class="pulse-red-glow">⚡</span>
+        <span>¡TROFEO DE CACERÍA RECLAMADO!</span>
+        <span class="pulse-red-glow">⚡</span>
+      </div>
+
+      <!-- Predator raising severed human head with spine -->
+      <div class="trophy-sprite-wrapper">
+        <div class="trophy-glow-aura"></div>
+        <img src="/static/assets/predator_trophy_pixel.png" alt="Predator Trophy Victory" class="trophy-pixel-sprite" id="celebrationSprite">
+      </div>
+
+      <div class="celebration-details">
+        <h2 class="celebration-title" id="celebrationSkullTitle">SKULL 01 — RECONOCIMIENTO DEL TERRITORIO</h2>
+        <div class="celebration-rank-tag" id="celebrationRankTag">RANGO: SANGRE JOVEN</div>
+        
+        <div class="celebration-points-row">
+          <span class="celebration-honor-glow" id="celebrationPoints">+100 HONOR YAUTJA</span>
+          <span style="color: #888;">•</span>
+          <span style="color: #ff9900; font-weight: bold;" id="celebrationTotalHonor">PUNTUACIÓN TOTAL: 1100 PTS</span>
+        </div>
+
+        <div class="celebration-rank-up-box" id="celebrationRankUpBox" style="display: none;">
+          <span class="rank-up-icon">🔥</span>
+          <span id="celebrationRankUpText">¡ASCENSO DE RANGO! AHORA ERES CAZADOR SANGRADO</span>
+        </div>
+
+        <div style="margin-top: 1.5rem; display: flex; justify-content: center; gap: 12px;">
+          <button type="button" class="btn-hunt celebration-btn" onclick="closeTrophyCelebration()">
+            CONTINUAR CACERÍA ⚔️
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script src="/static/js/yautja_glyphs.js"></script>
   <script src="/static/js/app.js"></script>

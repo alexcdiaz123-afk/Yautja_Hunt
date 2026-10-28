@@ -132,8 +132,72 @@ function renderDashboard() {
   document.getElementById('hudRank').textContent = appState.current_rank;
   document.getElementById('rankBannerTitle').textContent = `RANGO ACTUAL: ${appState.current_rank}`;
 
+  renderTrackerTrack();
   renderTrophyRack();
   renderChallenges();
+}
+
+function renderTrackerTrack() {
+  const waypointsContainer = document.getElementById('trackerWaypoints');
+  const railFill = document.getElementById('trackerRailFill');
+  const runnerAvatar = document.getElementById('predatorRunnerAvatar');
+  const targetLabel = document.getElementById('trackerTargetLabel');
+  const progressCount = document.getElementById('trackerProgressCount');
+  const hunterCallout = document.getElementById('hunterCallout');
+
+  if (!waypointsContainer || !appState) return;
+
+  const claimedCount = appState.claimed_skulls ? appState.claimed_skulls.length : 0;
+  
+  // Find current target skull index (0 to 14)
+  let currentTargetIndex = 0;
+  for (let i = 1; i <= 15; i++) {
+    const skullId = `skull_${String(i).padStart(2, '0')}`;
+    if (!appState.claimed_skulls.includes(skullId)) {
+      currentTargetIndex = i - 1;
+      break;
+    }
+    if (i === 15) currentTargetIndex = 14;
+  }
+
+  // Calculate progress on the rail
+  const percentFill = (claimedCount / 15) * 100;
+  // Hunter avatar traverses from 0% (Skull 1) to 100% (Skull 15)
+  const hunterLeft = (currentTargetIndex / 14) * 100;
+
+  if (railFill) railFill.style.width = `${percentFill}%`;
+  if (runnerAvatar) runnerAvatar.style.left = `${hunterLeft}%`;
+
+  if (progressCount) progressCount.textContent = `${claimedCount} / 15 CRÁNEOS`;
+
+  if (claimedCount === 15) {
+    if (targetLabel) targetLabel.textContent = '¡CACERÍA SUPREMA! TODOS LOS CRÁNEOS COBRADOS';
+    if (hunterCallout) hunterCallout.textContent = 'ANCESTRAL 👑';
+  } else {
+    if (targetLabel) targetLabel.textContent = `ACECHANDO SKULL ${String(currentTargetIndex + 1).padStart(2, '0')}`;
+    if (hunterCallout) hunterCallout.textContent = `SKULL ${currentTargetIndex + 1}`;
+  }
+
+  // Render the 15 telemetry waypoints along the track
+  let wpHTML = '';
+  for (let i = 1; i <= 15; i++) {
+    const skullId = `skull_${String(i).padStart(2, '0')}`;
+    const isClaimed = appState.claimed_skulls.includes(skullId);
+    const isTarget = (i - 1 === currentTargetIndex) && !isClaimed;
+    const isUnlocked = isSkullUnlocked(i);
+
+    let wpClass = 'rail-waypoint';
+    if (isClaimed) wpClass += ' claimed';
+    else if (isTarget) wpClass += ' active-target';
+    else if (!isUnlocked) wpClass += ' locked';
+
+    wpHTML += `
+      <div class="${wpClass}" title="Sector Skull ${i}${isClaimed ? ' (Cobrado ✓)' : (isTarget ? ' (En la Mira 🎯)' : ' (Bloqueado 🔒)')}">
+        ${isClaimed ? '✓' : i}
+      </div>
+    `;
+  }
+  waypointsContainer.innerHTML = wpHTML;
 }
 
 function isSkullUnlocked(skullNumber) {
@@ -151,11 +215,23 @@ function renderTrophyRack() {
   const rack = document.getElementById('trophyRack');
   if (!rack) return;
 
+  // Find active hunting target skull index
+  let currentTargetIndex = 0;
+  for (let k = 1; k <= 15; k++) {
+    const sId = `skull_${String(k).padStart(2, '0')}`;
+    if (!appState.claimed_skulls.includes(sId)) {
+      currentTargetIndex = k - 1;
+      break;
+    }
+    if (k === 15) currentTargetIndex = 14;
+  }
+
   let html = '';
   for (let i = 1; i <= 15; i++) {
     const skullId = `skull_${String(i).padStart(2, '0')}`;
     const isClaimed = appState.claimed_skulls.includes(skullId);
     const isUnlocked = isSkullUnlocked(i);
+    const isTarget = (i - 1 === currentTargetIndex) && !isClaimed;
 
     let statusKey = 'active';
     let statusBadgeText = 'EN MIRA';
@@ -169,6 +245,12 @@ function renderTrophyRack() {
       statusBadgeColor = '#00ff77';
       labelColor = '#00ff77';
       tooltip = 'Cráneo Capturado (✓)';
+    } else if (isTarget) {
+      statusKey = 'active';
+      statusBadgeText = '🎯 BLANCO';
+      statusBadgeColor = '#ff2222';
+      labelColor = '#ff2222';
+      tooltip = '🎯 Objetivo actual fijado por el Cazador Yautja';
     } else if (!isUnlocked) {
       statusKey = 'locked';
       statusBadgeText = 'BLOQUEADO';
@@ -183,7 +265,7 @@ function renderTrophyRack() {
     const skullSVG = getSkullVectorSVG(statusKey, 42);
 
     html += `
-      <div class="skull-trophy ${statusKey === 'active' ? 'active-target' : statusKey}" 
+      <div class="skull-trophy ${statusKey === 'active' ? 'active-target' : statusKey} ${isTarget ? 'current-hunt-focus' : ''}" 
            title="${tooltip}">
         <div class="skull-icon-wrapper">
           ${skullSVG}
@@ -191,7 +273,7 @@ function renderTrophyRack() {
         <div style="font-size:0.75rem; font-weight:900; color:${labelColor}; letter-spacing:1px; margin-top:2px;">
           SKULL ${i}
         </div>
-        <div class="skull-status-badge" style="color:${statusBadgeColor};">
+        <div class="skull-status-badge" style="color:${statusBadgeColor}; font-weight: ${isTarget ? '900' : '700'};">
           ${statusBadgeText}
         </div>
       </div>
@@ -452,9 +534,14 @@ async function submitFlag(flag) {
     if (data.success) {
       statusMsg.innerHTML = `<span style="color:#00ff77; font-weight:bold;">¡CRÁNEO CAPTURADO! +${data.points_added} Honor. ${data.message}</span>`;
       document.getElementById('flagInput').value = '';
+      
+      const oldRank = appState ? appState.current_rank : null;
       appState = data.state;
       renderDashboard();
       playSuccessEffect();
+
+      // Trigger celebratory Predator trophy animation!
+      triggerSkullTrophyCelebration(data, oldRank);
     } else {
       statusMsg.innerHTML = `<span style="color:#ff4d6d; font-weight:bold;">✕ PRESA ERRÓNEA: ${data.message}</span>`;
     }
@@ -560,12 +647,149 @@ window.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     closeBrazaleteModal();
     closeArmasModal();
+    closeTrophyCelebration();
   }
 });
 
 window.addEventListener('click', (e) => {
   const brazaleteModal = document.getElementById('brazaleteModal') || document.getElementById('codexModal');
   const armasModal = document.getElementById('armasModal');
+  const celebrationOverlay = document.getElementById('predatorCelebrationOverlay');
+
   if (e.target === brazaleteModal) closeBrazaleteModal();
   if (e.target === armasModal) closeArmasModal();
+  if (e.target === celebrationOverlay) closeTrophyCelebration();
 });
+
+/* ========================================================
+   PREDATOR TROPHY CELEBRATION LOGIC & RETRO AUDIO
+   ======================================================== */
+let celebrationDismissTimer = null;
+
+function triggerSkullTrophyCelebration(data, oldRank) {
+  const overlay = document.getElementById('predatorCelebrationOverlay');
+  if (!overlay) return;
+
+  if (celebrationDismissTimer) {
+    clearTimeout(celebrationDismissTimer);
+    celebrationDismissTimer = null;
+  }
+
+  // Play retro 8-bit Yautja victory roar and laser chimes
+  playYautjaTrophySound();
+
+  const titleEl = document.getElementById('celebrationSkullTitle');
+  const rankEl = document.getElementById('celebrationRankTag');
+  const pointsEl = document.getElementById('celebrationPoints');
+  const totalHonorEl = document.getElementById('celebrationTotalHonor');
+  const rankUpBox = document.getElementById('celebrationRankUpBox');
+  const rankUpText = document.getElementById('celebrationRankUpText');
+  const sprite = document.getElementById('celebrationSprite');
+
+  if (titleEl) titleEl.textContent = data.message || "CRÁNEO DE CACERÍA COBRADO";
+  if (rankEl && appState) rankEl.textContent = `RANGO: ${appState.current_rank.toUpperCase()}`;
+  if (pointsEl) pointsEl.textContent = `+${data.points_added || 100} HONOR YAUTJA`;
+  if (totalHonorEl && appState) totalHonorEl.textContent = `PUNTUACIÓN TOTAL: ${appState.honor_score} PTS`;
+
+  // Check if rank upgraded
+  if (data.new_rank && oldRank && data.new_rank !== oldRank) {
+    if (rankUpBox && rankUpText) {
+      rankUpText.textContent = `¡ASCENSO DE RANGO! AHORA ERES ${data.new_rank.toUpperCase()}`;
+      rankUpBox.style.display = 'flex';
+    }
+  } else if (rankUpBox) {
+    rankUpBox.style.display = 'none';
+  }
+
+  // Re-trigger rising animation on sprite
+  if (sprite) {
+    sprite.style.animation = 'none';
+    void sprite.offsetWidth; // Force CSS reflow
+    sprite.style.animation = 'trophySpriteRise 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, trophyVictoryIdle 1.5s infinite ease-in-out 0.6s';
+  }
+
+  overlay.style.display = 'flex';
+
+  // Auto-dismiss after 6.5 seconds
+  celebrationDismissTimer = setTimeout(() => {
+    closeTrophyCelebration();
+  }, 6500);
+}
+
+function closeTrophyCelebration(e) {
+  if (e && e.target && e.target.closest && e.target.closest('.trophy-celebration-card') && e.type === 'click' && !e.target.closest('.celebration-btn')) {
+    return;
+  }
+  const overlay = document.getElementById('predatorCelebrationOverlay');
+  if (overlay) overlay.style.display = 'none';
+  if (celebrationDismissTimer) {
+    clearTimeout(celebrationDismissTimer);
+    celebrationDismissTimer = null;
+  }
+}
+
+function demoTrophyAnimation() {
+  const sampleData = {
+    message: "Skull 03 — La Entrada (Bóveda Descubierta)",
+    points_added: 100,
+    new_rank: "Sangrado (Blooded)"
+  };
+  triggerSkullTrophyCelebration(sampleData, "Sangre Joven (Young Blood)");
+}
+
+// Synthesize authentic 8-bit arcade Yautja triumph audio using Web Audio API
+function playYautjaTrophySound() {
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+    const ctx = new AudioContext();
+
+    const now = ctx.currentTime;
+
+    // 1. Guttural Bass Roar / Plasma sweep (Low Sawtooth with pitch drop)
+    const oscRoar = ctx.createOscillator();
+    const gainRoar = ctx.createGain();
+    oscRoar.type = 'sawtooth';
+    oscRoar.frequency.setValueAtTime(120, now);
+    oscRoar.frequency.exponentialRampToValueAtTime(32, now + 0.45);
+    gainRoar.gain.setValueAtTime(0.35, now);
+    gainRoar.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+    oscRoar.connect(gainRoar);
+    gainRoar.connect(ctx.destination);
+    oscRoar.start(now);
+    oscRoar.stop(now + 0.52);
+
+    // 2. Tri-Laser Target Lock Chimes (880Hz, 1174Hz, 1760Hz)
+    [0.15, 0.28, 0.42].forEach((timeOffset, idx) => {
+      const oscChirp = ctx.createOscillator();
+      const gainChirp = ctx.createGain();
+      oscChirp.type = 'sine';
+      const freqs = [880, 1174, 1760];
+      oscChirp.frequency.setValueAtTime(freqs[idx], now + timeOffset);
+      gainChirp.gain.setValueAtTime(0.2, now + timeOffset);
+      gainChirp.gain.exponentialRampToValueAtTime(0.001, now + timeOffset + 0.16);
+      oscChirp.connect(gainChirp);
+      gainChirp.connect(ctx.destination);
+      oscChirp.start(now + timeOffset);
+      oscChirp.stop(now + timeOffset + 0.18);
+    });
+
+    // 3. Victorious Arcade Arpeggio (C5 -> E5 -> G5 -> C6)
+    const victoryNotes = [523.25, 659.25, 783.99, 1046.50];
+    victoryNotes.forEach((f, i) => {
+      const oscV = ctx.createOscillator();
+      const gainV = ctx.createGain();
+      oscV.type = 'triangle';
+      const startT = now + 0.52 + (i * 0.09);
+      oscV.frequency.setValueAtTime(f, startT);
+      gainV.gain.setValueAtTime(0.22, startT);
+      gainV.gain.exponentialRampToValueAtTime(0.001, startT + 0.32);
+      oscV.connect(gainV);
+      gainV.connect(ctx.destination);
+      oscV.start(startT);
+      oscV.stop(startT + 0.35);
+    });
+  } catch (err) {
+    console.log("Audio synthesis not available or blocked:", err);
+  }
+}
