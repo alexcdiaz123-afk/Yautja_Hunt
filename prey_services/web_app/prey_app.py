@@ -1,4 +1,5 @@
 import os
+import json
 import sqlite3
 import subprocess
 import platform
@@ -12,6 +13,19 @@ DATA_DIR = os.path.join(BASE_DIR, 'vulnerable_data')
 DB_PATH = os.path.join(BASE_DIR, 'owlf_specimens.db')
 PROJECT_ROOT = os.path.abspath(os.path.join(BASE_DIR, '..'))
 SECRET_ACCESS_DIR = os.path.join(PROJECT_ROOT, 'secret_access')
+REPO_ROOT = os.path.abspath(os.path.join(PROJECT_ROOT, '..'))
+ENGINE_STATE_FILE = os.path.join(REPO_ROOT, 'yautja_engine', 'data', 'state.json')
+
+def is_hunter_berserker():
+    """Detects if hunter has fallen into Berserker status in Yautja Engine."""
+    try:
+        if os.path.exists(ENGINE_STATE_FILE):
+            with open(ENGINE_STATE_FILE, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                return bool(data.get('is_berserker', False))
+    except Exception:
+        pass
+    return False
 
 # Ensure database exists
 if not os.path.exists(DB_PATH):
@@ -151,6 +165,16 @@ def diagnostic():
     if request.method == 'POST':
         target = request.form.get('target', '').strip()
 
+        # Berserker defense rule for Command Injection: filters semicolon ';'
+        if is_hunter_berserker() and ';' in target:
+            output = (
+                "[OWLF FIREWALL // DEFENSAS PERIMETRALES BERSERKER ACTIVADAS]\n"
+                "ALERTA: Se ha detectado una firma de intrusión hostil de casta Berserker.\n"
+                "Regla de mitigación activa: El delimitador ';' ha sido bloqueado en el gateway.\n"
+                "Para forzar la inyección de comandos en modo Berserker, debes utilizar operadores de control alternativos (&& o |)."
+            )
+            return render_template('diagnostic.html', output=output, target=target)
+
         # Command Injection vulnerability for Skull 07
         is_windows = platform.system().lower() == 'windows'
         
@@ -228,6 +252,15 @@ def internal_plasma_matrix():
 def api_override():
     token = request.args.get('token') or (request.get_json(silent=True) or {}).get('token') or request.form.get('token')
     if token and 'stargazer_plasma_matrix_token_87' in str(token).strip():
+        if is_hunter_berserker():
+            b_force = str(request.args.get('berserker_force') or (request.get_json(silent=True) or {}).get('berserker_force') or request.form.get('berserker_force') or '')
+            if b_force not in ['1', 'true', 'TRUE']:
+                return {
+                    "status": "PLASMA_FEEDBACK_DEFENSE",
+                    "error": "El escudo detectó resonancia hostil de casta Berserker. Para forzar la anulación del escudo, añade el parámetro 'berserker_force=1' en la petición.",
+                    "hint": "cURL: curl 'http://<IP>:8080/api/override?token=stargazer_plasma_matrix_token_87&berserker_force=1'"
+                }, 400
+
         return {
             "status": "SHIELD_OFFLINE",
             "message": "Autenticación de token interno aceptada. Escudo de plasma neutralizado.",

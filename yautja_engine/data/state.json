@@ -4,6 +4,10 @@
   "claimed_skulls": [],
   "unlocked_hints": {},
   "current_rank": "Iniciado (Sin Sangrar)",
+  "is_berserker": false,
+  "berserker_clean_skulls": 0,
+  "berserker_skulls_needed": 3,
+  "berserker_trigger_honor": 800,
   "logs": [
     {
       "time": "REINICIO",

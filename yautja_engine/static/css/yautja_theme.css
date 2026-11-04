@@ -1350,3 +1350,146 @@ body.thermal-vision .trophy-celebration-card {
 body.thermal-vision .trophy-pixel-sprite {
   filter: drop-shadow(0 0 20px #00e5ff) drop-shadow(0 0 40px #39ff14);
 }
+
+/* ========================================================
+   MODO BERSERKER (DESHONOR YOUTJA // PENITENCIA)
+   ======================================================== */
+.badge-rank-berserker {
+  background: rgba(255, 0, 51, 0.28) !important;
+  color: #ff1a40 !important;
+  border: 1px solid #ff0033 !important;
+  font-weight: 900 !important;
+  letter-spacing: 1px;
+  box-shadow: 0 0 12px rgba(255, 0, 51, 0.6) !important;
+  animation: berserkerGlow 1.8s infinite alternate;
+}
+
+@keyframes berserkerGlow {
+  0% { box-shadow: 0 0 8px rgba(255, 0, 51, 0.4); border-color: #ff0033; }
+  100% { box-shadow: 0 0 18px rgba(255, 0, 51, 0.9), 0 0 30px rgba(255, 0, 51, 0.4); border-color: #ff4d6d; }
+}
+
+body.berserker-mode {
+  --y-red: #ff0033;
+}
+
+body.berserker-mode .brand-title {
+  text-shadow: 0 0 15px rgba(255, 0, 51, 0.85);
+}
+
+body.berserker-mode .rank-banner {
+  border-color: #ff0033 !important;
+  background: linear-gradient(90deg, rgba(35, 5, 10, 0.95), rgba(50, 10, 18, 0.92)) !important;
+  box-shadow: 0 0 25px rgba(255, 0, 51, 0.4) !important;
+}
+
+.berserker-banner-alert {
+  background: linear-gradient(135deg, rgba(45, 6, 10, 0.96), rgba(22, 3, 6, 0.98));
+  border: 1px solid #ff0033;
+  border-left: 5px solid #ff0033;
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 0 20px rgba(255, 0, 51, 0.3);
+  animation: berserkerPulse 2.5s infinite alternate;
+}
+
+@keyframes berserkerPulse {
+  0% { border-color: #ff0033; box-shadow: 0 0 15px rgba(255, 0, 51, 0.25); }
+  100% { border-color: #ff6677; box-shadow: 0 0 28px rgba(255, 0, 51, 0.5); }
+}
+
+.berserker-alert-icon {
+  font-size: 1.4rem;
+  font-family: monospace;
+  font-weight: 900;
+  color: #ff0033;
+  text-shadow: 0 0 10px #ff0033;
+  padding: 4px 8px;
+}
+
+.berserker-alert-title {
+  color: #ff1a40;
+  font-weight: 900;
+  font-size: 1rem;
+  letter-spacing: 1.2px;
+}
+
+.berserker-alert-desc {
+  font-size: 0.84rem;
+  color: #d18080;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+.berserker-skulls-box {
+  background: rgba(18, 4, 7, 0.85);
+  border: 1px solid #66111a;
+  border-radius: 5px;
+  padding: 8px 14px;
+  text-align: center;
+  min-width: 140px;
+}
+
+.berserker-box-title {
+  font-size: 0.7rem;
+  color: #ff6677;
+  letter-spacing: 1.5px;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.berserker-slots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.berserker-slot {
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  border: 1px dashed #ff0033;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 900;
+  color: #ff4d6d;
+  background: rgba(255, 0, 51, 0.08);
+  transition: all 0.3s;
+}
+
+.berserker-slot.redeemed {
+  border: 1px solid #00ff77;
+  color: #00ff77;
+  background: rgba(0, 255, 119, 0.2);
+  box-shadow: 0 0 10px rgba(0, 255, 119, 0.6);
+}
+
+.btn-unlock-hint.berserker-disabled {
+  background: rgba(40, 10, 15, 0.7);
+  border: 1px solid #661a22;
+  color: #88444a;
+  cursor: not-allowed;
+  font-size: 0.75rem;
+  padding: 5px 10px;
+  border-radius: 3px;
+  display: inline-block;
+  user-select: none;
+}
+
+.theory-berserker-warning {
+  background: rgba(255, 0, 51, 0.12);
+  border: 1px dashed #ff0033;
+  padding: 10px 14px;
+  border-radius: 4px;
+  margin-top: 4px;
+  color: #ff8899;
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+

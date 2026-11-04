@@ -127,10 +127,83 @@ function renderDashboard() {
   if (!appState || !challengesData) return;
 
   // Update HUD
-  document.getElementById('hudHonor').textContent = appState.honor_score;
+  const honorEl = document.getElementById('hudHonor');
+  if (honorEl) {
+    honorEl.textContent = appState.honor_score;
+    if (appState.honor_score <= (appState.berserker_trigger_honor || 800)) {
+      honorEl.style.color = '#ff0033';
+      honorEl.title = '¡Alerta de deshonor! Honor en límite Berserker (≤ 800)';
+    } else {
+      honorEl.style.color = '#ff9900';
+      honorEl.title = 'Honor Yautja disponible';
+    }
+  }
+
   document.getElementById('hudSkullsCount').textContent = `${appState.claimed_skulls.length} / 15`;
-  document.getElementById('hudRank').textContent = appState.current_rank;
-  document.getElementById('rankBannerTitle').textContent = `RANGO ACTUAL: ${appState.current_rank}`;
+  
+  const hudRankEl = document.getElementById('hudRank');
+  const berserkerHudItem = document.getElementById('berserkerHudItem');
+  const hudBerserkerCount = document.getElementById('hudBerserkerCount');
+  const berserkerAlertBanner = document.getElementById('berserkerAlertBanner');
+  const rankBannerTitle = document.getElementById('rankBannerTitle');
+  const rankBannerCategory = document.getElementById('rankBannerCategory');
+  const rankBannerSubtext = document.getElementById('rankBannerSubtext');
+
+  if (appState.is_berserker) {
+    document.body.classList.add('berserker-mode');
+    if (hudRankEl) {
+      hudRankEl.textContent = `BERSERKER [${appState.berserker_clean_skulls || 0}/3]`;
+      hudRankEl.style.color = '#ff0033';
+    }
+    if (berserkerHudItem) {
+      berserkerHudItem.style.display = 'flex';
+      if (hudBerserkerCount) {
+        hudBerserkerCount.textContent = `${appState.berserker_clean_skulls || 0} / ${appState.berserker_skulls_needed || 3} LIMPIOS`;
+      }
+    }
+    if (berserkerAlertBanner) berserkerAlertBanner.style.display = 'flex';
+
+    if (rankBannerTitle) rankBannerTitle.textContent = 'RANGO: BERSERKER (MALA SANGRE)';
+    if (rankBannerCategory) {
+      rankBannerCategory.textContent = 'PENITENCIA POR DESHONOR';
+      rankBannerCategory.style.color = '#ff1a40';
+    }
+    if (rankBannerSubtext) {
+      rankBannerSubtext.innerHTML = '<span style="color:#ff4d6d;font-weight:bold;">¡Rango noble suspendido!</span> Exige 3 cráneos limpios para redención.';
+    }
+
+    // Update slots
+    const cleanCount = appState.berserker_clean_skulls || 0;
+    for (let s = 1; s <= 3; s++) {
+      const slot = document.getElementById(`bslot_${s}`);
+      if (slot) {
+        if (s <= cleanCount) {
+          slot.classList.add('redeemed');
+          slot.textContent = '✓';
+        } else {
+          slot.classList.remove('redeemed');
+          slot.textContent = s;
+        }
+      }
+    }
+  } else {
+    document.body.classList.remove('berserker-mode');
+    if (hudRankEl) {
+      hudRankEl.textContent = appState.current_rank;
+      hudRankEl.style.color = '#ff7733';
+    }
+    if (berserkerHudItem) berserkerHudItem.style.display = 'none';
+    if (berserkerAlertBanner) berserkerAlertBanner.style.display = 'none';
+
+    if (rankBannerTitle) rankBannerTitle.textContent = `RANGO ACTUAL: ${appState.current_rank}`;
+    if (rankBannerCategory) {
+      rankBannerCategory.textContent = 'ASCENSO DE CACERÍA';
+      rankBannerCategory.style.color = '#885555';
+    }
+    if (rankBannerSubtext) {
+      rankBannerSubtext.innerHTML = 'Sangre Joven (1-3) &rarr; Sangrado (4-7) &rarr; Élite (8-11) &rarr; Anciano (12-14) &rarr; Ancestral (15)';
+    }
+  }
 
   renderTrackerTrack();
   renderTrophyRack();
@@ -173,6 +246,9 @@ function renderTrackerTrack() {
   if (claimedCount === 15) {
     if (targetLabel) targetLabel.textContent = '¡CACERÍA SUPREMA! TODOS LOS CRÁNEOS COBRADOS';
     if (hunterCallout) hunterCallout.textContent = 'ANCESTRAL';
+  } else if (appState.is_berserker) {
+    if (targetLabel) targetLabel.textContent = `ACECHANDO SKULL ${String(currentTargetIndex + 1).padStart(2, '0')} // MODO BERSERKER`;
+    if (hunterCallout) hunterCallout.textContent = `BERSERKER [${appState.berserker_clean_skulls || 0}/3]`;
   } else {
     if (targetLabel) targetLabel.textContent = `ACECHANDO SKULL ${String(currentTargetIndex + 1).padStart(2, '0')}`;
     if (hunterCallout) hunterCallout.textContent = `SKULL ${currentTargetIndex + 1}`;
@@ -384,7 +460,14 @@ function renderChallenges() {
             <p class="theory-text">${c.theory ? c.theory.tools : 'N/A'}</p>
 
             <div class="theory-section-title">[+] ENFOQUE Y RAZONAMIENTO DEL ANALISTA:</div>
-            <p class="theory-text" style="color: #80d8ff;">${c.theory ? c.theory.approach : 'N/A'}</p>
+            ${appState.is_berserker ? `
+              <div class="theory-berserker-warning">
+                [!] INTERFERENCIA DE FRENESÍ BERSERKER: El deshonor nubla los sensores de orientación paso a paso.
+                Debes examinar los servicios y utilizar las herramientas sugeridas (${c.theory ? c.theory.tools : 'herramientas de Kali'}) para deducir el vector de explotación por tu cuenta.
+              </div>
+            ` : `
+              <p class="theory-text" style="color: #80d8ff;">${c.theory ? c.theory.approach : 'N/A'}</p>
+            `}
 
             <div class="theory-section-title">[+] MEDIDAS DE MITIGACIÓN Y HARDENING:</div>
             <p class="theory-text" style="color: #69f0ae;">${c.theory ? c.theory.mitigation : 'N/A'}</p>
@@ -468,17 +551,44 @@ function renderHintsForChallenge(challenge) {
         </div>
       `;
     } else {
-      html += `
-        <div class="hint-row">
-          <div>
-            <span style="color: #aaa; font-size: 0.85rem;">Pista Nivel ${h.level} (${h.title})</span>
-            <span style="color: #ff5555; font-size: 0.75rem; margin-left: 10px;">Penalización: -${h.cost} Honor</span>
+      if (appState.is_berserker) {
+        if (h.level === 3) {
+          html += `
+            <div class="hint-row" style="border-left: 3px solid #66111a;">
+              <div>
+                <span style="color: #995555; font-size: 0.85rem;">Pista Nivel 3 (${h.title})</span>
+                <span style="color: #ff3344; font-size: 0.75rem; margin-left: 10px; font-weight: bold;">[BLOQUEO BERSERKER: SIN PISTAS DIRECTAS]</span>
+              </div>
+              <span class="btn-unlock-hint berserker-disabled">[ DESACTIVADA EN BERSERKER ]</span>
+            </div>
+          `;
+        } else {
+          const bCost = Math.round(h.cost * 1.5);
+          html += `
+            <div class="hint-row" style="border-left: 3px solid #ff0033;">
+              <div>
+                <span style="color: #aaa; font-size: 0.85rem;">Pista Nivel ${h.level} (${h.title})</span>
+                <span style="color: #ff3344; font-size: 0.75rem; margin-left: 10px;">Penalización Berserker: -${bCost} Honor</span>
+              </div>
+              <button class="btn-unlock-hint" style="border-color: #ff0033; color: #ff6677;" onclick="unlockHint('${challenge.id}', ${h.level}, ${bCost})">
+                Desbloquear (-${bCost} Honor) [Reinicia Redención]
+              </button>
+            </div>
+          `;
+        }
+      } else {
+        html += `
+          <div class="hint-row">
+            <div>
+              <span style="color: #aaa; font-size: 0.85rem;">Pista Nivel ${h.level} (${h.title})</span>
+              <span style="color: #ff5555; font-size: 0.75rem; margin-left: 10px;">Penalización: -${h.cost} Honor</span>
+            </div>
+            <button class="btn-unlock-hint" onclick="unlockHint('${challenge.id}', ${h.level}, ${h.cost})">
+              Desbloquear Pista en Glifos (-${h.cost})
+            </button>
           </div>
-          <button class="btn-unlock-hint" onclick="unlockHint('${challenge.id}', ${h.level}, ${h.cost})">
-            Desbloquear Pista en Glifos (-${h.cost})
-          </button>
-        </div>
-      `;
+        `;
+      }
     }
   }
 
@@ -500,7 +610,26 @@ async function unlockHint(challengeId, level, cost) {
     return;
   }
 
-  if (!confirm(`¿Deseas descifrar esta pista por ${cost} puntos de honor?`)) return;
+  if (appState.is_berserker) {
+    if (level === 3) {
+      alert("¡BLOQUEO BERSERKER!\n\nUn cazador en frenesí no recibe pistas de solución directa (Nivel 3). Debes deducir el vector con tu propia astucia.");
+      return;
+    }
+    const needed = appState.berserker_skulls_needed || 3;
+    if (!confirm(`[ADVERTENCIA BERSERKER]\nDesbloquear esta pista cuesta ${cost} puntos de honor y REINICIARÁ tu progreso de redención a 0/${needed} cráneos limpios.\n\n¿Deseas continuar?`)) {
+      return;
+    }
+  } else {
+    const trigger = appState.berserker_trigger_honor || 800;
+    const remaining = appState.honor_score - cost;
+    if (remaining <= trigger) {
+      if (!confirm(`⚠️ ¡ADVERTENCIA DE DESHONOR!\nSi descifras esta pista por ${cost} puntos, tu honor caerá a ${remaining} pts (≤ ${trigger}).\n\n¡SERÁS DEGRADADO AL RANGO BERSERKER Y PERDERÁS TU RANGO NOBLE!\n\n¿Deseas descifrarla de todas formas?`)) {
+        return;
+      }
+    } else {
+      if (!confirm(`¿Deseas descifrar esta pista por ${cost} puntos de honor?`)) return;
+    }
+  }
 
   try {
     const res = await fetch('/api/unlock_hint', {
@@ -512,6 +641,20 @@ async function unlockHint(challengeId, level, cost) {
     if (result.success) {
       appState = result.state;
       renderDashboard();
+
+      if (result.became_berserker) {
+        alert(
+          "⚡ ¡ALERTA DE DESHONOR YAUTJA! ⚡\n\n" +
+          "Tu honor ha descendido a " + result.state.honor_score + " puntos (límite ≤ 800).\n" +
+          "Has sido despojado de tu casta noble y degradado al rango BERSERKER.\n\n" +
+          "Efectos activos de Berserker:\n" +
+          "• Pistas directas (Nivel 3) BLOQUEADAS.\n" +
+          "• Recargo de honor en pistas restantes (+50%).\n" +
+          "• Interferencia táctica en el visor térmico.\n" +
+          "• Defensas perimetrales de OWLF en alerta reforzada.\n\n" +
+          "Para salir de Berserker y restaurar tu rango, debes capturar 3 cráneos de forma limpia (sin usar pistas)."
+        );
+      }
     } else {
       alert(result.message || "Error al desbloquear pista.");
     }
@@ -534,13 +677,24 @@ async function submitFlag(flag) {
     const data = await res.json();
 
     if (data.success) {
-      statusMsg.innerHTML = `<span style="color:#00ff77; font-weight:bold;">¡CRÁNEO CAPTURADO! +${data.points_added} Honor. ${data.message}</span>`;
       document.getElementById('flagInput').value = '';
-      
       const oldRank = appState ? appState.current_rank : null;
       appState = data.state;
       renderDashboard();
       playSuccessEffect();
+
+      if (data.redeemed) {
+        statusMsg.innerHTML = `<span style="color:#00ff77; font-weight:bold;">¡REDENCIÓN YAUTJA! Cráneo capturado y has purificado el deshonor. ¡Restaurado rango ${data.new_rank.toUpperCase()}!</span>`;
+      } else if (data.is_berserker) {
+        const needed = data.state.berserker_skulls_needed || 3;
+        if (data.was_clean) {
+          statusMsg.innerHTML = `<span style="color:#ffaa00; font-weight:bold;">¡CRÁNEO COBRADO SIN PISTAS! Penitencia Berserker: ${data.state.berserker_clean_skulls}/${needed} limpios.</span>`;
+        } else {
+          statusMsg.innerHTML = `<span style="color:#ff4d6d; font-weight:bold;">¡Cráneo cobrado! Pero usaste pistas. En Berserker la redención exige cráneos puros sin auxilio (Progreso reiniciado a 0/${needed}).</span>`;
+        }
+      } else {
+        statusMsg.innerHTML = `<span style="color:#00ff77; font-weight:bold;">¡CRÁNEO CAPTURADO! +${data.points_added} Honor. ${data.message}</span>`;
+      }
 
       // Trigger celebratory Predator trophy animation!
       triggerSkullTrophyCelebration(data, oldRank);
@@ -689,15 +843,30 @@ function triggerSkullTrophyCelebration(data, oldRank) {
   const sprite = document.getElementById('celebrationSprite');
 
   if (titleEl) titleEl.textContent = data.message || "CRÁNEO DE CACERÍA COBRADO";
-  if (rankEl && appState) rankEl.textContent = `RANGO: ${appState.current_rank.toUpperCase()}`;
+  if (data.is_berserker && rankEl) {
+    rankEl.textContent = `RANGO: BERSERKER (REDENCIÓN: ${data.state.berserker_clean_skulls || 0}/${data.state.berserker_skulls_needed || 3} LIMPIOS)`;
+    rankEl.style.color = '#ff1a40';
+  } else if (rankEl && appState) {
+    rankEl.textContent = `RANGO: ${appState.current_rank.toUpperCase()}`;
+    rankEl.style.color = '#ff9900';
+  }
   if (pointsEl) pointsEl.textContent = `+${data.points_added || 100} HONOR YAUTJA`;
   if (totalHonorEl && appState) totalHonorEl.textContent = `PUNTUACIÓN TOTAL: ${appState.honor_score} PTS`;
 
-  // Check if rank upgraded
-  if (data.new_rank && oldRank && data.new_rank !== oldRank) {
+  // Check if rank upgraded or redeemed
+  if (data.redeemed) {
+    if (rankUpBox && rankUpText) {
+      rankUpText.textContent = `¡REDENCIÓN YAUTJA! RANGO RESTAURADO A ${data.new_rank.toUpperCase()}`;
+      rankUpBox.style.display = 'flex';
+      rankUpBox.style.border = '1px solid #00ff77';
+      rankUpBox.style.color = '#00ff77';
+    }
+  } else if (data.new_rank && oldRank && data.new_rank !== oldRank && !data.is_berserker) {
     if (rankUpBox && rankUpText) {
       rankUpText.textContent = `¡ASCENSO DE RANGO! AHORA ERES ${data.new_rank.toUpperCase()}`;
       rankUpBox.style.display = 'flex';
+      rankUpBox.style.border = '1px solid #ff7700';
+      rankUpBox.style.color = '#ffcc00';
     }
   } else if (rankUpBox) {
     rankUpBox.style.display = 'none';

@@ -27,6 +27,10 @@
         <span class="stat-label">RANGO ACTUAL</span>
         <span class="stat-value" id="hudRank" style="color: #ff7733; font-size: 0.95rem;">Iniciado</span>
       </div>
+      <div class="stat-item" id="berserkerHudItem" style="display: none;">
+        <span class="stat-label" style="color: #ff1a40;">PENITENCIA</span>
+        <span class="stat-value" id="hudBerserkerCount" style="color: #ff1a40; font-size: 0.95rem;">0 / 3 LIMPIOS</span>
+      </div>
 
       <button class="btn-hunt" onclick="openArmasModal()" style="padding: 6px 12px; font-size: 0.85rem; border-color: #ff9900; color: #ffaa00;" title="Arsenal de cacería y herramientas de Kali Linux">
         ARMAS YAUTJA
@@ -48,14 +52,36 @@
 
   <div class="container">
     <!-- Rank Progression Banner -->
-    <div class="rank-banner" style="position: relative; overflow: hidden;">
+    <div class="rank-banner" id="rankBanner" style="position: relative; overflow: hidden;">
       <img src="/static/assets/predator_logo.png" alt="" class="predator-watermark">
       <div>
-        <div style="font-size: 0.75rem; color: #885555; letter-spacing: 2px;">ASCENSO DE CACERÍA</div>
+        <div style="font-size: 0.75rem; color: #885555; letter-spacing: 2px;" id="rankBannerCategory">ASCENSO DE CACERÍA</div>
         <div class="rank-title" id="rankBannerTitle">RANGO ACTUAL: INICIADO</div>
       </div>
-      <div style="font-size: 0.85rem; color: #a89494; text-align: right; z-index: 2;">
+      <div style="font-size: 0.85rem; color: #a89494; text-align: right; z-index: 2;" id="rankBannerSubtext">
         Sangre Joven (1-3) &rarr; Sangrado (4-7) &rarr; Élite (8-11) &rarr; Anciano (12-14) &rarr; Ancestral (15)
+      </div>
+    </div>
+
+    <!-- Berserker Mode Alert Banner (Visible when is_berserker is true) -->
+    <div class="berserker-banner-alert" id="berserkerAlertBanner" style="display: none;">
+      <div class="berserker-alert-icon">[ ⚡ ]</div>
+      <div style="flex: 1;">
+        <div class="berserker-alert-title">
+          ESTADO DE DESHONOR: MODO BERSERKER ACTIVO (HONOR &le; 800)
+        </div>
+        <div class="berserker-alert-desc">
+          El abuso de pistas ha quebrado tu honor Yautja. Tu casta noble ha sido suspendida, las pistas directas están bloqueadas y las pruebas aumentan de exigencia.
+          Para redimirte y restaurar tu rango, debes cobrar <strong>3 cráneos de forma limpia (sin usar pistas)</strong>.
+        </div>
+      </div>
+      <div class="berserker-skulls-box">
+        <div class="berserker-box-title">REDENCIÓN</div>
+        <div class="berserker-slots">
+          <span class="berserker-slot" id="bslot_1">1</span>
+          <span class="berserker-slot" id="bslot_2">2</span>
+          <span class="berserker-slot" id="bslot_3">3</span>
+        </div>
       </div>
     </div>
 
