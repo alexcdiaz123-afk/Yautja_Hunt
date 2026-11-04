@@ -7,30 +7,76 @@
   <link rel="stylesheet" href="/static/css/owlf_theme.css">
 </head>
 <body>
-  <header>
-    <div class="brand-badge">
-      <span class="indicator"></span>
-      OWLF // STARGAZER OUTPOST 74
+  <!-- Top Classification Banner (DoD Standard) -->
+  <div class="military-top-strip">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span class="classification-tag">TOP SECRET // OWLF EYES ONLY</span>
+      <span>U.S. DEPT OF DEFENSE // SPECIAL OPERATIONS // OUTPOST 74</span>
     </div>
-    <nav>
-      <a href="/">[ESTADO BASE]</a>
-      <a href="/telemetry_vault/">[TELEMETRÍA]</a>
+    <div class="system-ticker">
+      SEC-LEVEL: COSMIC // PROTOCOL: STANAG-4586 // SECTOR: VAL VERDE
+    </div>
+  </div>
+
+  <!-- Primary Military Header -->
+  <header class="military-header">
+    <div class="brand-wrapper">
+      <div class="mil-insignia-box">
+        OWLF
+      </div>
+      <div class="brand-titles">
+        <div class="brand-title-main">
+          <span>PROJECT STARGAZER</span>
+          <span style="font-size: 0.75rem; color: var(--mil-cyan); font-weight: normal;">[OUTPOST 74]</span>
+        </div>
+        <div class="brand-title-sub">
+          DIVISION DE INVESTIGACION Y RECUPERACION XENOBIOLOGICA
+        </div>
+      </div>
+    </div>
+
+    <nav class="military-nav">
+      <a href="/" {% if request.path == '/' %}class="active"{% endif %}>ESTADO BASE</a>
+      <a href="/telemetry_vault/" {% if request.path == '/telemetry_vault/' %}class="active"{% endif %}>TELEMETRIA</a>
       {% if session.get('user') %}
-        <a href="/dashboard">[PANEL CONTROL]</a>
-        <a href="/specimens">[ESPECÍMENES]</a>
-        <a href="/diagnostic">[DIAGNÓSTICO]</a>
-        <a href="/logout" style="color: #ff4d6d;">[SALIR ({{ session.get('user') }})]</a>
+        <a href="/dashboard" {% if request.path == '/dashboard' %}class="active"{% endif %}>PANEL CONTROL</a>
+        <a href="/specimens" {% if request.path == '/specimens' %}class="active"{% endif %}>ESPECIMENES</a>
+        <a href="/diagnostic" {% if request.path == '/diagnostic' %}class="active"{% endif %}>DIAGNOSTICO</a>
+        <a href="/logout" class="nav-logout">SALIR [{{ session.get('user') }}]</a>
       {% else %}
-        <a href="/login">[ACCESO CIENTÍFICO]</a>
+        <a href="/login" {% if request.path == '/login' %}class="active"{% endif %}>ACCESO CIENTIFICO</a>
       {% endif %}
     </nav>
   </header>
+
+  <!-- Secondary Tactical Telemetry Strip -->
+  <div class="tactical-telemetry-strip">
+    <div class="strip-item">
+      <span class="strip-indicator green"></span>
+      <span>DEFCON: <strong>3 (ALERTA AMARILLA)</strong></span>
+    </div>
+    <div class="strip-item">
+      <span class="strip-indicator green"></span>
+      <span>RADAR MILITAR: <strong>1987.00 MHz (EN LINEA)</strong></span>
+    </div>
+    <div class="strip-item">
+      <span class="strip-indicator amber"></span>
+      <span>FIRMA TERMICA: <strong>ANOMALIAS DETECTADAS (+41.5&deg;C)</strong></span>
+    </div>
+    <div class="strip-item">
+      <span class="strip-indicator green"></span>
+      <span>ENLACE SAT-COM: <strong>BLOQUEADO (CANOPY SECTOR 42)</strong></span>
+    </div>
+  </div>
 
   <div class="container">
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         {% for category, message in messages %}
-          <div class="card" style="border-left: 4px solid {% if category == 'error' %}#e63946{% else %}#00ff66{% endif %}; padding: 1rem; margin-bottom: 1rem;">
+          <div class="card" style="border-left: 4px solid {% if category == 'error' %}var(--mil-red){% else %}var(--mil-green){% endif %}; padding: 1rem 1.4rem; margin-bottom: 1.5rem; font-family: var(--mil-font-mono); font-size: 0.9rem;">
+            <span style="font-weight: 900; color: {% if category == 'error' %}var(--mil-red){% else %}var(--mil-green){% endif %}; margin-right: 8px;">
+              {% if category == 'error' %}[!] ALERTA DE SEGURIDAD:{% else %}[+] SISTEMA MILITAR:{% endif %}
+            </span>
             {{ message }}
           </div>
         {% endfor %}
@@ -40,9 +86,10 @@
     {% block content %}{% endblock %}
   </div>
 
-  <footer>
-    OTHER WORLD LIFEFORM TASKFORCE // PROJECT STARGAZER DIVISION<br>
-    CONFIDENTIAL SYSTEM RECORD &copy; 1987-2026 VAL VERDE SURVEILLANCE SECTOR
+  <footer class="military-footer">
+    UNITED STATES DEPARTMENT OF DEFENSE &bull; OTHER WORLD LIFEFORM TASKFORCE (OWLF)<br>
+    PROJECT STARGAZER // CLASSIFIED SCIENTIFIC OUTPOST 74 &bull; VAL VERDE SURVEILLANCE SECTOR<br>
+    <span style="color: #3b5068; font-size: 0.7rem;">ADVERTENCIA: ACCESO NO AUTORIZADO ES PUNIBLE BAJO LA LEY FEDERAL DE SEGURIDAD NACIONAL &bull; TERMINAL AUDITADA</span>
   </footer>
 </body>
 </html>

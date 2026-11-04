@@ -1,59 +1,80 @@
 {% extends "base.html" %}
 
-{% block title %}OWLF - Catálogo de Especímenes Bio-Armamentísticos{% endblock %}
+{% block title %}OWLF - Catalogo Militar de Especimenes Clasificados{% endblock %}
 
 {% block content %}
 <div class="card">
   <div class="card-header">
-    <h2>[+] BASE DE DATOS DE ESPECÍMENES (PROYECTO STARGAZER)</h2>
-    <span class="badge-warning">MOTOR SQL CLASIFICADO</span>
+    <div class="card-title-group">
+      <span class="card-title-prefix">DB // SQL</span>
+      <h2>REGISTRO DE ESPECIMENES XENOLOGICOS // PROYECTO STARGAZER</h2>
+    </div>
+    <span class="badge-warning">MOTOR SQLITE V3.2 &bull; CLASIFICADO</span>
   </div>
-  <p style="color: #9cb3c9; font-size: 0.9rem;">
-    Utilice el filtro de búsqueda para consultar los registros biológicos y tecnológicos clasificados recuperados de zonas de contacto extraterrestre.
+
+  <p style="color: #9cb3c9; font-size: 0.9rem; margin-top: 0;">
+    Terminal de consulta del banco de muestras biologicas y tecnologicas alienigenas recuperadas de zonas de combate.
+    Filtre los registros introduciendo parametros de texto o identificadores de muestra.
   </p>
 
-  <form method="GET" action="/specimens" style="margin: 1.5rem 0; display: flex; gap: 10px;">
-    <input type="text" name="q" value="{{ query }}" placeholder="Buscar por nombre o descripción (ej: Fragment, Bio-Mask...)" style="margin-bottom: 0;">
-    <button type="submit" style="white-space: nowrap;">BUSCAR EN BASE DE DATOS</button>
+  <form method="GET" action="/specimens" style="margin: 1.5rem 0; display: flex; gap: 10px; flex-wrap: wrap;">
+    <div style="flex: 1; min-width: 260px;">
+      <input type="text" name="q" value="{{ query }}" placeholder="Buscar espécimen por nombre o clasificacion (ej: Bio-Mask, Fragment, Omega...)" style="margin-bottom: 0;">
+    </div>
+    <button type="submit" style="white-space: nowrap;">
+      [ CONSULTAR BASE DE DATOS ]
+    </button>
   </form>
 
   {% if sql_error %}
-    <div style="background: rgba(230, 57, 70, 0.2); border: 1px solid #e63946; padding: 1rem; border-radius: 4px; margin-bottom: 1.5rem; font-family: var(--owlf-font-mono); color: #ff6b81; font-size: 0.85rem;">
-      <strong>[ERROR SQL DEL SERVIDOR]:</strong> {{ sql_error }}
+    <div style="background: rgba(255, 51, 68, 0.12); border: 1px solid var(--mil-red); border-left: 5px solid var(--mil-red); padding: 1.1rem; border-radius: 3px; margin-bottom: 1.5rem; font-family: var(--mil-font-mono); color: #ff8090; font-size: 0.84rem;">
+      <div style="font-weight: 900; color: #ff4d6d; margin-bottom: 4px;">
+        [ERROR CRITICO DEL MOTOR SQL / EXCEPCION DE SINTAXIS]:
+      </div>
+      <code>{{ sql_error }}</code>
     </div>
   {% endif %}
 
   {% if results %}
-    <div style="overflow-x: auto;">
+    <div style="overflow-x: auto; border: 1px solid var(--mil-border); border-radius: 4px;">
       <table>
         <thead>
           <tr>
-            <th>ID</th>
-            <th>NOMBRE CLAVE</th>
-            <th>NIVEL DE PELIGRO</th>
-            <th>NOTAS DE LABORATORIO</th>
-            <th>CLASIFICACIÓN</th>
+            <th style="width: 50px;">ID</th>
+            <th>DENOMINACION TACTICA</th>
+            <th>NIVEL DE AMENAZA</th>
+            <th>NOTAS DE AUTOPSIA / CAMPO</th>
+            <th>CLASIFICACION MILITAR</th>
           </tr>
         </thead>
         <tbody>
           {% for row in results %}
-            <tr {% if 'SKULL{' in row[3] or 'SKULL{' in row[1] %}style="background: rgba(0, 255, 102, 0.08); border-left: 3px solid #00ff66;"{% endif %}>
-              <td>{{ row[0] }}</td>
-              <td style="color: #00d2ff; font-weight: bold;">{{ row[1] }}</td>
+            <tr {% if 'SKULL{' in row[3] or 'SKULL{' in row[1] %}style="background: rgba(0, 255, 136, 0.08); border-left: 4px solid var(--mil-green);"{% endif %}>
+              <td style="color: #64748b; font-weight: bold;">#{{ row[0] }}</td>
+              <td style="color: var(--mil-cyan); font-weight: bold; letter-spacing: 0.5px;">{{ row[1] }}</td>
               <td>
-                <span class="badge-warning" {% if 'OMEGA' in row[2] or 'LETHAL' in row[2] %}style="color: #ff4d6d; border-color: #ff4d6d;"{% endif %}>
+                <span class="badge-warning" {% if 'OMEGA' in row[2] or 'LETHAL' in row[2] %}style="background: rgba(255, 51, 68, 0.2); color: #ff4d6d; border-color: #ff4d6d;"{% endif %}>
                   {{ row[2] }}
                 </span>
               </td>
-              <td style="max-width: 400px;">{{ row[3] }}</td>
-              <td style="color: #cad2c5; font-size: 0.8rem;">{{ row[4] }}</td>
+              <td style="max-width: 420px; line-height: 1.4; color: #cbd5e1;">{{ row[3] }}</td>
+              <td style="color: #94a3b8; font-size: 0.78rem;">
+                <span style="background: rgba(255, 255, 255, 0.05); padding: 2px 6px; border-radius: 2px; border: 1px solid #1e293b;">
+                  {{ row[4] }}
+                </span>
+              </td>
             </tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
+    <div style="margin-top: 10px; font-family: var(--mil-font-mono); font-size: 0.75rem; color: #55708f; text-align: right;">
+      REGISTROS RETORNADOS POR EL SUBSISTEMA: {{ results|length }}
+    </div>
   {% else %}
-    <p style="color: #718096; font-style: italic;">No se encontraron especímenes coincidentes en la base de datos.</p>
+    <div style="background: rgba(8, 12, 18, 0.8); border: 1px dashed var(--mil-border); padding: 1.5rem; text-align: center; border-radius: 4px; color: #64748b; font-family: var(--mil-font-mono); font-size: 0.88rem;">
+      [!] No se encontraron especimenes coincidentes en el catalogo clasificado.
+    </div>
   {% endif %}
 </div>
 {% endblock %}

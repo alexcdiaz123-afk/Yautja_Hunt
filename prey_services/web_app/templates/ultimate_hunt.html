@@ -1,51 +1,63 @@
 {% extends "base.html" %}
 
-{% block title %}OWLF - Templo Ancestral // Ultimate Hunt{% endblock %}
+{% block title %}OWLF - Protocolo Defensivo Supremo // Ultimate Hunt{% endblock %}
 
 {% block content %}
-<div class="card" style="border: 2px solid #ff1744; box-shadow: 0 0 25px rgba(255, 23, 68, 0.3);">
-  <div class="card-header" style="border-bottom-color: #ff1744;">
-    <h2 style="color: #ff1744; margin: 0; display: flex; align-items: center; gap: 10px;">
-      <span>[+] TERMINAL DE COMANDO SUPREMO — ULTIMATE HUNT</span>
-    </h2>
-    <span class="badge-skull" style="background: rgba(255, 23, 68, 0.2); border-color: #ff1744; color: #ff1744;">
-      NIVEL ANCESTRAL
-    </span>
+<div class="card" style="border-top: 3px solid var(--mil-red); box-shadow: 0 0 35px rgba(255, 51, 68, 0.25);">
+  <div class="card-header" style="border-bottom-color: rgba(255, 51, 68, 0.3);">
+    <div class="card-title-group">
+      <span class="card-title-prefix" style="color: var(--mil-red); border-color: var(--mil-red); background: rgba(255, 51, 68, 0.12);">
+        BUNKER // OVERRIDE
+      </span>
+      <h2>CONSOLA MAESTRA DE ULTIMA LINEA // OUTPOST 74</h2>
+    </div>
+    <span class="badge-skull">DEFCON 1 &bull; FALLA DE CONTENCION</span>
   </div>
 
-  <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6;">
-    Has neutralizado el reactor principal y vulnerado todas las defensas de la presa humana en Outpost 74.
-    Para activar la secuencia de honor ancestral y obtener el <strong>Cráneo Supremo (Skull 15)</strong>, debes introducir la clave de coordenadas ancestrales obtenida tras la sobrecarga del reactor.
+  <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin-top: 0;">
+    El perimetro defensivo humano del <strong>Puesto Avanzado 74</strong> ha sucumbido. Las compuertas blindadas de titanio han sido rasgadas, 
+    los generadores de plasma han detonado y las fuerzas de la presa humana se encuentran en retirada total.
+    Para forzar la rendicion de la consola militar y obtener el <strong>Craneo Supremo de Caceria (Skull 15)</strong>, ingrese la secuencia de coordenadas ancestrales recuperada tras sobrecargar el nucleo del reactor.
   </p>
 
   <form method="POST" action="/ultimate_hunt" style="margin: 2rem 0;">
-    <label style="display: block; margin-bottom: 8px; font-family: var(--owlf-font-mono); color: #00e5ff; font-weight: bold; font-size: 0.9rem;">
-      &gt;&gt; INGRESE LA SECUENCIA DE COORDENADAS ANCESTRALES:
+    <label class="mil-label" style="color: #ff6677;">
+      SECUENCIA DE COORDENADAS ANCESTRALES // OVERRIDE CODE:
     </label>
-    <div style="display: flex; gap: 10px;">
-      <input type="text" name="ancestral_code" value="{{ entered_code }}" placeholder="ej: YAUTJA_PRIME_ELDER_COORDINATES_X87" required style="margin-bottom: 0;">
-      <button type="submit" class="btn" style="background: #e63946; color: #fff; border-color: #ff1744; white-space: nowrap;">
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <input type="text" name="ancestral_code" value="{{ entered_code }}" placeholder="ej: YAUTJA_PRIME_ELDER_COORDINATES_X87" required style="flex: 1; min-width: 280px; border-color: rgba(255, 51, 68, 0.4);">
+      <button type="submit" class="btn" style="background: linear-gradient(180deg, #3d1016 0%, #1e080b 100%); border-color: var(--mil-red); color: #ff6677; white-space: nowrap;">
         VERIFICAR HONOR ANCESTRAL
       </button>
+    </div>
+    <div style="font-family: var(--mil-font-mono); font-size: 0.75rem; color: #8fa0b5; margin-top: 6px;">
+      [DIRECTIVA ANCESTRAL]: Solo un cazador que haya vencido las 14 pruebas previas posee la sabiduria para activar esta secuencia.
     </div>
   </form>
 
   {% if success %}
-    <div style="background: rgba(0, 255, 119, 0.08); border: 2px solid #00ff77; padding: 1.5rem; border-radius: 6px; margin-top: 1.5rem; text-align: center;">
-      <h3 style="color: #00ff77; margin-top: 0; font-size: 1.3rem;">[!] CACERÍA DEFINITIVA COMPLETADA — PROTOCOLO DE HONOR ACTIVADO</h3>
-      <p style="color: #e2e8f0; font-size: 0.95rem;">
-        La presa humana ha sido derrotada en todos los frentes. Tu nombre se inscribe en el salón sagrado de Yautja Prime.
+    <div style="background: rgba(0, 255, 136, 0.08); border: 2px solid var(--mil-green); padding: 1.8rem; border-radius: 4px; margin-top: 2rem; text-align: center; box-shadow: 0 0 30px rgba(0, 255, 136, 0.2);">
+      <div style="font-family: var(--mil-font-mono); font-size: 0.85rem; color: var(--mil-green); letter-spacing: 2px; margin-bottom: 6px;">
+        [+] CACERIA DEFINITIVA COMPLETADA // PROTOCOLO DE HONOR ACTIVADO
+      </div>
+      <h3 style="color: #fff; margin: 0 0 10px 0; font-size: 1.35rem; font-family: var(--mil-font-mono); letter-spacing: 1px;">
+        OUTPOST 74 NEUTRALIZADO &bull; LA PRESA HUMANA HA CAIDO
+      </h3>
+      <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.5; max-width: 680px; margin: 0 auto 1.25rem auto;">
+        Has cobrado cada trofeo y doblegado la tecnologia del hombre. Tu nombre ha sido tallado con sangre en el monolito de honor de Yautja Prime.
       </p>
-      <div style="font-family: var(--owlf-font-mono); font-size: 1.4rem; color: #00ff77; font-weight: 900; letter-spacing: 2px; padding: 1rem; background: #000; border: 1px dashed #00ff77; border-radius: 4px; display: inline-block; margin: 1rem 0;">
+      
+      <div style="font-family: var(--mil-font-mono); font-size: 1.4rem; color: var(--mil-green); font-weight: 900; letter-spacing: 2.5px; padding: 12px 24px; background: #030806; border: 1px dashed var(--mil-green); border-radius: 3px; display: inline-block; margin: 0.5rem 0 1.25rem 0;">
         SKULL{ANCESTRAL_15_ULTIMATE_HUNT}
       </div>
-      <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 0;">
-        Registra este último cráneo en tu Brazalete Yautja para ascender al rango legendario de <strong>Cazador Ancestral (+1000 Honor)</strong>.
+
+      <p style="color: #8fa0b5; font-size: 0.85rem; margin: 0; font-family: var(--mil-font-mono);">
+        Ingresa este ultimo craneo en tu Consola Yautja para consumar tu consagracion como <strong>Cazador Ancestral (+1000 Honor)</strong>.
       </p>
     </div>
   {% elif error %}
-    <div style="background: rgba(230, 57, 70, 0.15); border: 1px solid #e63946; padding: 1rem; border-radius: 4px; color: #ff6b81; font-family: var(--owlf-font-mono);">
-      {{ error }}
+    <div style="background: rgba(255, 51, 68, 0.12); border: 1px solid var(--mil-red); padding: 1rem 1.25rem; border-radius: 4px; color: #ff8090; font-family: var(--mil-font-mono); font-size: 0.88rem; margin-top: 1.5rem;">
+      [ERROR DE AUTORIZACION]: {{ error }}
     </div>
   {% endif %}
 </div>

@@ -1,32 +1,47 @@
 {% extends "base.html" %}
 
-{% block title %}OWLF - Acceso Científico Clasificado{% endblock %}
+{% block title %}OWLF - Autenticacion Militar Clasificada{% endblock %}
 
 {% block content %}
-<div style="max-width: 500px; margin: 3rem auto;">
-  <div class="card">
+<div style="max-width: 540px; margin: 3rem auto;">
+  <div class="card" style="border-top: 3px solid var(--mil-cyan);">
     <div class="card-header">
-      <h2>[+] AUTENTICACIÓN OWLF</h2>
-      <span class="badge-warning">NIVEL 3 REQUERIDO</span>
+      <div class="card-title-group">
+        <span class="card-title-prefix">AUTH // LEVEL 3</span>
+        <h2>TERMINAL DE CONTROL DE ACCESO OWLF</h2>
+      </div>
+      <span class="badge-warning">SECURITY GATEWAY</span>
+    </div>
+
+    <div style="background: rgba(255, 183, 3, 0.08); border-left: 3px solid var(--mil-amber); padding: 8px 12px; margin-bottom: 1.5rem; font-family: var(--mil-font-mono); font-size: 0.78rem; color: #ffca3a;">
+      [AVISO MILITAR]: Acceso restringido a cientificos acreditados del Proyecto Stargazer. Toda peticion de autenticacion queda registrada bajo auditoria militar.
     </div>
 
     <form method="POST" action="/login">
-      <div style="margin-bottom: 1rem;">
-        <label style="display: block; margin-bottom: 6px; font-family: var(--owlf-font-mono); color: #00d2ff; font-size: 0.9rem;">
-          IDENTIFICADOR DE CIENTÍFICO / AGENTE:
+      <div style="margin-bottom: 1.25rem;">
+        <label class="mil-label" for="username">
+          &gt;&gt; IDENTIFICADOR DE CIENTIFICO / AGENTE:
         </label>
-        <input type="text" name="username" placeholder="ej. dr_keys" required autofocus autocomplete="off">
+        <input type="text" id="username" name="username" placeholder="ej: dr_keys" required autofocus autocomplete="off">
       </div>
 
-      <div style="margin-bottom: 1.5rem;">
-        <label style="display: block; margin-bottom: 6px; font-family: var(--owlf-font-mono); color: #00d2ff; font-size: 0.9rem;">
-          CÓDIGO DE ACCESO / LLAVE TÉRMICA:
+      <div style="margin-bottom: 1.75rem;">
+        <label class="mil-label" for="password">
+          &gt;&gt; CODIGO DE ACCESO / LLAVE TERMICA:
         </label>
-        <input type="password" name="password" placeholder="••••••••••••" required>
+        <input type="password" id="password" name="password" placeholder="••••••••••••" required>
       </div>
 
-      <button type="submit" style="width: 100%;">VALIDAR CREDENCIALES MILITARES</button>
+      <button type="submit" style="width: 100%; padding: 12px; font-size: 0.95rem;">
+        [ VALIDAR CREDENCIALES Y AUTORIZAR ACCESO ]
+      </button>
     </form>
+
+    <div style="margin-top: 1.5rem; border-top: 1px solid #162436; padding-top: 10px; display: flex; justify-content: space-between; font-family: var(--mil-font-mono); font-size: 0.72rem; color: #4e6782;">
+      <span>TERMINAL: C2-STG-NODE-01</span>
+      <span>CIPHER: 2048-BIT RSA</span>
+      <span>ESTADO: AUDITADO</span>
+    </div>
   </div>
 </div>
 {% endblock %}

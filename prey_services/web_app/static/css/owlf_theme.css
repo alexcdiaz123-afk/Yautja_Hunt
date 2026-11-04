@@ -1,193 +1,533 @@
+/* ========================================================
+   OWLF // PROJECT STARGAZER - MILITARY TACTICAL C2 INTERFACE
+   U.S. Department of Defense / Special Activities Division
+   Outpost 74 - Classified Xenobiological Research Node
+   ======================================================== */
+
 :root {
-  --owlf-bg: #0a0d12;
-  --owlf-panel: #111823;
-  --owlf-border: #1e2d42;
-  --owlf-accent: #00d2ff;
-  --owlf-warning: #ffb703;
-  --owlf-danger: #e63946;
-  --owlf-text: #d8e2dc;
-  --owlf-font-mono: 'Consolas', 'Courier New', monospace;
+  --mil-bg: #070a0e;
+  --mil-bg-alt: #0c1117;
+  --mil-panel: #0e1520;
+  --mil-panel-header: #131c2a;
+  --mil-border: #1e3148;
+  --mil-border-bright: #2d4c72;
+  --mil-cyan: #00e5ff;
+  --mil-green: #00ff88;
+  --mil-amber: #ffb703;
+  --mil-red: #ff3344;
+  --mil-text: #d8e6f3;
+  --mil-text-dim: #7f99b4;
+  --mil-text-muted: #4e6782;
+  --mil-font-mono: 'Consolas', 'Courier New', 'Share Tech Mono', monospace;
+  --mil-font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
-  background-color: var(--owlf-bg);
-  color: var(--owlf-text);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--mil-bg);
+  background-image: 
+    linear-gradient(rgba(0, 229, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.025) 1px, transparent 1px),
+    radial-gradient(circle at 50% 20%, rgba(14, 28, 48, 0.6) 0%, rgba(7, 10, 14, 0.95) 80%);
+  background-size: 32px 32px, 32px 32px, 100% 100%;
+  color: var(--mil-text);
+  font-family: var(--mil-font-ui);
   margin: 0;
   padding: 0;
   min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
 }
 
-header {
-  background: var(--owlf-panel);
-  border-bottom: 2px solid var(--owlf-accent);
-  padding: 1rem 2rem;
+/* CRT Scanlines Overlay */
+body::before {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+              linear-gradient(90deg, rgba(255, 0, 0, 0.01), rgba(0, 255, 0, 0.005), rgba(0, 0, 255, 0.01));
+  z-index: 9999;
+  background-size: 100% 3px, 4px 100%;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* Top Classification Banner (DoD Standard) */
+.military-top-strip {
+  background: #000;
+  border-bottom: 1px solid #1a2a3e;
+  padding: 4px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-family: var(--mil-font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 1.5px;
+  color: var(--mil-amber);
 }
 
-.brand-badge {
-  font-family: var(--owlf-font-mono);
-  font-size: 1.25rem;
-  font-weight: bold;
+.classification-tag {
+  background: rgba(255, 183, 3, 0.15);
+  border: 1px solid var(--mil-amber);
+  color: var(--mil-amber);
+  padding: 2px 8px;
+  font-weight: 900;
+  border-radius: 2px;
   letter-spacing: 2px;
-  color: var(--owlf-accent);
+}
+
+.system-ticker {
+  color: #5c7b9c;
+}
+
+/* Military Header & Nav */
+header.military-header {
+  background: linear-gradient(180deg, #111a26 0%, #0c121c 100%);
+  border-bottom: 2px solid var(--mil-cyan);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(0, 229, 255, 0.3);
+  padding: 0.9rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.brand-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.mil-insignia-box {
+  width: 44px;
+  height: 44px;
+  background: #060a10;
+  border: 1px solid var(--mil-cyan);
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mil-font-mono);
+  font-weight: 900;
+  font-size: 0.85rem;
+  color: var(--mil-cyan);
+  letter-spacing: -1px;
+  position: relative;
+}
+
+.mil-insignia-box::after {
+  content: "";
+  position: absolute;
+  top: 2px; right: 2px;
+  width: 5px; height: 5px;
+  background: var(--mil-green);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--mil-green);
+}
+
+.brand-titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-title-main {
+  font-family: var(--mil-font-mono);
+  font-size: 1.15rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-title-sub {
+  font-family: var(--mil-font-mono);
+  font-size: 0.72rem;
+  color: var(--mil-text-dim);
+  letter-spacing: 1.5px;
+}
+
+nav.military-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+nav.military-nav a {
+  color: var(--mil-text);
+  text-decoration: none;
+  font-family: var(--mil-font-mono);
+  font-size: 0.82rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  padding: 6px 14px;
+  background: rgba(14, 25, 40, 0.6);
+  border: 1px solid var(--mil-border);
+  border-radius: 3px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+nav.military-nav a:hover {
+  background: rgba(0, 229, 255, 0.15);
+  border-color: var(--mil-cyan);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.4);
+}
+
+nav.military-nav a.active {
+  background: rgba(0, 229, 255, 0.2);
+  border-color: var(--mil-cyan);
+  color: var(--mil-cyan);
+}
+
+nav.military-nav a.nav-logout {
+  border-color: rgba(255, 51, 68, 0.5);
+  color: #ff6677;
+}
+
+nav.military-nav a.nav-logout:hover {
+  background: rgba(255, 51, 68, 0.25);
+  border-color: var(--mil-red);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(255, 51, 68, 0.5);
+}
+
+/* Secondary Tactical Status Strip */
+.tactical-telemetry-strip {
+  background: #090e16;
+  border-bottom: 1px solid #18283c;
+  padding: 6px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--mil-font-mono);
+  font-size: 0.75rem;
+  color: #6a88a8;
+  overflow-x: auto;
+  white-space: nowrap;
+  gap: 20px;
+}
+
+.strip-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.strip-indicator {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.strip-indicator.green {
+  background: var(--mil-green);
+  box-shadow: 0 0 8px var(--mil-green);
+  animation: radarBlink 2s infinite;
+}
+
+.strip-indicator.amber {
+  background: var(--mil-amber);
+  box-shadow: 0 0 8px var(--mil-amber);
+}
+
+.strip-indicator.red {
+  background: var(--mil-red);
+  box-shadow: 0 0 8px var(--mil-red);
+  animation: radarBlink 1s infinite;
+}
+
+@keyframes radarBlink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+/* Container */
+.container {
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 0 1.25rem;
+}
+
+/* Military Classified Cards */
+.card {
+  background: linear-gradient(135deg, rgba(14, 21, 32, 0.94) 0%, rgba(9, 14, 22, 0.98) 100%);
+  border: 1px solid var(--mil-border);
+  border-radius: 4px;
+  padding: 1.8rem;
+  margin-bottom: 1.8rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  position: relative;
+}
+
+/* Tactical Corner Reticles on Cards */
+.card::before, .card::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: var(--mil-border-bright);
+  pointer-events: none;
+}
+
+.card::before {
+  top: -1px; left: -1px;
+  border-top: 2px solid var(--mil-cyan);
+  border-left: 2px solid var(--mil-cyan);
+}
+
+.card::after {
+  bottom: -1px; right: -1px;
+  border-bottom: 2px solid var(--mil-cyan);
+  border-right: 2px solid var(--mil-cyan);
+}
+
+.card-header {
+  border-bottom: 1px solid var(--mil-border);
+  padding-bottom: 0.9rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.card-title-group {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.brand-badge span.indicator {
-  width: 12px;
-  height: 12px;
-  background: #00ff66;
-  border-radius: 50%;
-  display: inline-block;
-  box-shadow: 0 0 8px #00ff66;
-}
-
-nav a {
-  color: var(--owlf-text);
-  text-decoration: none;
-  margin-left: 1.5rem;
-  font-family: var(--owlf-font-mono);
-  font-size: 0.9rem;
-  transition: color 0.2s;
-}
-
-nav a:hover {
-  color: var(--owlf-accent);
-}
-
-.container {
-  max-width: 1000px;
-  margin: 2rem auto;
-  padding: 0 1rem;
-}
-
-.card {
-  background: var(--owlf-panel);
-  border: 1px solid var(--owlf-border);
-  border-radius: 6px;
-  padding: 1.8rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-}
-
-.card-header {
-  border-bottom: 1px solid var(--owlf-border);
-  padding-bottom: 0.8rem;
-  margin-bottom: 1.2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.card-title-prefix {
+  font-family: var(--mil-font-mono);
+  font-size: 0.78rem;
+  color: var(--mil-cyan);
+  background: rgba(0, 229, 255, 0.1);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  padding: 3px 8px;
+  border-radius: 2px;
+  font-weight: 900;
 }
 
 h1, h2, h3 {
-  font-family: var(--owlf-font-mono);
-  letter-spacing: 1px;
-  margin-top: 0;
+  font-family: var(--mil-font-mono);
+  letter-spacing: 1.5px;
+  margin: 0;
+  color: #fff;
 }
 
+h2 {
+  font-size: 1.18rem;
+}
+
+h3 {
+  font-size: 1rem;
+}
+
+/* Badges */
 .badge-warning {
-  background: rgba(255, 183, 3, 0.15);
-  color: var(--owlf-warning);
-  border: 1px solid var(--owlf-warning);
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-family: var(--owlf-font-mono);
+  background: rgba(255, 183, 3, 0.12);
+  color: var(--mil-amber);
+  border: 1px solid var(--mil-amber);
+  padding: 4px 10px;
+  border-radius: 3px;
+  font-size: 0.72rem;
+  font-family: var(--mil-font-mono);
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .badge-skull {
-  background: rgba(230, 57, 70, 0.2);
+  background: rgba(255, 51, 68, 0.15);
   color: #ff4d6d;
-  border: 1px solid #ff4d6d;
-  padding: 6px 12px;
-  border-radius: 4px;
-  font-family: var(--owlf-font-mono);
-  font-weight: bold;
+  border: 1px solid var(--mil-red);
+  padding: 5px 12px;
+  border-radius: 3px;
+  font-family: var(--mil-font-mono);
+  font-weight: 900;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  box-shadow: 0 0 10px rgba(255, 51, 68, 0.3);
+}
+
+.badge-secure {
+  background: rgba(0, 255, 136, 0.12);
+  color: var(--mil-green);
+  border: 1px solid var(--mil-green);
+  padding: 4px 10px;
+  border-radius: 3px;
+  font-size: 0.72rem;
+  font-family: var(--mil-font-mono);
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+/* Inputs & Forms */
+label.mil-label {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--mil-font-mono);
+  color: var(--mil-cyan);
+  font-size: 0.82rem;
+  font-weight: 900;
+  letter-spacing: 1px;
 }
 
 input[type="text"], input[type="password"] {
   width: 100%;
   box-sizing: border-box;
-  background: #080b0f;
-  border: 1px solid var(--owlf-border);
-  color: #00d2ff;
-  font-family: var(--owlf-font-mono);
-  padding: 10px 14px;
-  border-radius: 4px;
-  margin-bottom: 1rem;
-  font-size: 1rem;
+  background: #06090e;
+  border: 1px solid var(--mil-border);
+  color: #fff;
+  font-family: var(--mil-font-mono);
+  padding: 11px 16px;
+  border-radius: 3px;
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  transition: all 0.2s;
 }
 
 input[type="text"]:focus, input[type="password"]:focus {
   outline: none;
-  border-color: var(--owlf-accent);
-  box-shadow: 0 0 10px rgba(0, 210, 255, 0.3);
+  border-color: var(--mil-cyan);
+  background: #080d14;
+  box-shadow: 0 0 14px rgba(0, 229, 255, 0.35);
 }
 
+/* Buttons */
 button, .btn {
-  background: #0d2137;
-  color: var(--owlf-accent);
-  border: 1px solid var(--owlf-accent);
-  padding: 10px 18px;
-  font-family: var(--owlf-font-mono);
-  font-weight: bold;
+  background: linear-gradient(180deg, #15263a 0%, #0c1724 100%);
+  color: var(--mil-cyan);
+  border: 1px solid var(--mil-cyan);
+  padding: 10px 20px;
+  font-family: var(--mil-font-mono);
+  font-size: 0.85rem;
+  font-weight: 900;
+  letter-spacing: 1px;
   cursor: pointer;
-  border-radius: 4px;
-  transition: all 0.2s;
+  border-radius: 3px;
+  transition: all 0.2s ease;
   text-decoration: none;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 button:hover, .btn:hover {
-  background: var(--owlf-accent);
+  background: var(--mil-cyan);
   color: #000;
-  box-shadow: 0 0 12px rgba(0, 210, 255, 0.6);
+  box-shadow: 0 0 16px rgba(0, 229, 255, 0.6);
+  transform: translateY(-1px);
 }
 
+button:active, .btn:active {
+  transform: translateY(1px);
+}
+
+/* Terminal Box */
 .terminal-box {
-  background: #05070a;
-  border: 1px solid #1a2636;
-  border-radius: 4px;
-  padding: 1rem;
-  font-family: var(--owlf-font-mono);
+  background: #040608;
+  border: 1px solid #17283c;
+  border-left: 4px solid var(--mil-cyan);
+  border-radius: 3px;
+  padding: 1.2rem;
+  font-family: var(--mil-font-mono);
   color: #38bdf8;
   white-space: pre-wrap;
   word-break: break-all;
-  max-height: 400px;
+  max-height: 420px;
   overflow-y: auto;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
 }
 
+/* Tables */
 table {
   width: 100%;
   border-collapse: collapse;
-  font-family: var(--owlf-font-mono);
-  font-size: 0.9rem;
+  font-family: var(--mil-font-mono);
+  font-size: 0.85rem;
 }
 
 th, td {
-  padding: 10px;
-  border: 1px solid var(--owlf-border);
+  padding: 11px 14px;
+  border: 1px solid var(--mil-border);
   text-align: left;
 }
 
 th {
-  background: #0e1520;
-  color: var(--owlf-accent);
+  background: #0a111a;
+  color: var(--mil-cyan);
+  font-weight: 900;
+  letter-spacing: 1px;
+  font-size: 0.78rem;
 }
 
 tr:nth-child(even) {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(14, 25, 40, 0.3);
 }
 
-footer {
+tr:hover {
+  background: rgba(0, 229, 255, 0.05);
+}
+
+/* Tactical Sensor Grid Cards */
+.tactical-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.tactical-cell {
+  background: #090e16;
+  border: 1px solid #162537;
+  border-left: 3px solid var(--mil-cyan);
+  padding: 1.25rem;
+  border-radius: 3px;
+  position: relative;
+}
+
+.tactical-cell-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.tactical-cell-title {
+  color: var(--mil-cyan);
+  font-family: var(--mil-font-mono);
+  font-size: 0.92rem;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+/* Footer */
+footer.military-footer {
   text-align: center;
-  padding: 2rem;
-  color: #52637a;
-  font-family: var(--owlf-font-mono);
-  font-size: 0.8rem;
+  padding: 2.5rem 1rem;
+  color: #55708f;
+  font-family: var(--mil-font-mono);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  border-top: 1px solid #132233;
+  background: #06090d;
 }

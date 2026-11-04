@@ -1,49 +1,100 @@
 {% extends "base.html" %}
 
-{% block title %}OWLF - Bóveda de Telemetría{% endblock %}
+{% block title %}OWLF - Boveda Militar de Telemetria y Avistamientos{% endblock %}
 
 {% block content %}
 <div class="card">
   <div class="card-header">
-    <h2>[+] REGISTROS DE TELEMETRÍA Y AVISTAMIENTOS</h2>
-    <span class="badge-warning">ARCHIVO NO INDEXADO</span>
+    <div class="card-title-group">
+      <span class="card-title-prefix">ARCHIVE // SENSORS</span>
+      <h2>BOVEDA DE TELEMETRIA MILITAR // AVISTAMIENTOS NO HUMANOS</h2>
+    </div>
+    <span class="badge-warning">ARCHIVO NO INDEXADO // TOP SECRET</span>
   </div>
-  <p style="color: #9cb3c9;">
-    Esta boveda contiene las trazas de sensores infrarrojos registradas en el sector de la jungla durante las patrullas nocturnas.
+
+  <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin-top: 0;">
+    Registro centralizado de trazas multiespectrales, interferometria infrarroja y telemetria radar interceptadas por la fuerza de tarea <strong>OWLF</strong> en el sector selvatico de Val Verde.
+    Toda senal anomalica registrada durante patrullas nocturnas es almacenada sin indexar para preservar el secreto militar del <strong>Proyecto Stargazer</strong>.
   </p>
 
   <!-- CLASSIFIED LOG ENTRY: Subject demonstrated active optical camouflage. Recovered marker: SKULL{YOUNG_BLOOD_03_WEB_ENTRY_DISCOVERED} -->
   <!-- NOTA DEL TÉCNICO: Recuerde que el respaldo de llaves del Dr. Keyes se guardó en la ruta /specimen_backup/ -->
 
-  <div style="background: #080c14; border: 1px solid #1a273b; border-radius: 4px; padding: 1rem; margin-top: 1.5rem;">
-    <h3 style="color: #00d2ff; font-size: 0.95rem; margin-bottom: 0.5rem;">REGISTROS DE EVENTOS RECIENTES</h3>
+  <div class="tactical-grid" style="margin-bottom: 1.5rem;">
+    <div class="tactical-cell">
+      <div class="tactical-cell-header">
+        <span class="tactical-cell-title">SENSOR CANOPY-04</span>
+        <span class="badge-warning">DISTORSION</span>
+      </div>
+      <p style="font-size: 0.85rem; color: #8fa0b5; margin: 4px 0;">Banda: Infrarrojo medio (3-5 m)</p>
+      <p style="font-size: 0.82rem; color: #ffb703; margin: 4px 0;">Anomalia: Desviacion fotonica local</p>
+    </div>
+
+    <div class="tactical-cell">
+      <div class="tactical-cell-header">
+        <span class="tactical-cell-title">RADAR SECTOR-B</span>
+        <span class="badge-secure">1987.00 MHz</span>
+      </div>
+      <p style="font-size: 0.85rem; color: #8fa0b5; margin: 4px 0;">Eco: Pulsante hiperbolico</p>
+      <p style="font-size: 0.82rem; color: #00ff88; margin: 4px 0;">Estado: Sincronizado en tiempo real</p>
+    </div>
+
+    <div class="tactical-cell">
+      <div class="tactical-cell-header">
+        <span class="tactical-cell-title">RED ACUSTICA 7</span>
+        <span class="badge-skull">AMENAZA</span>
+      </div>
+      <p style="font-size: 0.85rem; color: #8fa0b5; margin: 4px 0;">Frecuencia: Infrasonido 14 Hz</p>
+      <p style="font-size: 0.82rem; color: #ff4d6d; margin: 4px 0;">Patron: Patron vocalico no terrestre</p>
+    </div>
+  </div>
+
+  <div style="background: #06090e; border: 1px solid var(--mil-border); border-radius: 4px; padding: 1.25rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+      <h3 style="color: var(--mil-cyan); margin: 0; font-size: 0.95rem; letter-spacing: 1.5px;">
+        REGISTRO CRONOLOGICO DE EVENTOS TACTICOS Y SENSORES
+      </h3>
+      <span style="font-family: var(--mil-font-mono); font-size: 0.72rem; color: #5a7898;">STANAG-4586 FORMAT</span>
+    </div>
+
     <table>
       <thead>
         <tr>
-          <th>TIMESTAMP</th>
-          <th>SENSOR ID</th>
-          <th>LECTURA TÉRMICA</th>
-          <th>ESTADO</th>
+          <th>TIMESTAMP (UTC)</th>
+          <th>NODO SENSOR</th>
+          <th>COORDENADAS</th>
+          <th>LECTURA ESPECTRAL / TERMICA</th>
+          <th>EVALUACION DE AMENAZA</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>02:14:09 UTC</td>
+          <td>02:14:09.112</td>
           <td>IR-CANOPY-04</td>
-          <td>Firma difusa (+41.5&deg;C)</td>
-          <td><span style="color: #ffb703;">DISTORSIÓN ÓPTICA</span></td>
+          <td>0844'12\"N 7731'40\"W</td>
+          <td>Firma difusa (+41.5C) con gradiente curvo</td>
+          <td><span style="color: var(--mil-amber); font-weight: bold;">DISTORSION OPTICA (CAMUFLAJE)</span></td>
         </tr>
         <tr>
-          <td>02:45:22 UTC</td>
-          <td>RADAR-1987-SECTOR-B</td>
-          <td>Eco electromagnético pulsante</td>
-          <td><span style="color: #00ff66;">CONFIRMADO</span></td>
+          <td>02:45:22.840</td>
+          <td>RADAR-1987-B</td>
+          <td>0844'19\"N 7731'22\"W</td>
+          <td>Eco electromagnetico pulsante 1987.00 MHz</td>
+          <td><span style="color: var(--mil-green); font-weight: bold;">CONTACTO CONFIRMADO</span></td>
         </tr>
         <tr>
-          <td>03:12:51 UTC</td>
+          <td>03:12:51.309</td>
           <td>AUDIO-MIC-7</td>
-          <td>Chasquido gutural y rugido resonante</td>
-          <td><span style="color: #ff4d6d;">AMENAZA ALTA</span></td>
+          <td>0844'05\"N 7731'55\"W</td>
+          <td>Chasquido mandibular y modulacion resonante</td>
+          <td><span style="color: #ff4d6d; font-weight: bold;">AMENAZA LETHAL / HOSTIL</span></td>
+        </tr>
+        <tr>
+          <td>03:38:04.991</td>
+          <td>SPECTRO-FLIR-01</td>
+          <td>0843'58\"N 7732'10\"W</td>
+          <td>Ionizacion residual por proyeccion de plasma</td>
+          <td><span style="color: #ff4d6d; font-weight: bold;">ARTEFACTO ENERGETICO ALIEN</span></td>
         </tr>
       </tbody>
     </table>
