@@ -16,17 +16,30 @@ def load_challenges():
     return {"challenges": []}
 
 def load_state():
+    state = {}
     if os.path.exists(STATE_FILE):
-        with open(STATE_FILE, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    return {
+        try:
+            with open(STATE_FILE, 'r', encoding='utf-8') as f:
+                state = json.load(f)
+        except Exception:
+            state = {}
+
+    defaults = {
         "hunter_name": "Cazador Yautja",
         "honor_score": 1000,
         "claimed_skulls": [],
         "unlocked_hints": {},
         "current_rank": "Iniciado (Sin Sangrar)",
+        "is_berserker": False,
+        "berserker_clean_skulls": 0,
+        "berserker_skulls_needed": 3,
+        "berserker_trigger_honor": 800,
         "logs": []
     }
+    for k, v in defaults.items():
+        if k not in state:
+            state[k] = v
+    return state
 
 def save_state(state):
     with open(STATE_FILE, 'w', encoding='utf-8') as f:
@@ -35,14 +48,16 @@ def save_state(state):
 def calculate_rank(claimed_count):
     if claimed_count == 0:
         return "Iniciado (Sin Sangrar)"
-    elif 1 <= claimed_count <= 3:
+    elif 1 <= claimed_count < 3:
         return "Sangre Joven (Young Blood)"
-    elif 4 <= claimed_count <= 7:
+    elif 3 <= claimed_count < 7:
         return "Sangrado (Blooded)"
-    elif 8 <= claimed_count <= 11:
+    elif 7 <= claimed_count < 11:
         return "Cazador Élite"
-    elif 12 <= claimed_count <= 14:
+    elif 11 <= claimed_count < 14:
         return "Anciano (Elder)"
+    elif claimed_count == 14:
+        return "Anciano (Juicio Final)"
     else:
         return "Ancestral (Ultimate Hunter)"
 
@@ -91,19 +106,76 @@ def submit_flag():
     if matched['id'] in state['claimed_skulls']:
         return jsonify({"success": False, "message": "Este cráneo ya adorna el salón de trofeos de tu clan."}), 400
 
+    # Verify challenge is unlocked based on rank / required skulls
+    req_skulls = 0
+    if matched.get('rank') == 'Sangrado':
+        req_skulls = 3
+    elif matched.get('rank') == 'Élite':
+        req_skulls = 7
+    elif matched.get('rank') == 'Anciano':
+        req_skulls = 11
+    elif matched.get('rank') == 'Ancestral':
+        req_skulls = 14
+
+    if len(state['claimed_skulls']) < req_skulls:
+        return jsonify({
+            "success": False,
+            "message": f"Cráneo bloqueado. Tu rango actual no tiene el honor suficiente para reclamar este trofeo aún (Requiere al menos {req_skulls} cráneos previos cobrados)."
+        }), 403
+
     # Claim skull!
     state['claimed_skulls'].append(matched['id'])
     points = matched.get('points', 100)
     state['honor_score'] += points
-    
-    # Recalculate rank
-    old_rank = state.get('current_rank', 'Iniciado')
-    new_rank = calculate_rank(len(state['claimed_skulls']))
-    state['current_rank'] = new_rank
 
-    log_entry = f"Cráneo '{matched['title']}' capturado. +{points} de honor."
-    if old_rank != new_rank:
-        log_entry += f" ¡Ascenso al rango '{new_rank}'!"
+    # Check if this skull was solved cleanly (WITHOUT hints)
+    unlocked_for_this_skull = state.get('unlocked_hints', {}).get(matched['id'], [])
+    was_clean = (len(unlocked_for_this_skull) == 0)
+
+    redeemed = False
+    old_rank = state.get('current_rank', 'Iniciado')
+
+    if state.get('is_berserker', False):
+        needed = state.get('berserker_skulls_needed', 3)
+        if was_clean:
+            state['berserker_clean_skulls'] = state.get('berserker_clean_skulls', 0) + 1
+            if state['berserker_clean_skulls'] >= needed:
+                # REDEMPTION COMPLETED!
+                state['is_berserker'] = False
+                state['berserker_clean_skulls'] = 0
+                new_rank = calculate_rank(len(state['claimed_skulls']))
+                state['current_rank'] = new_rank
+                # Boost honor slightly if it was low so they don't immediately relapse
+                if state['honor_score'] <= 850:
+                    state['honor_score'] += 150
+                redeemed = True
+                log_entry = (
+                    f"¡REDENCIÓN YAUTJA! Cráneo '{matched['title']}' cobrado limpiamente sin pistas. "
+                    f"Has completado la penitencia de 3 cráneos puros. "
+                    f"Recuperas tu casta noble de '{new_rank}' (+Bono de honor)."
+                )
+            else:
+                new_rank = "Berserker"
+                state['current_rank'] = "Berserker"
+                log_entry = (
+                    f"Cráneo '{matched['title']}' capturado sin pistas (+{points} honor). "
+                    f"Progreso de redención Berserker: {state['berserker_clean_skulls']}/{needed} cráneos limpios."
+                )
+        else:
+            # Skull solved with hints
+            state['berserker_clean_skulls'] = 0
+            new_rank = "Berserker"
+            state['current_rank'] = "Berserker"
+            log_entry = (
+                f"Cráneo '{matched['title']}' capturado (+{points} honor), pero utilizaste pistas. "
+                f"La penitencia Berserker exige 3 cráneos puros sin auxilio (Progreso reiniciado a 0/{needed})."
+            )
+    else:
+        new_rank = calculate_rank(len(state['claimed_skulls']))
+        state['current_rank'] = new_rank
+        log_entry = f"Cráneo '{matched['title']}' capturado. +{points} de honor."
+        if old_rank != new_rank:
+            log_entry += f" ¡Ascenso al rango '{new_rank}'!"
 
     state['logs'].append({"time": "EN LÍNEA", "message": log_entry})
     save_state(state)
@@ -113,7 +185,10 @@ def submit_flag():
         "message": f"¡Cráneo verificado! {matched['title']}",
         "points_added": points,
         "new_rank": new_rank,
-        "state": state
+        "state": state,
+        "redeemed": redeemed,
+        "was_clean": was_clean,
+        "is_berserker": state.get('is_berserker', False)
     })
 
 @app.route('/api/unlock_hint', methods=['POST'])
@@ -135,6 +210,20 @@ def unlock_hint():
     if not target_c:
         return jsonify({"success": False, "message": "Reto no encontrado."}), 404
 
+    # Check if challenge is unlocked
+    req_skulls = 0
+    if target_c.get('rank') == 'Sangrado':
+        req_skulls = 3
+    elif target_c.get('rank') == 'Élite':
+        req_skulls = 7
+    elif target_c.get('rank') == 'Anciano':
+        req_skulls = 11
+    elif target_c.get('rank') == 'Ancestral':
+        req_skulls = 14
+
+    if len(state['claimed_skulls']) < req_skulls:
+        return jsonify({"success": False, "message": "Este reto está bloqueado para tu rango actual."}), 403
+
     # Find hint
     hint_obj = None
     for h in target_c.get('hints', []):
@@ -149,17 +238,62 @@ def unlock_hint():
     if level in unlocked_for_challenge:
         return jsonify({"success": True, "state": state, "message": "Pista ya desbloqueada."})
 
-    cost = hint_obj.get('cost', 10)
+    # Berserker validation & penalties
+    is_currently_berserker = state.get('is_berserker', False)
+    if is_currently_berserker:
+        if level == 3:
+            return jsonify({
+                "success": False,
+                "message": "BLOQUEO BERSERKER: Un cazador en frenesí no recibe pistas directas (Nivel 3). Debes resolverlo con tu propia astucia."
+            }), 403
+        base_cost = hint_obj.get('cost', 10)
+        cost = int(base_cost * 1.5)
+        # Any hint request in Berserker resets redemption progress!
+        state['berserker_clean_skulls'] = 0
+    else:
+        cost = hint_obj.get('cost', 10)
+
     if state['honor_score'] < cost:
         return jsonify({"success": False, "message": "Honor insuficiente para desbloquear pista."}), 400
 
     state['honor_score'] -= cost
     unlocked_for_challenge.append(level)
+
+    # Check if honor drop triggers Berserker mode!
+    became_berserker = False
+    trigger_threshold = state.get('berserker_trigger_honor', 800)
+
+    if not is_currently_berserker and state['honor_score'] <= trigger_threshold:
+        state['is_berserker'] = True
+        state['berserker_clean_skulls'] = 0
+        remaining_skulls = 15 - len(state['claimed_skulls'])
+        state['berserker_skulls_needed'] = min(3, max(1, remaining_skulls))
+        state['berserker_previous_rank'] = state.get('current_rank', 'Iniciado')
+        state['current_rank'] = "Berserker"
+        became_berserker = True
+
+        log_entry = (
+            f"¡DESHONOR! Tu honor cayó a {state['honor_score']} pts (límite ≤ {trigger_threshold}). "
+            f"Has perdido tu rango noble y has caído al rango BERSERKER. "
+            f"Para redimirte debes cobrar {state['berserker_skulls_needed']} cráneos sin pistas."
+        )
+        state['logs'].append({"time": "DESHONOR", "message": log_entry})
+    else:
+        log_entry = f"Pista {level} descifrada (-{cost} Honor). Honor restante: {state['honor_score']} pts."
+        if is_currently_berserker:
+            log_entry += f" Penitencia Berserker reiniciada (0/{state.get('berserker_skulls_needed', 3)} cráneos limpios)."
+        state['logs'].append({"time": "EN LÍNEA", "message": log_entry})
+
     save_state(state)
+
+    msg = f"Pista {level} descifrada (-{cost} Honor)."
+    if became_berserker:
+        msg = f"Pista descifrada. ¡ATENCIÓN: Has caído al rango BERSERKER por deshonor (Honor ≤ {trigger_threshold})!"
 
     return jsonify({
         "success": True,
-        "message": f"Pista {level} descifrada (-{cost} Honor).",
+        "message": msg,
+        "became_berserker": became_berserker,
         "state": state
     })
 
@@ -171,6 +305,10 @@ def reset_progress():
         "claimed_skulls": [],
         "unlocked_hints": {},
         "current_rank": "Iniciado (Sin Sangrar)",
+        "is_berserker": False,
+        "berserker_clean_skulls": 0,
+        "berserker_skulls_needed": 3,
+        "berserker_trigger_honor": 800,
         "logs": [
             {
                 "time": "REINICIO",
