@@ -19,7 +19,7 @@ BANNER = """
 ================================================================================
 [!] FREQUENCY: 1987.00 MHz | STATUS: SCANNING RAINFOREST PERIMETER
 [!] RADAR BEACON LOCK ON INTRUDER SECTOR:
-    >> SKULL{YOUNG_BLOOD_01_TERRITORY_RECON} <<
+    >> SKULL{IF_IT_BLEEDS_WE_CAN_KILL_IT} <<
 [!] THERMAL SENSORS: 4 ANOMALIES DETECTED NEAR CANOPY TREE LINE.
 [!] DIRECTIVE: EXAMINE WEB OBSERVATION PORTAL (PORT 8080 / 80).
 ================================================================================

@@ -12,5 +12,10 @@ echo "[*] Levantando Baliza de Radar OWLF en el puerto 1987..."
 python radar_beacon/beacon_service.py &
 
 echo "[*] Levantando Servidor Web OWLF en el puerto 80..."
+echo "================================================================================"
+echo "[+] SERVICIOS DE LA PRESA LISTOS:"
+echo "    - Portal Militar OWLF:   http://localhost:8080 (Mapeado desde puerto 80)"
+echo "    - Baliza Radar Militar:  Puerto 1987 (TCP)"
+echo "================================================================================"
 export PORT=80
 exec python web_app/app.py

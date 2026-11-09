@@ -32,6 +32,10 @@
         <span class="stat-value" id="hudBerserkerCount" style="color: #ff1a40; font-size: 0.95rem;">0 / 3 LIMPIOS</span>
       </div>
 
+      <a id="linkToPrey" href="http://127.0.0.1:8080" target="_blank" class="btn-hunt" style="padding: 6px 12px; font-size: 0.85rem; border-color: #00ff88; color: #00ff88; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;" title="Abrir portal militar de la presa humana (OWLF)">
+        PRESA: OWLF (:8080) &#8599;
+      </a>
+
       <button class="btn-hunt" onclick="openArmasModal()" style="padding: 6px 12px; font-size: 0.85rem; border-color: #ff9900; color: #ffaa00;" title="Arsenal de cacería y herramientas de Kali Linux">
         ARMAS YAUTJA
       </button>
@@ -220,7 +224,7 @@
         </div>
       </div>
       <p style="color: #bbb; font-size: 0.85rem; line-height: 1.5; margin-bottom: 1rem;">
-        Cada arma de la casta Yautja representa un vector de ataque y reconocimiento. Haz clic en <strong>[VER EN KALI DOCS ↗]</strong> para acceder a la guía oficial de la herramienta, o copia el comando sugerido para ejecutarlo en tu terminal de Kali Linux.
+        Cada arma de la casta Yautja representa un vector de ataque y reconocimiento en Kali Linux. Haz clic en <strong>[MANUAL OFFLINE]</strong> para consultar la guía técnica optimizada para máquinas virtuales (funciona <strong>sin internet</strong>), o copia el comando sugerido para ejecutarlo en tu terminal.
       </p>
 
       <div class="armas-grid">
@@ -233,16 +237,30 @@
             </div>
             <div class="arma-target-tag">OBJETIVO: SKULL 01 // RECONOCIMIENTO</div>
             <p class="arma-desc">
-              Escaneo electromagnético perimetral de frecuencias y puertos TCP/UDP abiertos en la presa, identificando servicios y firmas de versión.
+              Escaneo electromagnético perimetral de frecuencias y puertos TCP abiertos en la presa. Optimizado con <code>-Pn</code> para evitar demoras por ping en entornos virtuales.
             </p>
             <div class="arma-cmd-box">
-              <code>nmap -p- -sV -T4 &lt;IP_PRESA&gt;</code>
-              <button class="btn-copy-cmd" onclick="copyArmaCmd('nmap -p- -sV -T4 127.0.0.1')">Copiar</button>
+              <code>nmap -Pn -p 1987,8080 &lt;IP_PRESA&gt;</code>
+              <button class="btn-copy-cmd" onclick="copyArmaCmd('nmap -Pn -p 1987,8080 127.0.0.1')">Copiar</button>
+            </div>
+            <div class="arma-actions-row">
+              <button class="arma-guide-btn" onclick="toggleArmaGuide('guide-arma-1')">
+                📖 MANUAL OFFLINE
+              </button>
+              <a href="https://www.kali.org/tools/nmap/" target="_blank" rel="noopener noreferrer" class="arma-link-btn" title="Requiere conexión a Internet">
+                KALI DOCS ↗
+              </a>
+            </div>
+            <div id="guide-arma-1" class="arma-offline-drawer" style="display: none;">
+              <h4>GUÍA RÁPIDA DE NMAP (PARA MÁQUINAS VIRTUALES):</h4>
+              <ul>
+                <li><strong>-Pn:</strong> Trata el host como encendido. Evita que Nmap se quede colgado si la red de la VM no responde al ping ICMP.</li>
+                <li><strong>-p 1987,8080:</strong> Escaneo directo a los puertos del laboratorio (tarda 1 segundo en lugar de 15 minutos).</li>
+                <li><strong>Barrido de puertos altos:</strong> <code>nmap -Pn -p 1000-2500 -T4 &lt;IP&gt;</code> si buscas la baliza sin saturar la VM.</li>
+                <li><strong>Evitar:</strong> No uses <code>-p- -sV</code> a ciegas en una VM con pocos recursos, pues saturará los sockets.</li>
+              </ul>
             </div>
           </div>
-          <a href="https://www.kali.org/tools/nmap/" target="_blank" rel="noopener noreferrer" class="arma-link-btn">
-            VER EN KALI DOCS ↗
-          </a>
         </div>
 
         <!-- Arma 2: Wrist Blades / Netcat -->
@@ -254,16 +272,29 @@
             </div>
             <div class="arma-target-tag">OBJETIVO: SKULL 01 // BALIZA RADAR</div>
             <p class="arma-desc">
-              Conexión directa cuerpo a cuerpo contra puertos y sockets TCP crudos. Permite interceptar transmisiones de radar y banners sin intermediarios.
+              Conexión directa cuerpo a cuerpo contra sockets TCP crudos. Intercepta la transmisión de la baliza de radar militar OWLF en tiempo real.
             </p>
             <div class="arma-cmd-box">
               <code>nc -vn &lt;IP_PRESA&gt; 1987</code>
               <button class="btn-copy-cmd" onclick="copyArmaCmd('nc -vn 127.0.0.1 1987')">Copiar</button>
             </div>
+            <div class="arma-actions-row">
+              <button class="arma-guide-btn" onclick="toggleArmaGuide('guide-arma-2')">
+                📖 MANUAL OFFLINE
+              </button>
+              <a href="https://www.kali.org/tools/netcat/" target="_blank" rel="noopener noreferrer" class="arma-link-btn" title="Requiere conexión a Internet">
+                KALI DOCS ↗
+              </a>
+            </div>
+            <div id="guide-arma-2" class="arma-offline-drawer" style="display: none;">
+              <h4>GUÍA RÁPIDA DE NETCAT (NC):</h4>
+              <ul>
+                <li><strong>-v (Verbose):</strong> Muestra si la conexión fue exitosa o rechazada.</li>
+                <li><strong>-n (Numeric):</strong> Evita resolución DNS inversa, conectando de forma instantánea.</li>
+                <li><strong>Uso:</strong> Al conectar a <code>&lt;IP&gt; 1987</code>, el servicio te responderá directamente con el banner del radar militar y el primer cráneo.</li>
+              </ul>
+            </div>
           </div>
-          <a href="https://www.kali.org/tools/netcat/" target="_blank" rel="noopener noreferrer" class="arma-link-btn">
-            VER EN KALI DOCS ↗
-          </a>
         </div>
 
         <!-- Arma 3: Biomask Spectral Zoom / cURL -->
@@ -275,16 +306,29 @@
             </div>
             <div class="arma-target-tag">OBJETIVO: SKULL 02 &amp; SKULL 12/13</div>
             <p class="arma-desc">
-              Inspección de metadatos invisibles en cabeceras HTTP (Banner Grabbing) y consumo de microservicios REST internos con paso de tokens.
+              Inspección de metadatos invisibles en cabeceras HTTP (Banner Grabbing) y consumo de microservicios REST internos con parámetros de token.
             </p>
             <div class="arma-cmd-box">
-              <code>curl -I http://&lt;IP&gt;:8080/</code>
+              <code>curl -I http://&lt;IP_PRESA&gt;:8080/</code>
               <button class="btn-copy-cmd" onclick="copyArmaCmd('curl -I http://127.0.0.1:8080/')">Copiar</button>
             </div>
+            <div class="arma-actions-row">
+              <button class="arma-guide-btn" onclick="toggleArmaGuide('guide-arma-3')">
+                📖 MANUAL OFFLINE
+              </button>
+              <a href="https://www.kali.org/tools/curl/" target="_blank" rel="noopener noreferrer" class="arma-link-btn" title="Requiere conexión a Internet">
+                KALI DOCS ↗
+              </a>
+            </div>
+            <div id="guide-arma-3" class="arma-offline-drawer" style="display: none;">
+              <h4>GUÍA RÁPIDA DE CURL:</h4>
+              <ul>
+                <li><strong>-I (Head):</strong> Solo solicita las cabeceras HTTP de respuesta sin descargar el HTML.</li>
+                <li><strong>-s (Silent):</strong> Oculta la barra de progreso para lecturas limpias en terminal.</li>
+                <li><strong>Revisión clave:</strong> Busca cabeceras con prefijo <code>X-Specimen-Traces</code> o firmas militares de servidor.</li>
+              </ul>
+            </div>
           </div>
-          <a href="https://www.kali.org/tools/curl/" target="_blank" rel="noopener noreferrer" class="arma-link-btn">
-            VER EN KALI DOCS ↗
-          </a>
         </div>
 
         <!-- Arma 4: Net Launcher / Gobuster -->
@@ -296,16 +340,29 @@
             </div>
             <div class="arma-target-tag">OBJETIVO: SKULL 03 &amp; SKULL 04</div>
             <p class="arma-desc">
-              Fuzzing de alta velocidad para atrapar directorios ocultos, rutas denegadas en robots.txt y copias de seguridad (.env, .bak) huérfanas en el servidor.
+              Fuzzing ágil para descubrir rutas denegadas y copias de seguridad (.env, .bak). Usa listas de palabras ligeras para no colgar la VM.
             </p>
             <div class="arma-cmd-box">
-              <code>gobuster dir -u http://&lt;IP&gt;:8080 -w /usr/share/wordlists/dirb/common.txt -x env,bak,txt</code>
-              <button class="btn-copy-cmd" onclick="copyArmaCmd('gobuster dir -u http://127.0.0.1:8080 -w /usr/share/wordlists/dirb/common.txt -x env,bak,txt')">Copiar</button>
+              <code>gobuster dir -u http://&lt;IP&gt;:8080/ -w /usr/share/wordlists/dirb/common.txt -t 20</code>
+              <button class="btn-copy-cmd" onclick="copyArmaCmd('gobuster dir -u http://127.0.0.1:8080/ -w /usr/share/wordlists/dirb/common.txt -t 20')">Copiar</button>
+            </div>
+            <div class="arma-actions-row">
+              <button class="arma-guide-btn" onclick="toggleArmaGuide('guide-arma-4')">
+                📖 MANUAL OFFLINE
+              </button>
+              <a href="https://www.kali.org/tools/gobuster/" target="_blank" rel="noopener noreferrer" class="arma-link-btn" title="Requiere conexión a Internet">
+                KALI DOCS ↗
+              </a>
+            </div>
+            <div id="guide-arma-4" class="arma-offline-drawer" style="display: none;">
+              <h4>GUÍA RÁPIDA DE GOBUSTER:</h4>
+              <ul>
+                <li><strong>-w common.txt:</strong> Usa diccionarios compactos (~4.000 palabras). Terminará en 10 segundos en tu VM.</li>
+                <li><strong>-t 20 (Threads):</strong> Limita los hilos para no agotar la CPU ni la memoria de la máquina virtual.</li>
+                <li><strong>Tip esencial:</strong> Revisa siempre primero <code>http://&lt;IP&gt;:8080/robots.txt</code>; a menudo revela las rutas ocultas sin necesidad de fuzzer.</li>
+              </ul>
             </div>
           </div>
-          <a href="https://www.kali.org/tools/gobuster/" target="_blank" rel="noopener noreferrer" class="arma-link-btn">
-            VER EN KALI DOCS ↗
-          </a>
         </div>
 
         <!-- Arma 5: Combistick / Burp Suite -->
@@ -317,16 +374,29 @@
             </div>
             <div class="arma-target-tag">OBJETIVO: SKULL 05 &amp; SKULL 07</div>
             <p class="arma-desc">
-              Interceptación precisa de transmisiones HTTP. Permite manipular parámetros en peticiones de login, inyectar comandos de sistema operativo y evadir defensas.
+              Manipulación precisa de peticiones web y delimitadores de sistema operativo (Command Injection en utilidad de diagnóstico térmico).
             </p>
             <div class="arma-cmd-box">
-              <code>burpsuite &amp;</code>
-              <button class="btn-copy-cmd" onclick="copyArmaCmd('burpsuite &')">Copiar</button>
+              <code>127.0.0.1; cat secret_access/flag07.txt</code>
+              <button class="btn-copy-cmd" onclick="copyArmaCmd('127.0.0.1; cat secret_access/flag07.txt')">Copiar</button>
+            </div>
+            <div class="arma-actions-row">
+              <button class="arma-guide-btn" onclick="toggleArmaGuide('guide-arma-5')">
+                📖 MANUAL OFFLINE
+              </button>
+              <a href="https://www.kali.org/tools/burpsuite/" target="_blank" rel="noopener noreferrer" class="arma-link-btn" title="Requiere conexión a Internet">
+                KALI DOCS ↗
+              </a>
+            </div>
+            <div id="guide-arma-5" class="arma-offline-drawer" style="display: none;">
+              <h4>GUÍA RÁPIDA DE COMMAND INJECTION:</h4>
+              <ul>
+                <li><strong>Delimitador ';':</strong> Permite encadenar un segundo comando independiente en bash.</li>
+                <li><strong>Delimitador '&&':</strong> Ejecuta el segundo comando si el primero tiene éxito. Vital si caes en modo Berserker (donde ';' está bloqueado).</li>
+                <li><strong>Campo vulnerable:</strong> En <code>/diagnostic</code>, ingresa la IP seguida de <code>; cat secret_access/flag07.txt</code>.</li>
+              </ul>
             </div>
           </div>
-          <a href="https://www.kali.org/tools/burpsuite/" target="_blank" rel="noopener noreferrer" class="arma-link-btn">
-            VER EN KALI DOCS ↗
-          </a>
         </div>
 
         <!-- Arma 6: Smart Disc / SQLMap -->
@@ -334,23 +404,37 @@
           <div>
             <div class="arma-header">
               <span class="arma-title">[06] DISCO INTELIGENTE</span>
-              <span class="arma-kali-badge">KALI: SQLMAP</span>
+              <span class="arma-kali-badge">KALI: SQL INJECTION</span>
             </div>
             <div class="arma-target-tag">OBJETIVO: SKULL 06 // INYECCIÓN SQL</div>
             <p class="arma-desc">
-              Proyectil guiado contra bases de datos relacionales (SQLite/MySQL). Automatiza la extracción de tablas clasificadas mediante inyecciones booleanas y UNION.
+              Proyectil guiado contra bases de datos relacionales SQLite. Permite extraer registros clasificados mediante inyecciones booleanas manuales en segundos.
             </p>
             <div class="arma-cmd-box">
-              <code>sqlmap -u "http://&lt;IP&gt;:8080/specimens?q=test" --batch</code>
-              <button class="btn-copy-cmd" onclick="copyArmaCmd('sqlmap -u \"http://127.0.0.1:8080/specimens?q=test\" --batch')">Copiar</button>
+              <code>' OR 1=1 --</code>
+              <button class="btn-copy-cmd" onclick="copyArmaCmd('\' OR 1=1 --')">Copiar</button>
+            </div>
+            <div class="arma-actions-row">
+              <button class="arma-guide-btn" onclick="toggleArmaGuide('guide-arma-6')">
+                📖 MANUAL OFFLINE
+              </button>
+              <a href="https://www.kali.org/tools/sqlmap/" target="_blank" rel="noopener noreferrer" class="arma-link-btn" title="Requiere conexión a Internet">
+                KALI DOCS ↗
+              </a>
+            </div>
+            <div id="guide-arma-6" class="arma-offline-drawer" style="display: none;">
+              <h4>GUÍA RÁPIDA DE INYECCIÓN SQL:</h4>
+              <ul>
+                <li><strong>Comilla simple ( ' ):</strong> Cierra la cadena del programador en la cláusula WHERE.</li>
+                <li><strong>OR 1=1:</strong> Condición siempre verdadera que obliga a devolver todas las filas de la tabla.</li>
+                <li><strong>Guión guión ( -- ):</strong> Comenta el resto de la consulta original de SQLite.</li>
+                <li><strong>Inyección manual rápida:</strong> Pega <code>' OR 1=1 --</code> en el buscador de <code>/specimens</code> y presiona Enter; verás el espécimen secreto de inmediato.</li>
+              </ul>
             </div>
           </div>
-          <a href="https://www.kali.org/tools/sqlmap/" target="_blank" rel="noopener noreferrer" class="arma-link-btn">
-            VER EN KALI DOCS ↗
-          </a>
         </div>
 
-        <!-- Arma 7: Dispositivo de Autodestrucción / LinPEAS & GTFOBins -->
+        <!-- Arma 7: Dispositivo de Autodestrucción / GTFOBins -->
         <div class="arma-card">
           <div>
             <div class="arma-header">
@@ -359,16 +443,29 @@
             </div>
             <div class="arma-target-tag">OBJETIVO: SKULLS 08, 09, 10 &amp; 11</div>
             <p class="arma-desc">
-              Escalada vertical de privilegios. Audita el sistema en busca de scripts SUID, tareas cron desatendidas y binarios vulnerables para reclamar el control de ROOT.
+              Escalada vertical de privilegios. Audita el sistema en busca de scripts SUID, tareas cron desatendidas y ficheros confidenciales de superusuario.
             </p>
             <div class="arma-cmd-box">
               <code>find / -perm -4000 -type f 2&gt;/dev/null</code>
               <button class="btn-copy-cmd" onclick="copyArmaCmd('find / -perm -4000 -type f 2>/dev/null')">Copiar</button>
             </div>
+            <div class="arma-actions-row">
+              <button class="arma-guide-btn" onclick="toggleArmaGuide('guide-arma-7')">
+                📖 MANUAL OFFLINE
+              </button>
+              <a href="https://gtfobins.github.io/" target="_blank" rel="noopener noreferrer" class="arma-link-btn" title="Requiere conexión a Internet">
+                GTFOBINS ↗
+              </a>
+            </div>
+            <div id="guide-arma-7" class="arma-offline-drawer" style="display: none;">
+              <h4>GUÍA RÁPIDA DE ENUMERACIÓN LINUX / SUID:</h4>
+              <ul>
+                <li><strong>-perm -4000:</strong> Encuentra binarios con el bit SUID activo (se ejecutan como root).</li>
+                <li><strong>2&gt;/dev/null:</strong> Descarta errores de 'Permission denied' para una salida limpia.</li>
+                <li><strong>Rutas clave en Outpost 74:</strong> Inspecciona los archivos dentro de <code>secret_access/</code> (como <code>cron_audit.log</code>, <code>.internal_token</code>, <code>scanner_audit.sh</code> y <code>root_trophy.txt</code>).</li>
+              </ul>
+            </div>
           </div>
-          <a href="https://gtfobins.github.io/" target="_blank" rel="noopener noreferrer" class="arma-link-btn">
-            VER EN GTFOBINS ↗
-          </a>
         </div>
 
         <!-- Arma 8: Camuflaje Óptico / Pivoting & Proxychains -->
@@ -376,20 +473,33 @@
           <div>
             <div class="arma-header">
               <span class="arma-title">[08] CAMUFLAJE ÓPTICO</span>
-              <span class="arma-kali-badge">KALI: PROXYCHAINS / CHISEL</span>
+              <span class="arma-kali-badge">KALI: APIS INTERNAS / CURL</span>
             </div>
             <div class="arma-target-tag">OBJETIVO: SKULLS 12, 13, 14 &amp; 15</div>
             <p class="arma-desc">
-              Invisibilidad y túneles de movimiento lateral. Enruta tráfico a través de proxies para acceder a servicios que solo escuchan en la interfaz loopback (127.0.0.1).
+              Invisibilidad y consumo de microservicios internos encadenados. Desactiva escudos de plasma y ejecuta la secuencia de sobrecarga del reactor.
             </p>
             <div class="arma-cmd-box">
-              <code>proxychains curl -s http://127.0.0.1:8080/internal_plasma_matrix</code>
-              <button class="btn-copy-cmd" onclick="copyArmaCmd('proxychains curl -s http://127.0.0.1:8080/internal_plasma_matrix')">Copiar</button>
+              <code>curl -s http://&lt;IP&gt;:8080/internal_plasma_matrix</code>
+              <button class="btn-copy-cmd" onclick="copyArmaCmd('curl -s http://127.0.0.1:8080/internal_plasma_matrix')">Copiar</button>
+            </div>
+            <div class="arma-actions-row">
+              <button class="arma-guide-btn" onclick="toggleArmaGuide('guide-arma-8')">
+                📖 MANUAL OFFLINE
+              </button>
+              <a href="https://www.kali.org/tools/proxychains-ng/" target="_blank" rel="noopener noreferrer" class="arma-link-btn" title="Requiere conexión a Internet">
+                KALI DOCS ↗
+              </a>
+            </div>
+            <div id="guide-arma-8" class="arma-offline-drawer" style="display: none;">
+              <h4>GUÍA RÁPIDA DE APIS INTERNAS:</h4>
+              <ul>
+                <li><strong>/internal_plasma_matrix:</strong> Revela el estado del escudo y el endpoint de override.</li>
+                <li><strong>/api/override?token=...:</strong> Pasa el token obtenido en el Skull 09 para apagar los escudos de defensa.</li>
+                <li><strong>/api/reactor_overload:</strong> Envía el código de purga con la temperatura crítica 1987 para obtener las coordenadas sagradas.</li>
+              </ul>
             </div>
           </div>
-          <a href="https://www.kali.org/tools/proxychains-ng/" target="_blank" rel="noopener noreferrer" class="arma-link-btn">
-            VER EN KALI DOCS ↗
-          </a>
         </div>
       </div>
     </div>

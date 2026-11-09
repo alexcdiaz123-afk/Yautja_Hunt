@@ -821,28 +821,95 @@ body.thermal-vision .codex-card:hover {
   color: #000;
 }
 
+.arma-actions-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.arma-guide-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #2b1106;
+  color: #ff9900;
+  border: 1px solid #ff7700;
+  border-radius: 4px;
+  padding: 7px 10px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.arma-guide-btn:hover {
+  background: #ff7700;
+  color: #000;
+  box-shadow: 0 0 12px rgba(255, 119, 0, 0.6);
+}
+
 .arma-link-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  background: #200d05;
-  color: #ffaa33;
-  border: 1px solid #ff7700;
+  gap: 6px;
+  background: #140808;
+  color: #aa7777;
+  border: 1px solid #441818;
   border-radius: 4px;
-  padding: 7px 12px;
-  font-size: 0.82rem;
+  padding: 7px 10px;
+  font-size: 0.75rem;
   font-weight: bold;
   text-decoration: none;
   transition: all 0.2s;
   cursor: pointer;
   text-align: center;
+  white-space: nowrap;
 }
 
 .arma-link-btn:hover {
-  background: #ff7700;
-  color: #000;
-  box-shadow: 0 0 12px rgba(255, 119, 0, 0.7);
+  background: #331515;
+  color: #ff9900;
+  border-color: #ff7700;
+}
+
+.arma-offline-drawer {
+  background: #050204;
+  border: 1px dashed #662211;
+  border-left: 3px solid #ff7700;
+  border-radius: 4px;
+  padding: 10px 12px;
+  margin-top: 10px;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: #d1bcbc;
+}
+
+.arma-offline-drawer h4 {
+  margin: 0 0 6px 0;
+  color: #ff9900;
+  font-size: 0.82rem;
+  letter-spacing: 0.5px;
+}
+
+.arma-offline-drawer ul {
+  margin: 4px 0;
+  padding-left: 18px;
+}
+
+.arma-offline-drawer li {
+  margin-bottom: 3px;
+}
+
+.arma-offline-drawer code {
+  color: #39ff14;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 1px 4px;
+  border-radius: 2px;
+  font-size: 0.75rem;
 }
 
 body.thermal-vision .arma-card {

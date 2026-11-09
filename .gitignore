@@ -21,7 +21,9 @@ Thumbs.db
 # Exclude documentation and report generator per user request
 docs/
 *.docx
+*.pptx
 scripts/build_informe_docx.py
+scripts/build_presentacion_pptx.py
 
 # Vital hidden files for challenges
 !prey_services/secret_access/.internal_token

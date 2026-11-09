@@ -5,7 +5,7 @@
 [+] EL CAZADOR HA TOMADO EL CONTROL TOTAL DEL SISTEMA DE LA PRESA.
 
 [!] CRÁNEO DE ESCALADA DE PRIVILEGIOS OBTENIDO:
-    SKULL{ELITE_11_ROOT_PRIVILEGE_ASCENSION}
+    SKULL{SELF_DESTRUCT_COUNTDOWN_LAUGH}
 
 --------------------------------------------------------------------------------
 Has completado la fase ÉLITE del laboratorio Yautja Hunt.

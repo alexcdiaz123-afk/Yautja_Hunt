@@ -40,7 +40,7 @@ def add_custom_headers(response):
     response.headers['Server'] = 'OWLF-Research-Httpd/2.4.52 (Stargazer-OS)'
     response.headers['X-OWLF-Project'] = 'Stargazer-1987'
     # Skull 02 Banner Grabbing Flag!
-    response.headers['X-Specimen-Traces'] = 'SKULL{YOUNG_BLOOD_02_BANNER_TRACES}'
+    response.headers['X-Specimen-Traces'] = 'SKULL{PAINLESS_OLD_MINIGUN_DEFENSE}'
     return response
 
 @app.route('/')
@@ -180,7 +180,8 @@ def diagnostic():
         
         # Prepare execution command
         if is_windows:
-            ping_cmd = f"ping -n 1 {target}"
+            safe_target = target.replace(';', '&')
+            ping_cmd = f"ping -n 1 {safe_target}"
         else:
             ping_cmd = f"ping -c 1 {target}"
 
@@ -208,7 +209,7 @@ def diagnostic():
         root_path = os.path.join(SECRET_ACCESS_DIR, 'root_trophy.txt')
 
         target_lower = target.lower()
-        if ('flag07' in target_lower or 'secret_access' in target_lower) and os.path.exists(flag07_path):
+        if ('flag07' in target_lower or 'initial_access' in target_lower) and os.path.exists(flag07_path):
             if not output or 'SKULL{' not in output:
                 with open(flag07_path, 'r', encoding='utf-8') as f:
                     output = (output or '') + "\n" + f.read()
@@ -242,7 +243,7 @@ def internal_plasma_matrix():
         "status": "ONLINE",
         "service": "OWLF Internal Plasma Defense Matrix v3.2",
         "bus": "INTERNAL_LOOPBACK_9090",
-        "flag": "SKULL{ELDER_12_HIDDEN_PATHWAY_DISCOVERED}",
+        "flag": "SKULL{PLASMACASTER_TARGETING_TRIANGLE}",
         "description": "Matriz de defensa interna descubierta. Escudos energéticos activos.",
         "override_endpoint": "/api/override?token=<TOKEN_INTERNO>"
     }
@@ -264,7 +265,7 @@ def api_override():
         return {
             "status": "SHIELD_OFFLINE",
             "message": "Autenticación de token interno aceptada. Escudo de plasma neutralizado.",
-            "flag": "SKULL{ELDER_13_TWO_PREYS_ONE_HUNT}",
+            "flag": "SKULL{SMART_DISC_ENERGY_SLICE}",
             "reactor_code": "STG_REACTOR_PURGE_1987",
             "next_stage": "Ejecutar sobrecarga del reactor en /api/reactor_overload con reactor_code y temperature=1987"
         }
@@ -284,7 +285,7 @@ def api_reactor_overload():
         return {
             "status": "REACTOR_MELTDOWN",
             "message": "Sobrecarga térmica crítica completada. El búnker principal ha colapsado.",
-            "flag": "SKULL{ELDER_14_THE_ELDER_TRIAL_PASSED}",
+            "flag": "SKULL{ELDER_SWORD_HONOR_BOND}",
             "ancestral_vault_code": "YAUTJA_PRIME_ELDER_COORDINATES_X87",
             "ultimate_hunt_terminal": "/ultimate_hunt"
         }

@@ -785,6 +785,13 @@ function closeArmasModal() {
   if (modal) modal.style.display = 'none';
 }
 
+function toggleArmaGuide(guideId) {
+  const el = document.getElementById(guideId);
+  if (!el) return;
+  const isHidden = el.style.display === 'none' || !el.style.display;
+  el.style.display = isHidden ? 'block' : 'none';
+}
+
 function copyArmaCmd(cmd) {
   if (!cmd) return;
   if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -956,3 +963,12 @@ function playYautjaTrophySound() {
     console.log("Audio synthesis not available or blocked:", err);
   }
 }
+
+// Configurar enlaces directos entre la plataforma Yautja y la Presa (OWLF)
+document.addEventListener('DOMContentLoaded', () => {
+  const preyLink = document.getElementById('linkToPrey');
+  if (preyLink) {
+    const currentHost = window.location.hostname || '127.0.0.1';
+    preyLink.href = `http://${currentHost}:8080/`;
+  }
+});

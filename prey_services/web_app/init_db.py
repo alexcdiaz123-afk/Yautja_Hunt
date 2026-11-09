@@ -36,7 +36,7 @@ def init_database():
         ('Specimen Alpha-7 (Bio-Luminescent Fluid)', 'Medium', 'Fluorescencia verde brillante descubierta en hojas de palma tras enfrentamiento.', 'RESTRICTED'),
         ('Bio-Mask Optical Shard', 'High', 'Fragmento de aleación superconductora que sintoniza visión infrarroja.', 'SECRET'),
         ('Combistick Telescoping Fragment', 'Extreme', 'Aleación ultra-densa resistente a munición antitanque de 20mm.', 'TOP_SECRET'),
-        ('YAUTJA_HUNTER_BIO_WEAPON', 'LETHAL_OMEGA', 'Muestra biológica de cazador extraterrestre clasificada. Cráneo 06: SKULL{BLOODED_06_VULN_EXPLOITED}', 'CLASSIFIED_EYES_ONLY')
+        ('YAUTJA_HUNTER_BIO_WEAPON', 'LETHAL_OMEGA', 'Muestra biológica de cazador extraterrestre clasificada. Cráneo 06: SKULL{XENOMORPH_BIO_SPECIMEN_AUTOPSY}', 'CLASSIFIED_EYES_ONLY')
     ]
 
     cursor.executemany("""
@@ -47,7 +47,7 @@ def init_database():
     cursor.execute("""
     INSERT INTO vault_classified (secret_title, flag_skull, security_note)
     VALUES (?, ?, ?);
-    """, ('PROYECTO STARGAZER - ARCHIVO DE CRANEOS', 'SKULL{BLOODED_06_VULN_EXPLOITED}', 'Vulnerabilidad SQL detectada y documentada con exito'))
+    """, ('PROYECTO STARGAZER - ARCHIVO DE CRANEOS', 'SKULL{XENOMORPH_BIO_SPECIMEN_AUTOPSY}', 'Vulnerabilidad SQL detectada y documentada con exito'))
 
     conn.commit()
     conn.close()

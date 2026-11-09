@@ -5,7 +5,7 @@
 [+] PRIVILEGIO: owlf-agent (UID 1001)
 
 [!] CRÁNEO DE SANGRE OBTENIDO:
-    SKULL{BLOODED_07_INITIAL_ACCESS_GRANTED}
+    SKULL{GET_TO_THE_CHOPPER_NOW}
 
 --------------------------------------------------------------------------------
 Has desmantelado las defensas iniciales de la base humana y obtenido acceso

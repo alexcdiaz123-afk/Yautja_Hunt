@@ -36,6 +36,9 @@
     </div>
 
     <nav class="military-nav">
+      <a id="linkToHunter" href="http://127.0.0.1:8000" target="_blank" style="border-color: #ff9900; color: #ffaa00; background: rgba(255, 153, 0, 0.1);" title="Abrir consola de cacería Yautja">
+        CONSOLA YAUTJA (:8000) &#8599;
+      </a>
       <a href="/" {% if request.path == '/' %}class="active"{% endif %}>ESTADO BASE</a>
       <a href="/telemetry_vault/" {% if request.path == '/telemetry_vault/' %}class="active"{% endif %}>TELEMETRIA</a>
       {% if session.get('user') %}
@@ -91,5 +94,14 @@
     PROJECT STARGAZER // CLASSIFIED SCIENTIFIC OUTPOST 74 &bull; VAL VERDE SURVEILLANCE SECTOR<br>
     <span style="color: #3b5068; font-size: 0.7rem;">ADVERTENCIA: ACCESO NO AUTORIZADO ES PUNIBLE BAJO LA LEY FEDERAL DE SEGURIDAD NACIONAL &bull; TERMINAL AUDITADA</span>
   </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var hunterLink = document.getElementById('linkToHunter');
+      if (hunterLink) {
+        var currentHost = window.location.hostname || '127.0.0.1';
+        hunterLink.href = 'http://' + currentHost + ':8000/';
+      }
+    });
+  </script>
 </body>
 </html>
