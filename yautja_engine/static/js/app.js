@@ -546,9 +546,6 @@ function renderHintsForChallenge(challenge) {
               <button class="btn-unlock-hint" onclick="openBrazaleteWithRunes('${safeRunes}')" title="Abrir y descifrar automáticamente en el Brazalete Yautja" style="font-size: 0.75rem; padding: 3px 8px; border-color: #00d2ff; color: #00d2ff;">
                 🛸 ABRIR EN BRAZALETE
               </button>
-              <button class="btn-unlock-hint" onclick="toggleHintTranslation('${challenge.id}', ${h.level})" style="font-size: 0.75rem; padding: 3px 8px;">
-                [ TRADUCIR / ALTERNAR ]
-              </button>
             </div>
           </div>
           <div class="hint-content" id="hint_content_${challenge.id}_${h.level}" style="width: 100%;">
@@ -559,9 +556,6 @@ function renderHintsForChallenge(challenge) {
                 <span style="font-size: 0.75rem; color: #885555;">SÍMBOLOS SELECCIONABLES (COPIA CON CLIC O ARRASTRE):</span>
                 <span class="yautja-runes-selectable" style="color: #ff4444; font-family: monospace; font-size: 1.15rem; letter-spacing: 2px; user-select: all; cursor: pointer; background: #080303; padding: 2px 8px; border-radius: 3px; border: 1px solid #2a0808;" onclick="copyHintRunes('${safeRunes}')" title="Haz clic para copiar los símbolos">${runes}</span>
               </div>
-            </div>
-            <div class="hint-plain-box" style="display: none; color: #00ff77; font-size: 0.9rem; padding: 8px 12px; background: rgba(0,255,119,0.06); border-left: 3px solid #00ff77; border-radius: 3px; margin-top: 6px;">
-              <strong>Traducción humana:</strong> ${h.plain_text}
             </div>
           </div>
         </div>
