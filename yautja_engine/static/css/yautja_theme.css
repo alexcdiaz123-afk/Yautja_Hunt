@@ -709,8 +709,8 @@ body.thermal-vision .codex-card:hover {
 .theory-text {
   color: #c9e8ff;
   font-size: 0.88rem;
-  line-height: 1.55;
-  margin: 0;
+  line-height: 1.6;
+  margin: 0 0 8px 0;
 }
 
 /* ========================================================

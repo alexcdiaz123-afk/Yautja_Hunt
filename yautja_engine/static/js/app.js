@@ -122,6 +122,19 @@ function setupEventListeners() {
   }
 }
 
+
+/**
+ * Formats multi-paragraph theory text into styled HTML paragraphs.
+ */
+function renderTheoryParagraphs(text, extraStyle = '') {
+  if (!text) return '<p class="theory-text">N/A</p>';
+  return text.split('\n\n').map(p => {
+    const trimmed = p.trim();
+    if (!trimmed) return '';
+    return `<p class="theory-text" style="${extraStyle} margin-bottom: 8px;">${trimmed.replace(/\n/g, '<br>')}</p>`;
+  }).join('');
+}
+
 function renderDashboard() {
   if (!appState || !challengesData) return;
 
@@ -452,11 +465,11 @@ function renderChallenges() {
           </div>
 
           <div class="thermal-theory-box">
-            <div class="theory-section-title">[+] CONCEPTO DE SEGURIDAD & VULNERABILIDAD:</div>
-            <p class="theory-text">${c.theory ? c.theory.concept : 'Análisis teórico no disponible.'}</p>
+            <div class="theory-section-title">[+] CONTEXTO TEÓRICO & VULNERABILIDAD:</div>
+            ${renderTheoryParagraphs(c.theory ? c.theory.concept : 'Análisis teórico no disponible.')}
 
             <div class="theory-section-title">[+] METODOLOGÍA Y HERRAMIENTAS RECOMENDADAS:</div>
-            <p class="theory-text">${c.theory ? c.theory.tools : 'N/A'}</p>
+            ${renderTheoryParagraphs(c.theory ? c.theory.tools : 'N/A')}
 
             <div class="theory-section-title">[+] ENFOQUE Y RAZONAMIENTO DEL ANALISTA:</div>
             ${appState.is_berserker ? `
@@ -465,11 +478,11 @@ function renderChallenges() {
                 Debes examinar los servicios y utilizar las herramientas sugeridas (${c.theory ? c.theory.tools : 'herramientas de Kali'}) para deducir el vector de explotación por tu cuenta.
               </div>
             ` : `
-              <p class="theory-text" style="color: #80d8ff;">${c.theory ? c.theory.approach : 'N/A'}</p>
+              ${renderTheoryParagraphs(c.theory ? c.theory.approach : 'N/A', 'color: #80d8ff;')}
             `}
 
             <div class="theory-section-title">[+] MEDIDAS DE MITIGACIÓN Y HARDENING:</div>
-            <p class="theory-text" style="color: #69f0ae;">${c.theory ? c.theory.mitigation : 'N/A'}</p>
+            ${renderTheoryParagraphs(c.theory ? c.theory.mitigation : 'N/A', 'color: #69f0ae;')}
           </div>
 
           <div style="margin-top: 12px; font-size: 0.8rem; color: #80d8ff; display: flex; justify-content: space-between; align-items: center;">

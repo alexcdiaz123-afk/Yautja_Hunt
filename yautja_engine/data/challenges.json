@@ -11,10 +11,10 @@
       "flag": "SKULL{IF_IT_BLEEDS_WE_CAN_KILL_IT}",
       "description": "El cazador Yautja llega a la órbita de un puesto de avanzada humano clasificado (OWLF Outpost 74). Antes de descender a cazar, debes escanear el espectro electromagnético e identificar los puertos y servicios activos de la presa sin saturar la red.",
       "theory": {
-        "concept": "El reconocimiento activo en pentesting consiste en mapear la superficie de ataque e identificar puertos TCP abiertos. En entornos virtuales o laboratorios, es crucial optimizar los escaneos para evitar tiempos de espera prolongados.",
-        "tools": "Nmap (escaneo rápido con -Pn, delimitación de puertos con -p), Netcat (nc).",
-        "approach": "Comenzar con un barrido de puertos sobre el host objetivo. Considerar el año del primer contacto militar (1987) o puertos web estándar. Usa la bandera `-Pn` para evitar demoras si la VM no responde al ping.",
-        "mitigation": "Cerrar todo puerto no esencial, configurar reglas de cortafuegos perimetral (iptables/UFW) y deshabilitar balizas de transmisión continua."
+        "concept": "El reconocimiento activo en pentesting (fase inicial bajo marcos de trabajo como PTES y MITRE ATT&CK T1046) consiste en mapear e identificar puertos TCP y UDP abiertos en un objetivo para descubrir qué servicios de red se encuentran escuchando. El escaneo de puertos funciona transmitiendo paquetes SYN para sondeos sigilosos o completando el protocolo Three-Way Handshake (SYN -> SYN-ACK -> ACK).\n\nSin embargo, en entornos corporativos modernos o en laboratorios virtuales donde las máquinas objetivo operan detrás de adaptadores de red NAT o interfaces Host-Only, los paquetes ICMP (ping) son frecuentemente descartados por firewalls perimetrales o switches virtuales. Si un analista ejecuta escaneos exhaustivos sin acotar puertos (como 'nmap -p-'), la herramienta debe interrogar 65.535 puertos uno a uno, lo que satura la tabla de conexiones de la máquina virtual y genera demoras extremas o bloqueos. Para optimizar el análisis, se debe emplear la bandera '-Pn' (asumir host encendido sin enviar ping previo) y acotar la inspección a puertos conocidos o específicos (-p).",
+        "tools": "Nmap (escaneo ágil con banderas -Pn, -T4 y acotación -p), Netcat (nc -vn) para comprobación directa de sockets TCP.",
+        "approach": "Comienza ejecutando un barrido dirigido sobre los puertos de la presa humana. Evita escanear los 65.535 puertos de forma indiscriminada. Utiliza la bandera '-Pn' para no depender de respuestas ICMP ping en VirtualBox y busca puertos vinculados al año histórico del primer contacto militar (1987) o puertos de servicios web habituales (8080, 80).",
+        "mitigation": "Cerrar todo puerto y servicio de red no esencial, implementar reglas estrictas de cortafuegos perimetral (iptables / UFW) que descarten tráfico no autorizado y desactivar balizas de transmisión o telemetría continua."
       },
       "hints": [
         {
@@ -51,10 +51,10 @@
       "flag": "SKULL{PAINLESS_OLD_MINIGUN_DEFENSE}",
       "description": "Los humanos dejan marcas sutiles en sus transmisiones. Analiza a fondo las cabeceras HTTP y banners de los servicios web expuestos para detectar la firma tecnológica del laboratorio secreto.",
       "theory": {
-        "concept": "El Banner Grabbing es la inspección de cadenas de texto y metadatos que los servidores web transmiten en sus encabezados para anunciar versiones de software o variables de depuración interna (CWE-200).",
-        "tools": "cURL (solicitud de encabezados), DevTools del navegador (pestaña Red), WhatWeb.",
-        "approach": "Inspeccionar las cabeceras de respuesta HTTP del servidor web en el puerto 8080. Prestar especial atención a campos personalizados con prefijos de seguimiento militar (como 'X-').",
-        "mitigation": "Deshabilitar cabeceras de depuración interna y ofuscar las firmas de software en el servidor antes de desplegar en producción."
+        "concept": "El protocolo de transferencia de hipertexto (HTTP / RFC 7230 y RFC 7231) estructura la comunicación web mediante solicitudes y respuestas compuestas por líneas de estado, encabezados de metadatos y cuerpos de mensaje. Durante el ciclo de desarrollo o la integración de sistemas, los ingenieros a menudo configuran cabeceras HTTP personalizadas (históricamente designadas con el prefijo 'X-' según la convención del RFC 6648) para registrar identificadores de seguimiento, variables de depuración interna o nombres de proyectos clasificados.\n\nLa vulnerabilidad de exposición de información sensible (CWE-200 / OWASP A05: Security Misconfiguration) surge cuando estas cabeceras no se purgan antes de pasar a entornos operativos. A través de la técnica de Banner Grabbing, un auditor puede inspeccionar las cabeceras de respuesta HTTP (empleando peticiones de tipo HEAD mediante 'curl -I') para extraer nombres exactos de servidores, módulos activos, flags de depuración o pistas operativas sin necesidad de interactuar con la lógica profunda ni alterar el estado de la aplicación.",
+        "tools": "cURL (solicitud de encabezados con 'curl -I'), DevTools del navegador (pestaña Red / Network Headers), WhatWeb.",
+        "approach": "Inspecciona exhaustivamente las cabeceras de respuesta HTTP del portal web de la presa en el puerto 8080. Presta especial atención a los campos que inicien con prefijos de seguimiento o variables militares (como 'X-').",
+        "mitigation": "Configurar el servidor web para deshabilitar la firma de versión (ServerTokens Prod) y eliminar cualquier cabecera personalizada de depuración interna ('X-') en proxies inversos o middlewares de producción."
       },
       "hints": [
         {
@@ -91,10 +91,10 @@
       "flag": "SKULL{ACTIVE_CAMOUFLAGE_IN_THE_CANOPY}",
       "description": "El puesto científico de la presa cuenta con un portal web. Encuentra las entradas que los ingenieros intentaron ocultar a los rastreadores automáticos y explora las bóvedas de telemetría.",
       "theory": {
-        "concept": "El archivo robots.txt se utiliza para evitar que rastreadores indexen rutas sensibles. Sin embargo, al ser accesible públicamente, a menudo actúa como un mapa de las rutas más interesantes para un auditor de seguridad.",
-        "tools": "cURL, navegador web, inspección de código fuente HTML (Ctrl+U).",
-        "approach": "Comprobar si existe el estándar `/robots.txt` en la raíz del servicio web. Identificar las directivas 'Disallow' e inspeccionar el código fuente de las páginas no indexadas.",
-        "mitigation": "Nunca confiar en robots.txt como control de seguridad; restringir el acceso a nivel de servidor con autenticación real."
+        "concept": "El Robots Exclusion Protocol (formalizado como estándar en el RFC 9309) es un mecanismo diseñado desde 1994 para coordinar el comportamiento de los motores de búsqueda y rastreadores web automáticos (crawlers como Googlebot o Bingbot). Al consultar el archivo de texto plano ubicado en la raíz de un dominio ('/robots.txt'), los rastreadores leen directivas como 'User-agent: *' y 'Disallow: /ruta/' para abstenerse de indexar directorios privados o recursos que no deben aparecer en motores de búsqueda públicos.\n\nUn error clásico y grave de diseño es confundir el protocolo robots.txt con un mecanismo de control de acceso o autenticación (CWE-653 / OWASP A01: Broken Access Control). Dado que el archivo 'robots.txt' es forzosamente público y accesible por cualquier navegador sin credenciales, los atacantes y auditores lo revisan como su primera parada de reconocimiento. En la práctica, las rutas listadas bajo 'Disallow' actúan involuntariamente como un mapa que apunta hacia las carpetas más críticas, paneles de administración, respaldos o depósitos de telemetría del sistema.",
+        "tools": "Navegador web, cURL ('curl http://<IP>:8080/robots.txt'), inspección del código fuente HTML (Ctrl+U / DevTools).",
+        "approach": "Comprueba si existe el archivo '/robots.txt' en la raíz del servicio web. Analiza cada una de las rutas desautorizadas bajo la directiva 'Disallow' y navega hacia ellas. Inspecciona el código fuente HTML y comentarios ocultos que los desarrolladores hayan podido olvidar en esas vistas.",
+        "mitigation": "Nunca utilizar robots.txt para proteger recursos privados. Todo contenido o endpoint sensible debe estar protegido mediante autenticación robusta a nivel de aplicación o firewall de aplicaciones web (WAF)."
       },
       "hints": [
         {
@@ -131,10 +131,10 @@
       "flag": "SKULL{XENOMORPH_BIO_SPECIMEN_AUTOPSY}",
       "description": "Los científicos de Weyland-Yutani Projects y el ejército mantienen un catálogo de especímenes alienígenas. En la sección de especímenes han expuesto un archivo de imagen de un embrión de Xenomorfo (XX121). Descarga la muestra y analiza sus metadatos ocultos para extraer el informe criptográfico y las credenciales del laboratorio.",
       "theory": {
-        "concept": "La esteganografía en imágenes digitales consiste en ocultar mensajes o archivos dentro de la estructura de un contenedor gráfico (segmentos de comentarios COM, campos EXIF o bytes posteriores al marcador de fin de archivo EOI) sin alterar visiblemente la imagen (CWE-200).",
-        "tools": "strings, exiftool, binwalk, hexdump.",
-        "approach": "Descargar xenomorph_embryo.jpg desde el catálogo de especímenes o la bóveda de respaldos. Utilizar herramientas de extracción de texto y metadatos de Kali Linux para revelar notas de investigación y credenciales incrustadas.",
-        "mitigation": "Purgar metadatos EXIF con utilidades como exiftool -all= y desinfectar archivos binarios antes de publicarlos en servidores accesibles."
+        "concept": "La esteganografía digital es la disciplina que estudia la ocultación de información, mensajes o cargas útiles dentro de archivos portadores inocuos (como imágenes, audio o ejecutables), de forma tal que la existencia misma de la comunicación pase desapercibida para observadores no autorizados. A diferencia de la criptografía (que convierte un mensaje en un texto cifrado ininteligible pero evidente), la esteganografía disfraza la transferencia de datos como un archivo legítimo y común, técnica ampliamente documentada en ataques APT y exfiltración de secretos.\n\nEn formatos de imagen como JPEG, los archivos están estructurados en segmentos delimitados por marcadores de 2 bytes: por ejemplo, el marcador COM (0xFFFE) almacena comentarios de texto legibles, mientras que los metadatos EXIF (0xFFE1) almacenan parámetros de cámara y software. Asimismo, los visores de imágenes estándar ignoran cualquier byte ubicado después del marcador de fin de imagen (0xFFD9 - EOI). Los analistas forenses utilizan herramientas como 'strings' (que extrae secuencias consecutivas de caracteres imprimibles ASCII/Unicode) o 'exiftool' para auditar y descubrir datos ocultos, credenciales de emergencia o firmas de autor incrustadas en el archivo.",
+        "tools": "strings (filtro rápido de cadenas imprimibles), exiftool (análisis de metadatos EXIF/COM), binwalk, hexdump / xxd.",
+        "approach": "Descarga la imagen del espécimen expuesta en el catálogo biológico del laboratorio (/static/specimens/xenomorph_embryo.jpg). Utiliza la herramienta de terminal 'strings' combinada con grep, o 'exiftool', para inspeccionar el texto incrustado dentro de los metadatos y comentarios del archivo gráfico.",
+        "mitigation": "Implementar sanitización y recomposición de imágenes en el servidor antes de publicarlas, eliminando metadatos EXIF, bloques de comentarios y bytes residuales posteriores al marcador de cierre mediante bibliotecas gráficas seguras."
       },
       "hints": [
         {
@@ -171,10 +171,10 @@
       "flag": "SKULL{PETER_KEYES_OWLF_SURVEILLANCE}",
       "description": "Utiliza las credenciales descubiertas en el archivo de respaldo para infiltrarte en la consola de mando de nivel 4 del Dr. Peter Keyes.",
       "theory": {
-        "concept": "La reutilización de credenciales expuestas (Broken Authentication) permite al atacante obtener acceso legítimo utilizando contraseñas encontradas en archivos de texto plano o respaldos mal protegidos.",
-        "tools": "Formulario web de login, Burp Suite o cURL.",
-        "approach": "Correlacionar las credenciales halladas en ficheros de configuración con las pantallas de inicio de sesión militar identificadas en la aplicación.",
-        "mitigation": "Exigir políticas de contraseñas robustas, almacenar credenciales únicamente con hash salteado (Argon2/bcrypt) y activar autenticación multifactor (MFA)."
+        "concept": "La autenticación perimetral y la gestión de sesiones (CWE-287 / OWASP A07: Identification and Authentication Failures) constituyen la base para validar la identidad de un usuario antes de permitirle interactuar con funciones sensibles del sistema. Tras enviar credenciales válidas en un formulario web mediante el método POST, el servidor verifica la firma o hash de la contraseña y crea una sesión autenticada que se persiste a través de una cookie criptográficamente firmada (como la cookie de sesión en frameworks WSGI/Flask).\n\nEn auditorías de seguridad reales, las credenciales suelen obtenerse no por ataques de fuerza bruta, sino mediante fuga previa de artefactos, comentarios de desarrolladores o notas de emergencia descubiertas en fases anteriores (como el análisis forense de la imagen del espécimen o archivos de respaldo). Una vez iniciada sesión con una cuenta legítima con privilegios (como la del director científico Dr. Keyes), la aplicación otorga acceso al panel central de comando, desbloqueando vectores de explotación internos que previamente retornaban redirecciones o denegación de acceso.",
+        "tools": "Formulario de inicio de sesión web (/login), cURL con gestión de cookies (-c / -b), DevTools del navegador.",
+        "approach": "Recupera las credenciales del científico Dr. Keyes descubiertas durante la inspección del espécimen o archivos de soporte. Inicia sesión en el formulario web corporativo para acceder a la consola maestra de administración de Outpost 74.",
+        "mitigation": "Implementar autenticación de múltiples factores (MFA), políticas estrictas de rotación de contraseñas, almacenamiento de hashes seguros con algoritmos como Argon2 o bcrypt con 'salt', y prohibir el almacenamiento de credenciales en comentarios o notas."
       },
       "hints": [
         {
@@ -211,10 +211,10 @@
       "flag": "SKULL{THERE_IS_SOMETHING_IN_THOSE_TREES}",
       "description": "Una vez dentro de la consola, el cazador descubre el catálogo de especímenes biológicos. La consulta a la base de datos es vulnerable a inyección SQL.",
       "theory": {
-        "concept": "La inyección SQL (SQLi) se produce cuando los datos del usuario se concatenan directamente a una consulta SQL sin saneamiento ni parametrización (CWE-89).",
-        "tools": "Navegador web, Burp Suite, inyección manual con delimitadores de comilla simple.",
-        "approach": "Comprobar cómo reacciona el buscador de especímenes (`/specimens?q=`) ante caracteres de control SQL (como la comilla simple). Probar condiciones lógicas que fuercen la verdad booleana para extraer datos ocultos.",
-        "mitigation": "Utilizar exclusivamente consultas preparadas (Prepared Statements con parámetros vinculados) y limitar los privilegios del usuario de la base de datos."
+        "concept": "La Inyección de SQL (SQL Injection - SQLi / CWE-89 / OWASP A03: Injection) es una de las vulnerabilidades más críticas y frecuentes en aplicaciones web. Se origina cuando datos no confiables introducidos por el usuario se concatenan o interpolan directamente en una cadena de consulta SQL en lugar de emplear sentencias preparadas (Prepared Statements) con parámetros vinculados. Al inyectar caracteres delimitadores (como la comilla simple '), un atacante puede romper el contexto de datos y adentrarse en el contexto de control, modificando la lógica de la consulta para eludir restricciones o volcar registros protegidos mediante tautologías booleanas (' OR '1'='1).\n\nDIFERENCIAS CLAVE: SQLITE FRENTE A MOTORES SQL TRADICIONALES (MySQL, PostgreSQL, MSSQL, Oracle):\nEs fundamental comprender que SQLite no funciona como un servidor de base de datos cliente-servidor convencional, lo que impacta significativamente en cómo se evalúan y explotan las inyecciones:\n1. Arquitectura de Archivo Único: SQLite es una biblioteca embebida ligera que almacena toda la base de datos en un solo archivo de disco (.db), sin procesos de fondo ni usuarios con permisos de red (GRANT/REVOKE). No hay funciones de administración de red como en MySQL o Postgres.\n2. Restricción de Consultas Apiladas (Stacked Queries): En bases de datos tradicionales como MSSQL o PostgreSQL, a menudo es posible apilar sentencias separadas por punto y coma (ej: '; DROP TABLE...'). En SQLite, bajo los conectores estándar de aplicaciones (como el módulo 'sqlite3' de Python), el método 'cursor.execute()' RECHAZA ejecutar múltiples sentencias SQL en una sola invocación; si se introduce un punto y coma con otra consulta, el motor lanza una excepción o solo ejecuta la primera, impidiendo ataques de apilamiento.\n3. Introspección del Esquema (sqlite_master vs information_schema): En motores SQL tradicionales existe la base de datos estándar 'information_schema' (tablas 'information_schema.tables' e 'information_schema.columns'). En SQLite NO existe information_schema; en su lugar, todo el esquema se almacena en la tabla del sistema 'sqlite_master' (o 'sqlite_schema'), donde la columna 'sql' contiene la sentencia CREATE TABLE original de cada entidad.\n4. Sintaxis de Comentarios y Operadores: SQLite utiliza exclusivamente '--' (dos guiones) para comentarios de una línea y '/* ... */' para multilínea. A diferencia de MySQL, SQLite no admite '#' para comentar. Además, la concatenación de cadenas se realiza con el operador '||' (ej: 'a' || 'b'), a diferencia de CONCAT() en MySQL o '+' en MSSQL.\n5. Cláusula LIKE en Búsquedas: En este reto, la consulta del servidor es: WHERE code_name LIKE '%<INPUT>%' OR notes LIKE '%<INPUT>%'. Para neutralizar las comillas del desarrollador y forzar al motor a devolver los especímenes ocultos, debes inyectar una comilla de cierre y una condición siempre verdadera: ' OR '1'='1",
+        "tools": "Navegador web (parámetro de consulta 'q' en /specimens), SQLMap (enfoque automatizado), Burp Suite / ZAP.",
+        "approach": "Accede al catálogo de especímenes (/specimens) tras autenticarte. Prueba inyectar una comilla simple en la barra de búsqueda para verificar si el motor SQLite devuelve un error de sintaxis. Luego, cierra la comilla e inyecta una tautología booleana (como ' OR '1'='1) para forzar al motor a devolver la fila oculta de contención omega.",
+        "mitigation": "Utilizar invariablemente consultas parametrizadas con marcadores posicionales (cursor.execute('SELECT ... WHERE name = ?', (input,))) o un Mapeador Objeto-Relacional (ORM) seguro, evitando por completo la concatenación de cadenas mediante f-strings o format."
       },
       "hints": [
         {
@@ -251,10 +251,10 @@
       "flag": "SKULL{GET_TO_THE_CHOPPER_NOW}",
       "description": "La consola de diagnóstico de enlace ejecuta sondas de conectividad hacia los sensores de campo. Explotando esta brecha, el cazador ejecutará comandos directos en el servidor.",
       "theory": {
-        "concept": "La inyección de comandos en el sistema operativo (Command Injection - CWE-78) ocurre cuando una aplicación ejecuta una llamada a nivel de shell del sistema sin sanear los caracteres delimitadores.",
-        "tools": "Delimitadores de shell Linux (';', '&&', '|'), cURL o formulario web.",
-        "approach": "Identificar campos donde la aplicación ejecute comandos de red (como ping). Concatenar operadores de shell para ejecutar una orden secundaria arbitraria en el host.",
-        "mitigation": "Evitar llamar a intérpretes de shell (`shell=False`), emplear APIs nativas de red y validar la entrada con listas blancas estrictas."
+        "concept": "La Inyección de Comandos del Sistema Operativo (Command Injection / OS Command Injection / CWE-78 / OWASP A03) ocurre cuando una aplicación web transfiere datos suministrados por el usuario directamente a un intérprete de comandos del sistema operativo subyacente (como /bin/sh, /bin/bash o cmd.exe) sin validar ni escapar adecuadamente los metacaracteres del shell. Esta debilidad es común en paneles de diagnóstico de red que invocan utilidades del sistema como 'ping', 'traceroute' o 'nslookup' a través de llamadas de lenguaje como 'os.system()' o 'subprocess.Popen(..., shell=True)' en Python.\n\nEn entornos Linux y sistemas POSIX, el shell interpreta una serie de operadores especiales de control de flujo: el punto y coma (;) separa comandos independientes ejecutados secuencialmente, el ampersand doble (&&) ejecuta el segundo comando solo si el primero finaliza con éxito, y la tubería (|) redirige la salida estándar. Un atacante puede enviar una dirección IP válida seguida de un delimitador y un comando arbitrario (ej: '127.0.0.1; ls -la'), logrando que el servidor web ejecute el comando malicioso con los privilegios del proceso (RCE - Remote Code Execution).",
+        "tools": "Consola web de diagnóstico (/diagnostic), cURL / peticiones POST, decodificación de payloads de shell.",
+        "approach": "Navega a la herramienta de diagnóstico de enlace en el panel de control. Envía una dirección IP local seguida de un separador de comandos del shell Linux (como ';' o '&&') y una orden de lectura de archivos (como 'cat') apuntando al directorio de accesos secretos del complejo.",
+        "mitigation": "Evitar invocar intérpretes de comandos de shell. En su lugar, utilizar bibliotecas nativas del lenguaje de programación o invocar subprocess con listas de argumentos sin shell (subprocess.run(['ping', '-c', '1', ip], shell=False)) aplicando validación estricta de formato de dirección IP con expresiones regulares."
       },
       "hints": [
         {
@@ -291,10 +291,10 @@
       "flag": "SKULL{JUNGLE_HUNTER_THERMAL_VISION}",
       "description": "El cazador ha obtenido ejecución en el host humano. Ahora debe enumerar las tareas programadas y los registros de auditoría del sistema operativo para rastrear las rutinas de la presa.",
       "theory": {
-        "concept": "La enumeración local post-acceso analiza procesos, cronjobs y registros del sistema para comprender la infraestructura interna y ubicar pistas de configuración confidenciales.",
-        "tools": "Comandos de shell: `cat`, `ls -la secret_access`, `crontab -l`, `grep`.",
-        "approach": "Aprovechar la inyección de comandos para explorar directorios internos del host. Buscar archivos de registro (.log) o huellas de tareas programadas automatizadas.",
-        "mitigation": "Proteger los archivos de registro con permisos restrictivos (chmod 600) y evitar que scripts automáticos registren claves en logs legibles por usuarios de menor privilegio."
+        "concept": "El reconocimiento local y la enumeración interna del sistema operativo (MITRE ATT&CK T1082 / T1053) es la fase en la que un analista, tras obtener una vía de ejecución de comandos, investiga la configuración del host: versión del kernel, variables de entorno, usuarios del sistema y, de manera primordial, las tareas automáticas programadas que se ejecutan periódicamente en segundo plano.\n\nEn los sistemas operativos GNU/Linux, el servicio 'cron' administra la programación periódica de tareas y scripts de mantenimiento definidos en archivos centrales como '/etc/crontab', en directorios como '/etc/cron.d/', '/etc/cron.hourly/', o en tablas individuales de usuario en '/var/spool/cron/crontabs/'. Es frecuente que administradores o scripts de orquestación configuren tareas que se ejecutan como root o usuarios con mayores privilegios. Al inspeccionar estos archivos de configuración mediante inyección de comandos, el analista puede identificar qué scripts se ejecutan, qué archivos temporales generan y si existen secretos o variables incrustadas en sus definiciones.",
+        "tools": "Comandos de shell Linux: 'cat /etc/crontab', 'ls -la /etc/cron*', inspección de procesos periódicos.",
+        "approach": "Utiliza el vector de inyección de comandos en el formulario de diagnóstico para leer el archivo central de tareas programadas '/etc/crontab'. Localiza qué script de vigilancia o mantenimiento ejecuta el sistema y analiza su contenido.",
+        "mitigation": "Restringir los permisos de lectura en tablas de cron para usuarios no privilegiados, evitar almacenar secretos en texto claro dentro de scripts programados y asegurar que los scripts ejecutados pertenezcan exclusivamente a root con permisos 0700."
       },
       "hints": [
         {
@@ -331,10 +331,10 @@
       "flag": "SKULL{VAL_VERDE_COVERT_OPERATION}",
       "description": "Los ingenieros de OWLF protegen sus microservicios internos mediante tokens de paso. Inspecciona los archivos ocultos en el sistema para encontrar la llave maestra de la matriz de defensa.",
       "theory": {
-        "concept": "En sistemas UNIX/Linux, los archivos cuyo nombre empieza por punto (`.`) son archivos ocultos que los desarrolladores a menudo utilizan para almacenar claves de API, tokens o configuraciones de depuración.",
-        "tools": "Comandos: `ls -la secret_access`, `find . -name '.*'`, `cat`.",
-        "approach": "Listar archivos ocultos en el sistema de ficheros de la aplicación para descubrir tokens o llaves maestras que autoricen acciones en componentes internos.",
-        "mitigation": "No almacenar tokens de acceso en archivos planos sin cifrar; usar bóvedas de secretos dedicadas como HashiCorp Vault o AWS Secrets Manager."
+        "concept": "En los sistemas de archivos basados en UNIX/Linux y estándares POSIX, cualquier archivo o directorio cuyo nombre comience con un punto ('.') se designa como un 'dotfile' o archivo oculto. Por defecto, las utilidades de listado como 'ls' no muestran estos archivos a menos que se invoquen con el parámetro '-a' (all). Históricamente, esta convención se adoptó para archivos de inicialización y configuración de entorno (como .bashrc, .profile o .env).\n\nLa debilidad de asignación incorrecta de permisos (CWE-732 / CWE-552: Files or Directories Accessible to External Parties) ocurre cuando archivos que albergan secretos de configuración operativa (como tokens de autenticación de APIs, claves maestras de orquestación o cadenas de conexión a bases de datos) se dejan con permisos de lectura para cualquier usuario local del sistema (0644 o rw-r--r--). Un atacante con capacidad de ejecutar comandos en el servidor puede rastrear sistemáticamente la presencia de estos archivos ocultos en carpetas compartidas del sistema (/tmp, /var, /opt).",
+        "tools": "Comandos de búsqueda y listado en Linux: 'ls -la /tmp', 'find / -name \".*\" 2>/dev/null', 'cat'.",
+        "approach": "Ejecuta una inspección de archivos ocultos en directorios de trabajo compartido como '/tmp' mediante la consola de diagnóstico. Busca archivos que comiencen con punto vinculados a tokens de acceso de Outpost 74 y lee su contenido.",
+        "mitigation": "Almacenar secretos operativos en gestores de claves dedicados (como HashiCorp Vault, AWS Secrets Manager o variables de entorno de contenedor) y configurar permisos de archivo mínimos y estrictos (0600) restringidos únicamente a su propietario."
       },
       "hints": [
         {
@@ -371,10 +371,10 @@
       "flag": "SKULL{WRIST_BLADES_TROPHY_COLLECTOR}",
       "description": "Los cazadores veteranos reconocen las marcas de descuido del enemigo. Identifica los scripts y utilidades con permisos de superusuario indebidos (SUID) que permitirán la escalada a control total.",
       "theory": {
-        "concept": "El bit SUID (Set User ID) permite ejecutar un archivo con los privilegios del propietario (habitualmente root). Si un script con SUID contiene permisos débiles o lógica insegura, representa un vector de escalada crítica (CWE-732).",
-        "tools": "Comando: `find / -perm -4000 -type f 2>/dev/null`, `ls -l`, GTFOBins.",
-        "approach": "Inspeccionar ejecutables o scripts en directorios protegidos que cuenten con el permiso SUID activado para identificar la marca de escalada.",
-        "mitigation": "Remover el bit SUID de scripts y binarios que no lo requieran estrictamente (`chmod u-s`)."
+        "concept": "El mecanismo de permisos SUID (Set User ID, representado por el bit especial 4000 en notación octal o por una 's' en los permisos de ejecución del usuario: -rwsr-xr-x) es una funcionalidad central del modelo de seguridad de Linux. Permite que un programa se ejecute con los privilegios de su propietario (frecuentemente el superusuario 'root') en lugar de los privilegios del usuario que lo invoca. Esta característica es indispensable para que usuarios regulares ejecuten tareas esenciales que requieren privilegios de kernel (como cambiar su contraseña con /usr/bin/passwd).\n\nSin embargo, si un administrador o desarrollador asigna indebidamente el bit SUID a binarios del sistema, lenguajes de script o herramientas compiladas a medida que realizan operaciones de lectura o ejecución de comandos (CWE-250: Execution with Unnecessary Privileges), se genera una vía directa de escalada de privilegios local. El proyecto de referencia de la comunidad 'GTFOBins' documenta exhaustivamente cómo abusar de binarios Unix estándar que portan el bit SUID para leer archivos protegidos o generar shells con privilegios de root.",
+        "tools": "Comando 'find / -perm -4000 -type f 2>/dev/null' para localizar binarios SUID, catálogo GTFOBins.",
+        "approach": "Rastrea el sistema de archivos de la presa en busca de binarios con permisos SUID activos. Examina especialmente ejecutables personalizados en /opt o /usr/local/bin creados para auditoría de seguridad y averigua sus parámetros de ejecución.",
+        "mitigation": "Auditar periódicamente los binarios SUID del sistema, montar particiones donde escriban usuarios (/tmp, /home) con la opción 'nosuid' en /etc/fstab, y aplicar el principio de menor privilegio (Least Privilege)."
       },
       "hints": [
         {
@@ -411,10 +411,10 @@
       "flag": "SKULL{SELF_DESTRUCT_COUNTDOWN_LAUGH}",
       "description": "La culminación del rango Élite. Utiliza los privilegios elevados para quebrar la última bóveda protegida y tomar posesión del cráneo maestro de la presa.",
       "theory": {
-        "concept": "La escalada de privilegios vertical culmina cuando el analista aprovecha los privilegios de superusuario (UID 0) para acceder a los ficheros más restringidos del sistema.",
-        "tools": "Comandos de lectura privilegiada, inspección de directorios de root.",
-        "approach": "Acceder al trofeo reservado para el nivel administrativo de máxima seguridad en el sistema de la presa.",
-        "mitigation": "Aplicar el principio de mínimo privilegio y confinar los procesos con perfiles AppArmor o SELinux."
+        "concept": "La escalada de privilegios vertical (Local Privilege Escalation / MITRE ATT&CK T1068 / T1548) marca la culminación del compromiso de un sistema operativo. En sistemas GNU/Linux, la cuenta 'root' (identificada con el UID 0) ostenta control absoluto y no restringido sobre el espacio de usuario, el espacio del kernel, la memoria física, los dispositivos de hardware y el sistema de archivos completo, invalidando cualquier restricción impuesta a usuarios normales.\n\nEl directorio '/root/' es el espacio de almacenamiento reservado exclusivamente para el superusuario, inaccesible para cuentas sin privilegios (cuyos permisos estándar son 0700: drwx------). Cuando un analista explota un binario SUID o un fallo en la configuración de permisos locales, logra que el proceso lea o copie archivos confidenciales ubicados en '/root/', capturando el trofeo de control maestro que demuestra el compromiso total de la infraestructura.",
+        "tools": "Binarios SUID descubiertos en fases previas, scripts de escalada local (LinPEAS), invocación de utilidades con privilegios.",
+        "approach": "Aprovecha el binario SUID descubierto en el reto anterior para solicitar la lectura o auditoría del archivo clasificado del superusuario ubicado en el directorio '/root/'. Ingresa la flag capturada para consolidar el rango Élite.",
+        "mitigation": "Implementar módulos de seguridad en el kernel como AppArmor o SELinux para limitar las capacidades de procesos incluso si se ejecutan como root, mantener el kernel actualizado y auditar la integridad de archivos de configuración con herramientas como AIDE."
       },
       "hints": [
         {
@@ -451,10 +451,10 @@
       "flag": "SKULL{PLASMACASTER_TARGETING_TRIANGLE}",
       "description": "Los humanos resguardan su tecnología crítica en microservicios internos que no son visibles desde el perímetro exterior. Descubre la Matriz de Defensa de Plasma operando en el bus interno.",
       "theory": {
-        "concept": "Muchos sistemas despliegan microservicios internos que operan en endpoints no enlazados en el menú principal o restringidos a peticiones internas (Shadow APIs / Loopback Services).",
-        "tools": "cURL, enumeración de endpoints en código y documentación interna, inspección de rutas en la aplicación.",
-        "approach": "Consultar la ruta de telemetría de plasma interna en el servidor web de la presa para obtener el estado de los escudos y las instrucciones de anulación.",
-        "mitigation": "Exigir autenticación mutua (mTLS) y autorización explícita incluso en microservicios y rutas internas."
+        "concept": "En las arquitecturas modernas de microservicios y despliegues en contenedores (como Docker o Kubernetes), las aplicaciones suelen estructurarse en capas: servicios frontales expuestos al exterior y microservicios internos de soporte (buses de mensajería, bases de datos o paneles de telemetría interna). Para mitigar riesgos, los administradores suelen vincular estos servicios internos exclusivamente a la interfaz de loopback local ('127.0.0.1') o a redes de puente privadas, confiando en que ningún atacante externo podrá comunicarse con ellos directamente.\n\nNo obstante, este enfoque a menudo cae en la trampa de la 'seguridad por oscuridad' (CWE-653: Improper Neutralization of Security Boundaries). Si el servidor frontal expone rutas de proxy, endpoints internos o si el atacante posee ejecución de comandos local, puede acceder a estos microservicios desprotegidos. La falta de autenticación entre servicios (mTLS o tokens mutuos) permite descubrir interfaces de control críticas como la matriz de plasma defensiva de la presa.",
+        "tools": "Navegación web a rutas internas (/internal_plasma_matrix), cURL local, herramientas de inspección de redes internas.",
+        "approach": "Explora las rutas secundarias del servidor web corporativo. Accede al panel de la Matriz de Plasma (/internal_plasma_matrix) para inspeccionar el estado de los campos de fuerza y descubrir el endpoint de anulación de energía.",
+        "mitigation": "Implementar arquitecturas Zero Trust donde cada microservicio exija autenticación mutua (mTLS), validación rigurosa de tokens criptográficos y segmentación estricta de red independientemente de si la solicitud proviene de localhost."
       },
       "hints": [
         {
@@ -491,10 +491,10 @@
       "flag": "SKULL{SMART_DISC_ENERGY_SLICE}",
       "description": "Aprovecha el token de autorización interno descubierto en la fase Élite para ejecutar una anulación de emergencia (override) y derribar el escudo de plasma de la instalación.",
       "theory": {
-        "concept": "El encadenamiento de vulnerabilidades y movimiento lateral consiste en utilizar artefactos descubiertos en una fase previa (como el token del Skull 09) para desbloquear y anular funciones críticas en otra API.",
-        "tools": "cURL (peticiones REST GET/POST con parámetros), Burp Suite Repeater.",
-        "approach": "Enviar el token recuperado en el Skull 09 como parámetro al endpoint de override. Si estás en modo Berserker, añadir el parámetro de fuerza `berserker_force=1`.",
-        "mitigation": "Limitar el alcance y vigencia de los tokens administrativos, validando el rol de quien los presenta."
+        "concept": "Las interfaces de programación de aplicaciones REST (RESTful APIs) utilizan métodos HTTP estandarizados (GET, POST, PUT, DELETE) para gestionar recursos y coordinar acciones de automatización entre componentes de software. La autorización de operaciones de alto impacto debe gobernarse mediante mecanismos robustos como Bearer Tokens, OAuth 2.0 o firmas criptográficas HMAC transmitidas en el encabezado 'Authorization'.\n\nLa vulnerabilidad de autenticación rota en APIs (Broken Authentication / OWASP API Security Top 10 API2:2023) se produce cuando los desarrolladores implementan la validación de tokens a través de parámetros de consulta en la URL (query strings como '?token=...'). Esto provoca que los secretos queden registrados en texto claro en historiales de navegación, logs de servidores web y proxies intermedios. Al descubrir el token secreto de anulación en la matriz interna, un auditor puede construir una solicitud HTTP dirigida que consuma la API y desactive las defensas perimetrales.",
+        "tools": "cURL ('curl http://<IP>:8080/api/override?token=...'), navegador web, extensiones de prueba de APIs (Postman / RESTClient).",
+        "approach": "Identifica el token de autorización de plasma expuesto en la matriz de energía. Realiza una petición HTTP al endpoint '/api/override' pasando el parámetro de autorización 'token' correspondiente para forzar la desactivación de las defensas.",
+        "mitigation": "Nunca transmitir secretos o tokens en la URL. Emplear encabezados HTTP estandarizados ('Authorization: Bearer <TOKEN>'), establecer caducidad temporal corta para los tokens y aplicar rate limiting estricto para mitigar ataques de abuso."
       },
       "hints": [
         {
@@ -531,10 +531,10 @@
       "flag": "SKULL{ELDER_SWORD_HONOR_BOND}",
       "description": "El cazador Anciano conduce el reactor de la base humana a una sobrecarga térmica incontrolada para forzar la apertura del búnker central.",
       "theory": {
-        "concept": "Las cadenas de explotación complejas (Exploit Chaining) requieren correlacionar los códigos devueltos por un servicio comprometido con los parámetros de control del sistema de soporte vital o del reactor.",
-        "tools": "cURL (POST con JSON o parámetros de consulta), Burp Suite.",
-        "approach": "Tomar el código de purga devuelto en el Skull 13 y enviarlo junto a la temperatura crítica (1987) a `/api/reactor_overload`.",
-        "mitigation": "Diseñar mecanismos de seguridad física desacoplados que impidan la sobrecarga mediante peticiones lógicas sin confirmación en sitio."
+        "concept": "Los sistemas de control y monitorización de infraestructura (tanto en entornos industriales ICS/SCADA como en aplicaciones web de gestión de reactores o centros de datos) regulan parámetros físicos y térmicos críticos. Las APIs encargadas de controlar estos estados deben contar con mecanismos estrictos de desacoplamiento, validaciones de rango atómicas y control de secuencia para impedir que estados anómalos provoquen fallas catastróficas (CWE-400 / CWE-20).\n\nCuando una API de mantenimiento (como '/api/reactor_overload') permite alterar variables de estado sin verificar controles de redundancia o mediante solicitudes POST sin validación de estado previo, un analista puede inducir deliberadamente una condición de sobrecarga térmica. Al alcanzar el umbral de disparo térmico, los mecanismos de seguridad del complejo entran en modo de emergencia, volcando en pantalla los códigos maestros de purga y las coordenadas de evacuación ancestrales de la instalación.",
+        "tools": "cURL para peticiones POST ('curl -X POST http://<IP>:8080/api/reactor_overload'), formularios web de control.",
+        "approach": "Envía una solicitud POST al endpoint de control del reactor subterráneo (/api/reactor_overload). Provoca la secuencia de sobrecarga térmica para forzar la emisión de los códigos maestros de purga y las coordenadas de anulación final.",
+        "mitigation": "Implementar validaciones de seguridad de doble confirmación (Two-Man Rule), autenticación criptográfica de múltiples factores para acciones de control físico, y enclavamientos de hardware que impidan estados de sobrecarga por software."
       },
       "hints": [
         {
@@ -571,10 +571,10 @@
       "flag": "SKULL{YAUTJA_PRIME_ANCESTRAL_HONOR}",
       "description": "El desafío supremo de honor. Ingresa a la consola de última línea de la presa humana, introduce las coordenadas ancestrales obtenidas tras la sobrecarga del reactor y reclama el Cráneo Supremo que te consagrará como Cazador Ancestral.",
       "theory": {
-        "concept": "La fase 'Ultimate Hunt' integra todas las destrezas adquiridas: reconocimiento, explotación web, elevación de privilegios, anulación de escudos y descifrado para consumar la victoria total del laboratorio.",
-        "tools": "Consola web `/ultimate_hunt`, análisis de respuestas de colapso, cURL.",
-        "approach": "Tomar las coordenadas reveladas durante la sobrecarga del reactor, ingresar al portal `/ultimate_hunt` y enviar la secuencia para completar el laboratorio.",
-        "mitigation": "Aplicar defensa en profundidad (Defense in Depth) con segregación total de componentes críticos."
+        "concept": "En auditorías de seguridad avanzadas y operaciones de equipo rojo (Red Team), los objetivos de máximo valor raramente se conquistan mediante un único vector aislado. Por el contrario, requieren lo que en la industria se define como 'Encadenamiento de Exploits' (Exploit Chaining): una progresión sistemática y coordinada donde el artefacto, credencial o código recuperado en una fase anterior es el insumo indispensable para desbloquear la fase subsecuente de la infraestructura.\n\nLa consola de anulación total del complejo (/ultimate_hunt) representa la última línea de contención defensiva. Requiere la secuencia criptográfica de coordenadas ancestrales obtenida tras provocar la sobrecarga térmica del reactor en la fase 14. Al validar esta secuencia en el formulario de anulación, se produce la neutralización total de los protocolos de contención de Weyland-Yutani Outpost 74, coronando al estudiante como Cazador Ancestral (+1000 de Honor Yautja).",
+        "tools": "Consola maestra de anulación (/ultimate_hunt), encadenamiento de resultados de las 14 pruebas anteriores.",
+        "approach": "Accede a la consola de anulación final en '/ultimate_hunt'. Introduce la secuencia de coordenadas ancestrales recuperada tras la sobrecarga del reactor subterráneo para autorizar el colapso total de las defensas y cobrar el cráneo supremo.",
+        "mitigation": "Aplicar el principio de Defensa en Profundidad (Defense in Depth) en todas las capas de la organización: segmentación de redes, principio de menor privilegio, monitoreo y detección de anomalías (SIEM/EDR) y revisiones periódicas de código."
       },
       "hints": [
         {
