@@ -223,9 +223,17 @@
           </div>
         </div>
       </div>
-      <p style="color: #bbb; font-size: 0.85rem; line-height: 1.5; margin-bottom: 1rem;">
-        Cada arma de la casta Yautja representa un vector de ataque y reconocimiento en Kali Linux. Haz clic en <strong>[MANUAL OFFLINE]</strong> para consultar la guía técnica optimizada para máquinas virtuales (funciona <strong>sin internet</strong>), o copia el comando sugerido para ejecutarlo en tu terminal.
-      </p>
+      <div style="background: rgba(20, 5, 5, 0.7); border: 1px solid #441515; border-radius: 6px; padding: 12px 16px; margin-bottom: 1.2rem; font-size: 0.85rem; line-height: 1.6; color: #ccc;">
+        <p style="margin: 0 0 8px 0;">
+          Cada arma del arsenal Yautja representa un vector de auditoría ofensiva estándar en <strong>Kali Linux</strong>. Las tarjetas presentan la <strong>sintaxis conceptual</strong> del armamento para que aprendas a deducir y construir tus propios comandos.
+        </p>
+        <p style="margin: 0 0 8px 0;">
+          Haz clic en <strong>[📖 MANUAL OFFLINE]</strong> en cada arma para consultar su guía metodológica detallada, funcionamiento de parámetros y precauciones para máquinas virtuales (funciona <strong>100% sin conexión a internet</strong>).
+        </p>
+        <div style="color: #ff9944; background: rgba(40, 15, 0, 0.6); border-left: 3px solid #ff7700; padding: 6px 10px; border-radius: 3px;">
+          ⚔️ <strong>SISTEMA PEDAGÓGICO DE PISTAS:</strong> Mediante la teoría y las pistas de nivel 1 y 2 en la Consola Yautja podrás deducir los objetivos. Si te encuentras completamente bloqueado y necesitas el comando exacto funcional listo para ejecutar, puedes solicitar la <strong>Pista 3</strong> en el reto correspondiente (con una penalización de <strong>-100 Puntos de Honor</strong>).
+        </div>
+      </div>
 
       <div class="armas-grid">
         <!-- Arma 1: Plasmacaster / Nmap -->
@@ -235,13 +243,12 @@
               <span class="arma-title">[01] CAÑÓN DE PLASMA</span>
               <span class="arma-kali-badge">KALI: NMAP</span>
             </div>
-            <div class="arma-target-tag">OBJETIVO: SKULL 01 // RECONOCIMIENTO</div>
+            <div class="arma-target-tag">VECTOR: RECONOCIMIENTO &amp; AUDITORÍA DE PUERTOS</div>
             <p class="arma-desc">
-              Escaneo electromagnético perimetral de frecuencias y puertos TCP abiertos en la presa. Optimizado con <code>-Pn</code> para evitar demoras por ping en entornos virtuales.
+              Escaneo electromagnético perimetral de frecuencias y puertos TCP abiertos en la presa. Descubre qué servicios militares están escuchando en la red del objetivo.
             </p>
             <div class="arma-cmd-box">
-              <code>nmap -Pn -p 1987,8080 &lt;IP_PRESA&gt;</code>
-              <button class="btn-copy-cmd" onclick="copyArmaCmd('nmap -Pn -p 1987,8080 127.0.0.1')">Copiar</button>
+              <code>nmap -Pn [flags] -p [puerto(s)] &lt;IP_OBJETIVO&gt;</code>
             </div>
             <div class="arma-actions-row">
               <button class="arma-guide-btn" onclick="toggleArmaGuide('guide-arma-1')">
@@ -252,12 +259,12 @@
               </a>
             </div>
             <div id="guide-arma-1" class="arma-offline-drawer" style="display: none;">
-              <h4>GUÍA RÁPIDA DE NMAP (PARA MÁQUINAS VIRTUALES):</h4>
+              <h4>GUÍA METODOLÓGICA DE NMAP (PARA ENTORNOS VIRTUALES):</h4>
               <ul>
-                <li><strong>-Pn:</strong> Trata el host como encendido. Evita que Nmap se quede colgado si la red de la VM no responde al ping ICMP.</li>
-                <li><strong>-p 1987,8080:</strong> Escaneo directo a los puertos del laboratorio (tarda 1 segundo en lugar de 15 minutos).</li>
-                <li><strong>Barrido de puertos altos:</strong> <code>nmap -Pn -p 1000-2500 -T4 &lt;IP&gt;</code> si buscas la baliza sin saturar la VM.</li>
-                <li><strong>Evitar:</strong> No uses <code>-p- -sV</code> a ciegas en una VM con pocos recursos, pues saturará los sockets.</li>
+                <li><strong>-Pn:</strong> Trata al objetivo como encendido omitiendo la comprobación de ping ICMP. Indispensable en máquinas virtuales donde los adaptadores de red o firewalls descartan paquetes ICMP.</li>
+                <li><strong>-p [puertos]:</strong> Escanea puertos específicos (ej: <code>-p 80,8080</code> o rangos <code>-p 1000-2500</code>). Acotar los puertos toma menos de 2 segundos en lugar de minutos.</li>
+                <li><strong>-T4:</strong> Perfil de temporización agresivo pero estable, ideal para redes internas o laboratorios Host-Only.</li>
+                <li><strong>Recomendación para VM:</strong> Evita <code>nmap -p- -sV</code> indiscriminado, ya que puede saturar los descriptores de sockets en máquinas virtuales con pocos recursos.</li>
               </ul>
             </div>
           </div>
@@ -270,13 +277,12 @@
               <span class="arma-title">[02] CUCHILLAS DE MUÑECA</span>
               <span class="arma-kali-badge">KALI: NETCAT (NC)</span>
             </div>
-            <div class="arma-target-tag">OBJETIVO: SKULL 01 // BALIZA RADAR</div>
+            <div class="arma-target-tag">VECTOR: CONEXIONES CRUDAS &amp; BANNER GRABBING</div>
             <p class="arma-desc">
-              Conexión directa cuerpo a cuerpo contra sockets TCP crudos. Intercepta la transmisión de la baliza de radar militar OWLF en tiempo real.
+              Conexión directa cuerpo a cuerpo contra sockets TCP crudos. Lee transmisiones continuas de texto emitidas por balizas o daemons de telemetría.
             </p>
             <div class="arma-cmd-box">
-              <code>nc -vn &lt;IP_PRESA&gt; 1987</code>
-              <button class="btn-copy-cmd" onclick="copyArmaCmd('nc -vn 127.0.0.1 1987')">Copiar</button>
+              <code>nc -vn &lt;IP_OBJETIVO&gt; &lt;PUERTO_TCP&gt;</code>
             </div>
             <div class="arma-actions-row">
               <button class="arma-guide-btn" onclick="toggleArmaGuide('guide-arma-2')">
@@ -287,11 +293,11 @@
               </a>
             </div>
             <div id="guide-arma-2" class="arma-offline-drawer" style="display: none;">
-              <h4>GUÍA RÁPIDA DE NETCAT (NC):</h4>
+              <h4>GUÍA METODOLÓGICA DE NETCAT (NC):</h4>
               <ul>
-                <li><strong>-v (Verbose):</strong> Muestra si la conexión fue exitosa o rechazada.</li>
-                <li><strong>-n (Numeric):</strong> Evita resolución DNS inversa, conectando de forma instantánea.</li>
-                <li><strong>Uso:</strong> Al conectar a <code>&lt;IP&gt; 1987</code>, el servicio te responderá directamente con el banner del radar militar y el primer cráneo.</li>
+                <li><strong>-v (Verbose):</strong> Proporciona retroalimentación inmediata indicando si la conexión TCP fue exitosa o si el puerto está cerrado/filtrado.</li>
+                <li><strong>-n (Numeric):</strong> Desactiva la resolución de nombres DNS. Conecta directamente por dirección IP en milisegundos sin demoras por timeouts de red.</li>
+                <li><strong>Interacción con Sockets:</strong> Al enlazar con un servicio que emite un banner interactivo o una baliza continua, Netcat volcará la información directamente en tu terminal.</li>
               </ul>
             </div>
           </div>
@@ -304,13 +310,12 @@
               <span class="arma-title">[03] ZOOM ESPECTRAL</span>
               <span class="arma-kali-badge">KALI: CURL / WHATWEB</span>
             </div>
-            <div class="arma-target-tag">OBJETIVO: SKULL 02 &amp; SKULL 12/13</div>
+            <div class="arma-target-tag">VECTOR: ANÁLISIS DE CABECERAS HTTP &amp; APIS</div>
             <p class="arma-desc">
-              Inspección de metadatos invisibles en cabeceras HTTP (Banner Grabbing) y consumo de microservicios REST internos con parámetros de token.
+              Inspección espectral de metadatos invisibles en cabeceras HTTP de respuesta y consulta estructurada de microservicios web.
             </p>
             <div class="arma-cmd-box">
-              <code>curl -I http://&lt;IP_PRESA&gt;:8080/</code>
-              <button class="btn-copy-cmd" onclick="copyArmaCmd('curl -I http://127.0.0.1:8080/')">Copiar</button>
+              <code>curl -I http://&lt;IP_OBJETIVO&gt;:&lt;PUERTO&gt;/[ruta]</code>
             </div>
             <div class="arma-actions-row">
               <button class="arma-guide-btn" onclick="toggleArmaGuide('guide-arma-3')">
@@ -321,11 +326,11 @@
               </a>
             </div>
             <div id="guide-arma-3" class="arma-offline-drawer" style="display: none;">
-              <h4>GUÍA RÁPIDA DE CURL:</h4>
+              <h4>GUÍA METODOLÓGICA DE INSPECCIÓN HTTP:</h4>
               <ul>
-                <li><strong>-I (Head):</strong> Solo solicita las cabeceras HTTP de respuesta sin descargar el HTML.</li>
-                <li><strong>-s (Silent):</strong> Oculta la barra de progreso para lecturas limpias en terminal.</li>
-                <li><strong>Revisión clave:</strong> Busca cabeceras con prefijo <code>X-Specimen-Traces</code> o firmas militares de servidor.</li>
+                <li><strong>-I (Head):</strong> Envía una petición HEAD para obtener exclusivamente los encabezados HTTP sin descargar el cuerpo HTML de la página.</li>
+                <li><strong>Cabeceras personalizadas:</strong> Los desarrolladores y sistemas militares suelen incluir cabeceras de depuración (con prefijos como <code>X-</code>) o firmas de versiones.</li>
+                <li><strong>-s (Silent):</strong> Oculta la barra de progreso de cURL para canalizar la respuesta limpiamente en scripts o pipes.</li>
               </ul>
             </div>
           </div>
@@ -336,15 +341,14 @@
           <div>
             <div class="arma-header">
               <span class="arma-title">[04] LANZADOR DE RED</span>
-              <span class="arma-kali-badge">KALI: GOBUSTER / DIRB</span>
+              <span class="arma-kali-badge">KALI: GOBUSTER / FUZZING</span>
             </div>
-            <div class="arma-target-tag">OBJETIVO: SKULL 03 &amp; SKULL 04</div>
+            <div class="arma-target-tag">VECTOR: ENUMERACIÓN DE RUTAS Y RECURSOS OCULTOS</div>
             <p class="arma-desc">
-              Fuzzing ágil para descubrir rutas denegadas y copias de seguridad (.env, .bak). Usa listas de palabras ligeras para no colgar la VM.
+              Fuzzing controlado de directorios y archivos web para descubrir paneles administrativos, respaldos (.bak, .env) o zonas restringidas.
             </p>
             <div class="arma-cmd-box">
-              <code>gobuster dir -u http://&lt;IP&gt;:8080/ -w /usr/share/wordlists/dirb/common.txt -t 20</code>
-              <button class="btn-copy-cmd" onclick="copyArmaCmd('gobuster dir -u http://127.0.0.1:8080/ -w /usr/share/wordlists/dirb/common.txt -t 20')">Copiar</button>
+              <code>gobuster dir -u http://&lt;IP_OBJETIVO&gt;:&lt;PUERTO&gt;/ -w &lt;DICCIONARIO&gt; [flags]</code>
             </div>
             <div class="arma-actions-row">
               <button class="arma-guide-btn" onclick="toggleArmaGuide('guide-arma-4')">
@@ -355,11 +359,11 @@
               </a>
             </div>
             <div id="guide-arma-4" class="arma-offline-drawer" style="display: none;">
-              <h4>GUÍA RÁPIDA DE GOBUSTER:</h4>
+              <h4>GUÍA METODOLÓGICA DE FUZZING WEB:</h4>
               <ul>
-                <li><strong>-w common.txt:</strong> Usa diccionarios compactos (~4.000 palabras). Terminará en 10 segundos en tu VM.</li>
-                <li><strong>-t 20 (Threads):</strong> Limita los hilos para no agotar la CPU ni la memoria de la máquina virtual.</li>
-                <li><strong>Tip esencial:</strong> Revisa siempre primero <code>http://&lt;IP&gt;:8080/robots.txt</code>; a menudo revela las rutas ocultas sin necesidad de fuzzer.</li>
+                <li><strong>-w [diccionario]:</strong> Ruta al archivo de palabras en Kali (ej: <code>/usr/share/wordlists/dirb/common.txt</code>). Usa listas compactas para entornos virtuales.</li>
+                <li><strong>-t [hilos]:</strong> Limita el número de hilos simultáneos (ej: <code>-t 20</code>) para evitar saturar el CPU o la memoria de tu máquina virtual.</li>
+                <li><strong>Enumeración pasiva previa:</strong> Antes de recurrir a fuerza bruta, revisa siempre recursos estándar como <code>/robots.txt</code> o los comentarios en el código fuente HTML.</li>
               </ul>
             </div>
           </div>
@@ -370,15 +374,14 @@
           <div>
             <div class="arma-header">
               <span class="arma-title">[05] LANZA COMBISTICK</span>
-              <span class="arma-kali-badge">KALI: BURP SUITE</span>
+              <span class="arma-kali-badge">KALI: INYECCIÓN DE COMANDOS</span>
             </div>
-            <div class="arma-target-tag">OBJETIVO: SKULL 05 &amp; SKULL 07</div>
+            <div class="arma-target-tag">VECTOR: RUPTURA DE ENTRADAS &amp; COMMAND INJECTION</div>
             <p class="arma-desc">
-              Manipulación precisa de peticiones web y delimitadores de sistema operativo (Command Injection en utilidad de diagnóstico térmico).
+              Penetración en utilidades del sistema que concatenan entradas del usuario directamente en la consola del servidor (OS Command Injection).
             </p>
             <div class="arma-cmd-box">
-              <code>127.0.0.1; cat secret_access/flag07.txt</code>
-              <button class="btn-copy-cmd" onclick="copyArmaCmd('127.0.0.1; cat secret_access/flag07.txt')">Copiar</button>
+              <code>&lt;ENTRADA_VÁLIDA&gt; [DELIMITADOR] [COMANDO_SECUNDARIO]</code>
             </div>
             <div class="arma-actions-row">
               <button class="arma-guide-btn" onclick="toggleArmaGuide('guide-arma-5')">
@@ -389,11 +392,12 @@
               </a>
             </div>
             <div id="guide-arma-5" class="arma-offline-drawer" style="display: none;">
-              <h4>GUÍA RÁPIDA DE COMMAND INJECTION:</h4>
+              <h4>GUÍA METODOLÓGICA DE INYECCIÓN DE COMANDOS:</h4>
               <ul>
-                <li><strong>Delimitador ';':</strong> Permite encadenar un segundo comando independiente en bash.</li>
-                <li><strong>Delimitador '&&':</strong> Ejecuta el segundo comando si el primero tiene éxito. Vital si caes en modo Berserker (donde ';' está bloqueado).</li>
-                <li><strong>Campo vulnerable:</strong> En <code>/diagnostic</code>, ingresa la IP seguida de <code>; cat secret_access/flag07.txt</code>.</li>
+                <li><strong>Delimitador ';':</strong> Permite ejecutar un segundo comando de forma secuencial e independiente en entornos Unix/Linux.</li>
+                <li><strong>Delimitador '&amp;&amp;':</strong> Ejecuta el segundo comando únicamente si el comando anterior finaliza exitosamente (código de salida 0).</li>
+                <li><strong>Evasión de filtros:</strong> Cuando una aplicación web bloquea ciertos caracteres especiales (como <code>;</code>), probar delimitadores alternativos (<code>&amp;&amp;</code>, <code>|</code>, saltos de línea) permite sobrepasar los filtros.</li>
+                <li><strong>Lectura de archivos:</strong> Utilidades estándar de terminal como <code>cat</code> o <code>less</code> permiten volcar el contenido de ficheros confidenciales del servidor.</li>
               </ul>
             </div>
           </div>
@@ -406,13 +410,12 @@
               <span class="arma-title">[06] DISCO INTELIGENTE</span>
               <span class="arma-kali-badge">KALI: SQL INJECTION</span>
             </div>
-            <div class="arma-target-tag">OBJETIVO: SKULL 06 // INYECCIÓN SQL</div>
+            <div class="arma-target-tag">VECTOR: MANIPULACIÓN DE CONSULTAS RELACIONALES</div>
             <p class="arma-desc">
-              Proyectil guiado contra bases de datos relacionales SQLite. Permite extraer registros clasificados mediante inyecciones booleanas manuales en segundos.
+              Proyectil guiado contra bases de datos relacionales SQLite. Altera la lógica interna de la consulta para eludir restricciones y exponer registros confidenciales.
             </p>
             <div class="arma-cmd-box">
-              <code>' OR 1=1 --</code>
-              <button class="btn-copy-cmd" onclick="copyArmaCmd('\' OR 1=1 --')">Copiar</button>
+              <code>' [OPERADOR_LÓGICO] [CONDICIÓN_VERDADERA] [COMENTARIO]</code>
             </div>
             <div class="arma-actions-row">
               <button class="arma-guide-btn" onclick="toggleArmaGuide('guide-arma-6')">
@@ -423,12 +426,12 @@
               </a>
             </div>
             <div id="guide-arma-6" class="arma-offline-drawer" style="display: none;">
-              <h4>GUÍA RÁPIDA DE INYECCIÓN SQL:</h4>
+              <h4>GUÍA METODOLÓGICA DE INYECCIÓN SQL:</h4>
               <ul>
-                <li><strong>Comilla simple ( ' ):</strong> Cierra la cadena del programador en la cláusula WHERE.</li>
-                <li><strong>OR 1=1:</strong> Condición siempre verdadera que obliga a devolver todas las filas de la tabla.</li>
-                <li><strong>Guión guión ( -- ):</strong> Comenta el resto de la consulta original de SQLite.</li>
-                <li><strong>Inyección manual rápida:</strong> Pega <code>' OR 1=1 --</code> en el buscador de <code>/specimens</code> y presiona Enter; verás el espécimen secreto de inmediato.</li>
+                <li><strong>Comilla simple ('):</strong> Cierra la cadena de texto esperada por la consulta SQL subyacente.</li>
+                <li><strong>Condición Tautológica (OR 1=1):</strong> Inyecta una condición que siempre se evalúa como verdadera, haciendo que la cláusula WHERE devuelva todos los registros.</li>
+                <li><strong>Delimitador de Comentario (--):</strong> En motores como SQLite y PostgreSQL, dos guiones descartan el resto de la consulta original evitando errores sintácticos.</li>
+                <li><strong>Identificación de vulnerabilidades:</strong> Probar caracteres delimitadores en cajas de búsqueda permite deducir si la entrada se concatena directamente en la base de datos.</li>
               </ul>
             </div>
           </div>
@@ -441,13 +444,12 @@
               <span class="arma-title">[07] SECUENCIA DE MUÑECA</span>
               <span class="arma-kali-badge">KALI: GTFOBINS / SUID</span>
             </div>
-            <div class="arma-target-tag">OBJETIVO: SKULLS 08, 09, 10 &amp; 11</div>
+            <div class="arma-target-tag">VECTOR: ESCALADA VERTICAL DE PRIVILEGIOS LINUX</div>
             <p class="arma-desc">
-              Escalada vertical de privilegios. Audita el sistema en busca de scripts SUID, tareas cron desatendidas y ficheros confidenciales de superusuario.
+              Auditoría interna del sistema operativo objetivo en busca de binarios SUID, tareas programadas desatendidas (cron) y archivos con permisos débiles.
             </p>
             <div class="arma-cmd-box">
-              <code>find / -perm -4000 -type f 2&gt;/dev/null</code>
-              <button class="btn-copy-cmd" onclick="copyArmaCmd('find / -perm -4000 -type f 2>/dev/null')">Copiar</button>
+              <code>find &lt;RUTA&gt; -perm &lt;MÁSCARA&gt; -type f 2&gt;/dev/null</code>
             </div>
             <div class="arma-actions-row">
               <button class="arma-guide-btn" onclick="toggleArmaGuide('guide-arma-7')">
@@ -458,11 +460,11 @@
               </a>
             </div>
             <div id="guide-arma-7" class="arma-offline-drawer" style="display: none;">
-              <h4>GUÍA RÁPIDA DE ENUMERACIÓN LINUX / SUID:</h4>
+              <h4>GUÍA METODOLÓGICA DE ENUMERACIÓN LINUX / SUID:</h4>
               <ul>
-                <li><strong>-perm -4000:</strong> Encuentra binarios con el bit SUID activo (se ejecutan como root).</li>
-                <li><strong>2&gt;/dev/null:</strong> Descarta errores de 'Permission denied' para una salida limpia.</li>
-                <li><strong>Rutas clave en Outpost 74:</strong> Inspecciona los archivos dentro de <code>secret_access/</code> (como <code>cron_audit.log</code>, <code>.internal_token</code>, <code>scanner_audit.sh</code> y <code>root_trophy.txt</code>).</li>
+                <li><strong>-perm -4000:</strong> Busca binarios que posean el bit SUID (Set User ID) activado, ejecutándose con los privilegios del propietario (habitualmente root).</li>
+                <li><strong>2&gt;/dev/null:</strong> Redirige los mensajes de error (como 'Permission denied') al dispositivo nulo para no ensuciar la salida en terminal.</li>
+                <li><strong>Auditoría de Cron y Scripts:</strong> Revisa tareas automáticas y scripts auxiliares en el sistema; si un script con permisos de ejecución es ejecutado periódicamente por root, puede ser auditado para escalar privilegios.</li>
               </ul>
             </div>
           </div>
@@ -475,13 +477,12 @@
               <span class="arma-title">[08] CAMUFLAJE ÓPTICO</span>
               <span class="arma-kali-badge">KALI: APIS INTERNAS / CURL</span>
             </div>
-            <div class="arma-target-tag">OBJETIVO: SKULLS 12, 13, 14 &amp; 15</div>
+            <div class="arma-target-tag">VECTOR: CONSUMO DE MICROSERVICIOS RESTRINGIDOS</div>
             <p class="arma-desc">
-              Invisibilidad y consumo de microservicios internos encadenados. Desactiva escudos de plasma y ejecuta la secuencia de sobrecarga del reactor.
+              Interacción con endpoints REST internos no documentados. Consumo de parámetros de autorización y encadenamiento de solicitudes para desactivar defensas.
             </p>
             <div class="arma-cmd-box">
-              <code>curl -s http://&lt;IP&gt;:8080/internal_plasma_matrix</code>
-              <button class="btn-copy-cmd" onclick="copyArmaCmd('curl -s http://127.0.0.1:8080/internal_plasma_matrix')">Copiar</button>
+              <code>curl -s http://&lt;IP_OBJETIVO&gt;:&lt;PUERTO&gt;/&lt;ENDPOINT&gt;?[PARAMETROS]</code>
             </div>
             <div class="arma-actions-row">
               <button class="arma-guide-btn" onclick="toggleArmaGuide('guide-arma-8')">
@@ -492,11 +493,11 @@
               </a>
             </div>
             <div id="guide-arma-8" class="arma-offline-drawer" style="display: none;">
-              <h4>GUÍA RÁPIDA DE APIS INTERNAS:</h4>
+              <h4>GUÍA METODOLÓGICA DE APIS INTERNAS:</h4>
               <ul>
-                <li><strong>/internal_plasma_matrix:</strong> Revela el estado del escudo y el endpoint de override.</li>
-                <li><strong>/api/override?token=...:</strong> Pasa el token obtenido en el Skull 09 para apagar los escudos de defensa.</li>
-                <li><strong>/api/reactor_overload:</strong> Envía el código de purga con la temperatura crítica 1987 para obtener las coordenadas sagradas.</li>
+                <li><strong>Descubrimiento de Endpoints:</strong> Los archivos de configuración o el código fuente a menudo revelan rutas API internas destinadas a telemetría o mantenimiento.</li>
+                <li><strong>Autenticación basada en Tokens:</strong> Muchos endpoints validan un parámetro de consulta (ej: <code>?token=...</code>) antes de ejecutar operaciones críticas.</li>
+                <li><strong>Encadenamiento de Acciones:</strong> Los retos avanzados requieren recopilar información en fases previas (como tokens o códigos de purga) para enviarlos como parámetros en endpoints protegidos.</li>
               </ul>
             </div>
           </div>
