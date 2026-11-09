@@ -117,8 +117,7 @@ function setupEventListeners() {
   const translatorInput = document.getElementById('translatorInput');
   if (translatorInput) {
     translatorInput.addEventListener('input', (e) => {
-      const output = document.getElementById('translatorOutput');
-      output.innerHTML = renderYautjaString(e.target.value.toUpperCase() || 'YAUTJA', 28, '#ff2222');
+      handleBrazaleteInputChange(e.target.value);
     });
   }
 }
@@ -532,19 +531,36 @@ function renderHintsForChallenge(challenge) {
     const isUnlocked = unlockedList.includes(h.level);
 
     if (isUnlocked) {
+      const runes = textToYautjaRunes(h.yautja_text);
+      const safeText = (h.yautja_text || '').replace(/'/g, "\\'");
+      const safeRunes = runes.replace(/'/g, "\\'");
+
       html += `
-        <div class="hint-row" style="border-left: 3px solid #ff2a2a; flex-direction: column; align-items: flex-start;">
-          <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
+        <div class="hint-row" style="border-left: 3px solid #ff2a2a; flex-direction: column; align-items: flex-start; margin-bottom: 12px; padding: 10px;">
+          <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
             <span style="color: #ff9999; font-weight: bold; font-size: 0.85rem;">[PISTA NIVEL ${h.level}: ${h.title.toUpperCase()}]</span>
-            <button class="btn-unlock-hint" onclick="toggleHintTranslation('${challenge.id}', ${h.level})" style="font-size: 0.75rem; padding: 3px 8px;">
-              [ TRADUCIR / ALTERNAR ]
-            </button>
-          </div>
-          <div class="hint-content" id="hint_content_${challenge.id}_${h.level}">
-            <div class="hint-yautja-box" style="margin: 6px 0; background: #000; padding: 10px; border-radius: 4px; border: 1px solid #331111;">
-              ${renderYautjaString(h.yautja_text, 24, '#ff2222')}
+            <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+              <button class="btn-unlock-hint" onclick="copyHintRunes('${safeRunes}')" title="Copiar símbolos alienígenas al portapapeles" style="font-size: 0.75rem; padding: 3px 8px; border-color: #ff7700; color: #ffaa44;">
+                📋 COPIAR SÍMBOLOS
+              </button>
+              <button class="btn-unlock-hint" onclick="openBrazaleteWithRunes('${safeRunes}')" title="Abrir y descifrar automáticamente en el Brazalete Yautja" style="font-size: 0.75rem; padding: 3px 8px; border-color: #00d2ff; color: #00d2ff;">
+                🛸 ABRIR EN BRAZALETE
+              </button>
+              <button class="btn-unlock-hint" onclick="toggleHintTranslation('${challenge.id}', ${h.level})" style="font-size: 0.75rem; padding: 3px 8px;">
+                [ TRADUCIR / ALTERNAR ]
+              </button>
             </div>
-            <div class="hint-plain-box" style="display: none; color: #00ff77; font-size: 0.9rem; padding: 6px; background: rgba(0,255,119,0.05); border-left: 3px solid #00ff77;">
+          </div>
+          <div class="hint-content" id="hint_content_${challenge.id}_${h.level}" style="width: 100%;">
+            <div class="hint-yautja-box" style="margin: 8px 0; background: #000; padding: 12px; border-radius: 4px; border: 1px solid #331111;">
+              ${renderYautjaString(h.yautja_text, 24, '#ff2222')}
+              
+              <div style="margin-top: 8px; padding-top: 8px; border-top: 1px dashed #331111; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+                <span style="font-size: 0.75rem; color: #885555;">SÍMBOLOS SELECCIONABLES (COPIA CON CLIC O ARRASTRE):</span>
+                <span class="yautja-runes-selectable" style="color: #ff4444; font-family: monospace; font-size: 1.15rem; letter-spacing: 2px; user-select: all; cursor: pointer; background: #080303; padding: 2px 8px; border-radius: 3px; border: 1px solid #2a0808;" onclick="copyHintRunes('${safeRunes}')" title="Haz clic para copiar los símbolos">${runes}</span>
+              </div>
+            </div>
+            <div class="hint-plain-box" style="display: none; color: #00ff77; font-size: 0.9rem; padding: 8px 12px; background: rgba(0,255,119,0.06); border-left: 3px solid #00ff77; border-radius: 3px; margin-top: 6px;">
               <strong>Traducción humana:</strong> ${h.plain_text}
             </div>
           </div>
@@ -714,10 +730,20 @@ function playSuccessEffect() {
   }, 700);
 }
 
-// Brazalete Yautja Modal Functions
+// Brazalete Yautja Modal & Universal Cipher Controller
+window.lastCopiedRunes = '';
+
 function openBrazaleteModal() {
   const modal = document.getElementById('brazaleteModal') || document.getElementById('codexModal');
   if (modal) modal.style.display = 'flex';
+  const input = document.getElementById('translatorInput');
+  if (input) {
+    if (!input.value.trim() && window.lastCopiedRunes) {
+      input.value = window.lastCopiedRunes;
+    }
+    handleBrazaleteInputChange(input.value);
+    input.focus();
+  }
 }
 
 function closeBrazaleteModal() {
@@ -725,11 +751,186 @@ function closeBrazaleteModal() {
   if (modal) modal.style.display = 'none';
 }
 
-function selectBrazaleteLetter(char) {
+function selectBrazaleteRune(rune, char) {
   const input = document.getElementById('translatorInput');
   if (input) {
-    input.value += char;
+    input.value += (rune || char);
     input.dispatchEvent(new Event('input'));
+  }
+}
+
+function selectBrazaleteLetter(char) {
+  const rune = (window.YAUTJA_UNICODE_MAP && window.YAUTJA_UNICODE_MAP[char]) || char;
+  selectBrazaleteRune(rune, char);
+}
+
+function handleBrazaleteInputChange(rawVal) {
+  rawVal = rawVal || '';
+  const trimmed = rawVal.trim();
+  const badge = document.getElementById('brazaleteModeBadge');
+  const decodedEl = document.getElementById('brazaleteDecodedOutput');
+  const runesEl = document.getElementById('brazaleteRunesOutput');
+  const outputSvg = document.getElementById('translatorOutput');
+
+  if (!trimmed) {
+    if (badge) {
+      badge.textContent = 'MODO: EN ESPERA';
+      badge.style.color = '#888';
+      badge.style.borderColor = '#444';
+      badge.style.background = 'rgba(255,255,255,0.05)';
+    }
+    if (decodedEl) decodedEl.textContent = '(Pega símbolos o escribe en la caja superior para ver el resultado)';
+    if (runesEl) runesEl.textContent = '—';
+    if (outputSvg) outputSvg.innerHTML = renderYautjaString('YAUTJA', 24, '#ff2222');
+    return;
+  }
+
+  if (isYautjaRunic(trimmed)) {
+    // Mode: Deciphering Yautja Runes -> Latin Spanish
+    const decoded = yautjaRunesToText(trimmed);
+    if (badge) {
+      badge.textContent = 'MODO: DESCIFRANDO GLIFOS YAUTJA ➔ ESPAÑOL';
+      badge.style.color = '#00ff88';
+      badge.style.borderColor = '#00ff88';
+      badge.style.background = 'rgba(0,255,136,0.1)';
+    }
+    if (decodedEl) decodedEl.textContent = decoded;
+    if (runesEl) runesEl.textContent = trimmed;
+    if (outputSvg) outputSvg.innerHTML = renderYautjaString(decoded, 24, '#ff2222');
+  } else {
+    // Mode: Transcribing Latin Spanish -> Yautja Runes
+    const upper = trimmed.toUpperCase();
+    const runes = textToYautjaRunes(upper);
+    if (badge) {
+      badge.textContent = 'MODO: TRANSCRIBIENDO ESPAÑOL ➔ GLIFOS YAUTJA';
+      badge.style.color = '#00d2ff';
+      badge.style.borderColor = '#00d2ff';
+      badge.style.background = 'rgba(0,210,255,0.1)';
+    }
+    if (decodedEl) decodedEl.textContent = upper;
+    if (runesEl) runesEl.textContent = runes;
+    if (outputSvg) outputSvg.innerHTML = renderYautjaString(upper, 24, '#ff2222');
+  }
+}
+
+function copyHintRunes(runes) {
+  if (!runes) return;
+  window.lastCopiedRunes = runes;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(runes).then(() => {
+      alert(`[BRAZALETE YAUTJA]\n\n¡Símbolos alienígenas copiados al portapapeles!\n\n${runes}\n\nPuedes abrirlos en el Brazalete con el botón [🛸 ABRIR EN BRAZALETE] o pegarlos con Ctrl+V.`);
+    }).catch(() => {
+      prompt("Copia los símbolos alienígenas:", runes);
+    });
+  } else {
+    prompt("Copia los símbolos alienígenas:", runes);
+  }
+}
+
+function openBrazaleteWithRunes(runes) {
+  window.lastCopiedRunes = runes;
+  openBrazaleteModal();
+  const input = document.getElementById('translatorInput');
+  if (input) {
+    input.value = runes;
+    input.dispatchEvent(new Event('input'));
+  }
+}
+
+async function pasteToBrazalete() {
+  const input = document.getElementById('translatorInput');
+  if (!input) return;
+
+  if (navigator.clipboard && navigator.clipboard.readText) {
+    try {
+      const text = await navigator.clipboard.readText();
+      if (text) {
+        input.value = text;
+        input.dispatchEvent(new Event('input'));
+        return;
+      }
+    } catch (e) {
+      // Permission blocked
+    }
+  }
+
+  if (window.lastCopiedRunes) {
+    input.value = window.lastCopiedRunes;
+    input.dispatchEvent(new Event('input'));
+  } else {
+    const userText = prompt("Pega aquí los símbolos alienígenas o texto latino:");
+    if (userText) {
+      input.value = userText;
+      input.dispatchEvent(new Event('input'));
+    }
+  }
+}
+
+function loadLastHintToBrazalete() {
+  const input = document.getElementById('translatorInput');
+  if (!input) return;
+
+  if (window.lastCopiedRunes) {
+    input.value = window.lastCopiedRunes;
+    input.dispatchEvent(new Event('input'));
+    return;
+  }
+
+  if (appState && appState.unlocked_hints && challengesData) {
+    for (let i = challengesData.length - 1; i >= 0; i--) {
+      const c = challengesData[i];
+      const unl = appState.unlocked_hints[c.id];
+      if (unl && unl.length > 0 && c.hints) {
+        const maxLvl = Math.max(...unl);
+        const hintObj = c.hints.find(h => h.level === maxLvl);
+        if (hintObj) {
+          const runes = textToYautjaRunes(hintObj.yautja_text);
+          window.lastCopiedRunes = runes;
+          input.value = runes;
+          input.dispatchEvent(new Event('input'));
+          return;
+        }
+      }
+    }
+  }
+
+  const defaultSample = textToYautjaRunes("LA BALIZA MILITAR TRANSMITE EN UN PUERTO TCP ALTO");
+  input.value = defaultSample;
+  input.dispatchEvent(new Event('input'));
+}
+
+function clearBrazaleteInput() {
+  const input = document.getElementById('translatorInput');
+  if (input) {
+    input.value = '';
+    input.dispatchEvent(new Event('input'));
+    input.focus();
+  }
+}
+
+function copyDecodedText() {
+  const el = document.getElementById('brazaleteDecodedOutput');
+  const text = el ? el.textContent.trim() : '';
+  if (!text || text.startsWith('(')) return;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      alert(`[BRAZALETE YAUTJA]\nTraducción copiada al portapapeles:\n\n${text}`);
+    });
+  } else {
+    prompt("Copia la traducción:", text);
+  }
+}
+
+function copyRuneText() {
+  const el = document.getElementById('brazaleteRunesOutput');
+  const runes = el ? el.textContent.trim() : '';
+  if (!runes || runes === '—') return;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(runes).then(() => {
+      alert(`[BRAZALETE YAUTJA]\nSímbolos Yautja copiados al portapapeles:\n\n${runes}`);
+    });
+  } else {
+    prompt("Copia los símbolos:", runes);
   }
 }
 

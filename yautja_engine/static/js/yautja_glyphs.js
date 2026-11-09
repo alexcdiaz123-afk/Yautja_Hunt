@@ -206,12 +206,71 @@ function createYautjaGlyphSVG(char, size = 32, glowColor = '#ff2a2a') {
 }
 
 /**
+ * Mapping between standard Latin characters (A-Z, 0-9) and copyable Unicode Yautja Runes.
+ * Uses Elder Futhark and distinct Runic Unicode codepoints (U+16A0 - U+16F0)
+ * compatible across all modern operating systems, browsers, and terminal fonts.
+ */
+const YAUTJA_UNICODE_MAP = {
+  'A': '\u16a8', 'B': '\u16d2', 'C': '\u16b2', 'D': '\u16de', 'E': '\u16d6',
+  'F': '\u16a0', 'G': '\u16b7', 'H': '\u16ba', 'I': '\u16c1', 'J': '\u16c3',
+  'K': '\u16b4', 'L': '\u16da', 'M': '\u16d7', 'N': '\u16be', 'O': '\u16df',
+  'P': '\u16c8', 'Q': '\u16b3', 'R': '\u16b1', 'S': '\u16ca', 'T': '\u16cf',
+  'U': '\u16a2', 'V': '\u16a1', 'W': '\u16b9', 'X': '\u16ea', 'Y': '\u16a4',
+  'Z': '\u16ce',
+  '0': '\u16f0', '1': '\u16ee', '2': '\u16ef', '3': '\u16e1', '4': '\u16e2',
+  '5': '\u16e3', '6': '\u16e4', '7': '\u16e5', '8': '\u16e6', '9': '\u16e7'
+};
+
+const YAUTJA_REVERSE_MAP = {};
+for (const [latin, rune] of Object.entries(YAUTJA_UNICODE_MAP)) {
+  YAUTJA_REVERSE_MAP[rune] = latin;
+}
+
+/**
+ * Converts standard Latin text to copyable Unicode Yautja Runes.
+ */
+function textToYautjaRunes(text) {
+  if (!text) return '';
+  const upper = text.toUpperCase();
+  let result = '';
+  for (let i = 0; i < upper.length; i++) {
+    result += YAUTJA_UNICODE_MAP[upper[i]] || upper[i];
+  }
+  return result;
+}
+
+/**
+ * Converts Unicode Yautja Runes back to readable Latin Spanish text.
+ */
+function yautjaRunesToText(runeStr) {
+  if (!runeStr) return '';
+  let result = '';
+  for (let i = 0; i < runeStr.length; i++) {
+    result += YAUTJA_REVERSE_MAP[runeStr[i]] || runeStr[i];
+  }
+  return result;
+}
+
+/**
+ * Checks whether a given string contains any Yautja Runes.
+ */
+function isYautjaRunic(str) {
+  if (!str) return false;
+  for (let i = 0; i < str.length; i++) {
+    if (YAUTJA_REVERSE_MAP[str[i]]) return true;
+  }
+  return false;
+}
+
+/**
  * Converts a text string into an HTML block of Yautja glyphs.
  */
 function renderYautjaString(text, size = 26, glowColor = '#ff3333') {
+  // If the input is already in runic symbols, decode to latin first for SVG rendering
+  const latinText = isYautjaRunic(text) ? yautjaRunesToText(text) : (text || '');
   let result = '<div class="yautja-text-wrapper" style="display:inline-flex; flex-wrap:wrap; align-items:center; gap:2px;">';
-  for (let i = 0; i < text.length; i++) {
-    result += createYautjaGlyphSVG(text[i], size, glowColor);
+  for (let i = 0; i < latinText.length; i++) {
+    result += createYautjaGlyphSVG(latinText[i], size, glowColor);
   }
   result += '</div>';
   return result;
@@ -225,15 +284,19 @@ function generateBrazaleteGrid(containerId) {
   if (!container) return;
 
   const characters = Object.keys(YAUTJA_PATHS);
-  let html = '<div class="codex-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 10px;">';
+  let html = '<div class="codex-grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 10px;">';
 
   for (const char of characters) {
+    const rune = YAUTJA_UNICODE_MAP[char] || char;
     html += `
-      <div class="codex-card" style="background:#0c0909; border:1px solid #4a1212; border-radius:4px; padding:8px 4px; text-align:center; transition: all 0.2s; cursor:pointer;" onclick="(window.selectBrazaleteLetter || window.selectCodexLetter)('${char}')" title="Insertar ${char} en el traductor">
-        <div style="height:48px; display:flex; align-items:center; justify-content:center;">
-          ${createYautjaGlyphSVG(char, 28, '#ff3333')}
+      <div class="codex-card" style="background:#0c0909; border:1px solid #4a1212; border-radius:4px; padding:6px 4px; text-align:center; transition: all 0.2s; cursor:pointer;" onclick="(window.selectBrazaleteRune || window.selectBrazaleteLetter)('${rune}', '${char}')" title="Insertar glifo ${char} (${rune}) en el brazalete">
+        <div style="height:44px; display:flex; align-items:center; justify-content:center;">
+          ${createYautjaGlyphSVG(char, 26, '#ff3333')}
         </div>
-        <div style="font-family:'Courier New', monospace; font-size:1.1rem; font-weight:bold; color:#00ff88; margin-top:4px; border-top:1px dashed #331111; padding-top:4px;">
+        <div style="font-family:monospace; font-size:1.15rem; color:#ff5555; margin-top:2px;">
+          ${rune}
+        </div>
+        <div style="font-family:'Courier New', monospace; font-size:0.9rem; font-weight:bold; color:#00ff88; margin-top:2px; border-top:1px dashed #331111; padding-top:2px;">
           ${char}
         </div>
       </div>
