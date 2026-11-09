@@ -18,11 +18,25 @@ echo "==========================================================================
 echo "[*] Verificando Docker y levantando contenedores en segundo plano..."
 echo ""
 
+# Detectar si se requiere sudo para ejecutar comandos de Docker
+SUDO=""
+if [ "$EUID" -ne 0 ]; then
+    if ! docker ps &> /dev/null; then
+        SUDO="sudo"
+    fi
+fi
+
+# Verificar si el servicio Docker está encendido
+if ! $SUDO systemctl is-active --quiet docker 2>/dev/null; then
+    echo "[*] Iniciando el servicio de Docker..."
+    $SUDO systemctl start docker
+fi
+
 # Determinar comando de Docker Compose disponible
-if command -v docker &> /dev/null && docker compose version &> /dev/null; then
-    docker compose up --build -d
+if command -v docker &> /dev/null && $SUDO docker compose version &> /dev/null; then
+    $SUDO docker compose up --build -d
 elif command -v docker-compose &> /dev/null; then
-    docker-compose up --build -d
+    $SUDO docker-compose up --build -d
 else
     echo "[!] ERROR: Docker o Docker Compose no están instalados."
     echo "    Ejecuta: sudo apt update && sudo apt install -y docker.io docker-compose"
