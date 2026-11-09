@@ -14,7 +14,7 @@ PORT = 1987
 
 BANNER = """
 ================================================================================
-[+] OTHER WORLD LIFEFORM TASKFORCE (OWLF) - PROJECT STARGAZER
+[+] WEYLAND-YUTANI CORP & US MILITARY - PROJECT STARGAZER
 [+] AUTOMATED PERIMETER SURVEILLANCE RADAR v2.4 - OUTPOST 74
 ================================================================================
 [!] FREQUENCY: 1987.00 MHz | STATUS: SCANNING RAINFOREST PERIMETER
@@ -23,7 +23,7 @@ BANNER = """
 [!] THERMAL SENSORS: 4 ANOMALIES DETECTED NEAR CANOPY TREE LINE.
 [!] DIRECTIVE: EXAMINE WEB OBSERVATION PORTAL (PORT 8080 / 80).
 ================================================================================
-[OWLF-BEACON] Connection acknowledged. Sensor telemetry stream active...
+[WEYLAND-YUTANI-RADAR] Connection acknowledged. Sensor telemetry stream active...
 """
 
 def handle_client(client_socket, client_address):
@@ -34,7 +34,7 @@ def handle_client(client_socket, client_address):
         try:
             data = client_socket.recv(1024)
             if data:
-                client_socket.sendall(b"\n[OWLF-BEACON] Transmission recorded. Outpost 74 offline.\n")
+                client_socket.sendall(b"\n[WEYLAND-YUTANI-RADAR] Transmission recorded. Outpost 74 offline.\n")
         except socket.timeout:
             pass
     except Exception as e:

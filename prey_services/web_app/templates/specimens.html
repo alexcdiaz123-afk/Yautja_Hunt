@@ -1,25 +1,72 @@
 {% extends "base.html" %}
 
-{% block title %}OWLF - Catalogo Militar de Especimenes Clasificados{% endblock %}
+{% block title %}Weyland-Yutani - Catálogo de Especímenes Xenológicos{% endblock %}
 
 {% block content %}
+<!-- Weyland-Yutani Xenobiology Specimen Showcase -->
+<div class="card" style="border-left: 4px solid #00d2ff; margin-bottom: 2rem;">
+  <div class="card-header" style="margin-bottom: 1rem;">
+    <div class="card-title-group">
+      <span class="card-title-prefix" style="color: #00d2ff;">BIO // MUESTRA XX121</span>
+      <h2>ESPÉCIMEN XX121 &bull; EMBRIÓN XENOMORFO (OVOMORPH CYCLE)</h2>
+    </div>
+    <span class="badge-warning" style="border-color: #00d2ff; color: #00d2ff; background: rgba(0, 210, 255, 0.1);">
+      PRIORIDAD MÁXIMA &bull; WEYLAND-YUTANI
+    </span>
+  </div>
+
+  <div style="display: flex; gap: 24px; align-items: center; flex-wrap: wrap;">
+    <div style="position: relative; border: 2px solid #334155; border-radius: 6px; overflow: hidden; background: #000; max-width: 210px; box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);">
+      <img src="/static/specimens/xenomorph_embryo.jpg" alt="Espécimen XX121 Xenomorfo" style="width: 100%; height: auto; display: block;">
+      <div style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.8); color: #00d2ff; font-size: 0.7rem; text-align: center; padding: 4px; font-family: monospace;">
+        SCAN_XX121.JPG // 440x492
+      </div>
+    </div>
+
+    <div style="flex: 1; min-width: 280px;">
+      <div style="display: flex; gap: 10px; margin-bottom: 8px; flex-wrap: wrap;">
+        <span class="badge-warning" style="background: rgba(255, 51, 68, 0.15); color: #ff4d6d; border-color: #ff4d6d;">
+          NIVEL DE BIO-PELIGRO: EXTREMO (LETHAL)
+        </span>
+        <span class="badge-warning" style="border-color: var(--mil-border); color: #94a3b8;">
+          ORIGEN: EXCAVACIÓN PROFUNDA VAL VERDE
+        </span>
+      </div>
+      <p style="color: #cbd5e1; font-size: 0.9rem; line-height: 1.6; margin: 0 0 14px 0;">
+        Espécimen biomecánico embrionario de morfología desconocida preservado bajo criogénesis en el Outpost 74 por el equipo científico de <strong>Weyland-Yutani Projects</strong> y el destacamento militar. Las sondas fotométricas y radiológicas del Dr. Peter Keyes registraron telemetría forense dentro de este archivo.
+      </p>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <a href="/static/specimens/xenomorph_embryo.jpg" download="xenomorph_embryo.jpg" class="btn" style="border-color: #00d2ff; color: #00d2ff; background: rgba(0, 210, 255, 0.08); padding: 8px 16px; font-size: 0.85rem;" title="Descargar imagen original para análisis esteganográfico y forense">
+          📥 DESCARGAR MUESTRA FORENSE (.JPG)
+        </a>
+        <a href="/specimen_backup/xenomorph_embryo.jpg" target="_blank" class="btn" style="border-color: var(--mil-border); color: #94a3b8; padding: 8px 16px; font-size: 0.85rem;">
+          📁 VER EN BÓVEDA DE RESPALDOS
+        </a>
+      </div>
+      <div style="margin-top: 10px; font-size: 0.75rem; color: #64748b; font-family: var(--mil-font-mono);">
+        ⚠️ AVISO FORENSE: Los metadatos EXIF y segmentos binarios de esta muestra contienen registros confidenciales del laboratorio.
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="card">
   <div class="card-header">
     <div class="card-title-group">
       <span class="card-title-prefix">DB // SQL</span>
-      <h2>REGISTRO DE ESPECIMENES XENOLOGICOS // PROYECTO STARGAZER</h2>
+      <h2>BASE DE DATOS XENOBIOLÓGICA // PROYECTO STARGAZER</h2>
     </div>
     <span class="badge-warning">MOTOR SQLITE V3.2 &bull; CLASIFICADO</span>
   </div>
 
   <p style="color: #9cb3c9; font-size: 0.9rem; margin-top: 0;">
-    Terminal de consulta del banco de muestras biologicas y tecnologicas alienigenas recuperadas de zonas de combate.
-    Filtre los registros introduciendo parametros de texto o identificadores de muestra.
+    Terminal de consulta del banco de muestras biológicas y tecnológicas alienígenas recuperadas de zonas de combate.
+    Filtre los registros introduciendo parámetros de texto o identificadores de muestra.
   </p>
 
   <form method="GET" action="/specimens" style="margin: 1.5rem 0; display: flex; gap: 10px; flex-wrap: wrap;">
     <div style="flex: 1; min-width: 260px;">
-      <input type="text" name="q" value="{{ query }}" placeholder="Buscar espécimen por nombre o clasificacion (ej: Bio-Mask, Fragment, Omega...)" style="margin-bottom: 0;">
+      <input type="text" name="q" value="{{ query }}" placeholder="Buscar espécimen por nombre o clasificación (ej: Bio-Mask, Fragment, Omega...)" style="margin-bottom: 0;">
     </div>
     <button type="submit" style="white-space: nowrap;">
       [ CONSULTAR BASE DE DATOS ]

@@ -123,40 +123,40 @@
     {
       "id": "skull_04",
       "number": 4,
-      "title": "Skull 04 — Información Expuesta",
+      "title": "Skull 04 — Muestra Biológica Oculta",
       "rank": "Sangrado",
       "difficulty": "Baja-media",
       "points": 100,
-      "skill": "Análisis de información expuesta y fugas de configuración",
-      "flag": "SKULL{THERE_IS_SOMETHING_IN_THOSE_TREES}",
-      "description": "Los científicos humanos de OWLF cometieron un grave error de seguridad operacional al dejar expuesto un directorio de copias de seguridad de sus archivos de configuración y variables de entorno.",
+      "skill": "Esteganografía y análisis forense de metadatos en imágenes",
+      "flag": "SKULL{XENOMORPH_BIO_SPECIMEN_AUTOPSY}",
+      "description": "Los científicos de Weyland-Yutani Projects y el ejército mantienen un catálogo de especímenes alienígenas. En la sección de especímenes han expuesto un archivo de imagen de un embrión de Xenomorfo (XX121). Descarga la muestra y analiza sus metadatos ocultos para extraer el informe criptográfico y las credenciales del laboratorio.",
       "theory": {
-        "concept": "La fuga de información en archivos de respaldo (.env, .bak, .old) ocurre cuando copias temporales quedan expuestas en el árbol web con listado de directorios habilitado (CWE-552).",
-        "tools": "Navegador web, cURL, herramientas de fuzzing web.",
-        "approach": "Examinar los directorios revelados en fases de reconocimiento previas. Si un directorio tiene indexación activa, auditar archivos con extensiones críticas de configuración.",
-        "mitigation": "Deshabilitar Directory Listing, ubicar copias de seguridad fuera del DocumentRoot y restringir el acceso a extensiones como .env y .bak."
+        "concept": "La esteganografía en imágenes digitales consiste en ocultar mensajes o archivos dentro de la estructura de un contenedor gráfico (segmentos de comentarios COM, campos EXIF o bytes posteriores al marcador de fin de archivo EOI) sin alterar visiblemente la imagen (CWE-200).",
+        "tools": "strings, exiftool, binwalk, hexdump.",
+        "approach": "Descargar xenomorph_embryo.jpg desde el catálogo de especímenes o la bóveda de respaldos. Utilizar herramientas de extracción de texto y metadatos de Kali Linux para revelar notas de investigación y credenciales incrustadas.",
+        "mitigation": "Purgar metadatos EXIF con utilidades como exiftool -all= y desinfectar archivos binarios antes de publicarlos en servidores accesibles."
       },
       "hints": [
         {
           "level": 1,
           "title": "Pista Narrativa",
           "cost": 10,
-          "yautja_text": "UN COBARDE DEJA SUS COPIAS DE SEGURIDAD AL DESCUBIERTO EN EL CAMPAMENTO",
-          "plain_text": "Un cobarde deja sus copias de seguridad al descubierto en el campamento de investigación."
+          "yautja_text": "LOS CIENTIFICOS HUMANOS OCULTAN NOTAS CONFIDENCIALES DENTRO DE LAS IMAGENES DE SUS ESPECIMENES",
+          "plain_text": "Los científicos humanos ocultan notas confidenciales dentro de las imágenes de sus especímenes sin que el ojo humano lo perciba."
         },
         {
           "level": 2,
           "title": "Pista Técnica",
           "cost": 25,
-          "yautja_text": "UNA DE LAS RUTAS PROHIBIDAS CONTIENE UN LISTADO DE RESPALDOS",
-          "plain_text": "Revisa las rutas deshabilitadas que encontraste en robots.txt. Una de ellas contiene un directorio abierto con archivos de variables de entorno (.env) y notas del sistema."
+          "yautja_text": "DESCARGA LA IMAGEN DEL EMBRION XENOMORFO Y ANALIZA SUS METADATOS CON STRINGS O EXIFTOOL",
+          "plain_text": "Descarga la imagen del embrión de Xenomorfo (xenomorph_embryo.jpg) expuesta en el catálogo de especímenes. Utiliza herramientas de extracción de cadenas o metadatos de Kali (strings o exiftool)."
         },
         {
           "level": 3,
           "title": "Pista Directa",
           "cost": 100,
-          "yautja_text": "DESCARGA SYSTEM KEYS ENV EN SPECIMEN BACKUP",
-          "plain_text": "Comando exacto: Descarga 'http://<IP>:8080/specimen_backup/system_keys.env'; contiene la flag del Cráneo 04 y las credenciales del Dr. Keyes."
+          "yautja_text": "STRINGS XENOMORPH EMBRYO JPG GREP I SKULL REVELA LA FLAG Y LAS CREDENCIALES",
+          "plain_text": "Comando exacto: Ejecuta 'strings xenomorph_embryo.jpg | grep -i skull'; obtendrás la flag SKULL{XENOMORPH_BIO_SPECIMEN_AUTOPSY} y las credenciales de acceso de emergencia para el panel científico (dr_keys / thermal1987)."
         }
       ]
     },
@@ -208,7 +208,7 @@
       "difficulty": "Baja-media",
       "points": 100,
       "skill": "Inyección SQL manual en catálogo de base de datos",
-      "flag": "SKULL{XENOMORPH_BIO_SPECIMEN_AUTOPSY}",
+      "flag": "SKULL{THERE_IS_SOMETHING_IN_THOSE_TREES}",
       "description": "Una vez dentro de la consola, el cazador descubre el catálogo de especímenes biológicos. La consulta a la base de datos es vulnerable a inyección SQL.",
       "theory": {
         "concept": "La inyección SQL (SQLi) se produce cuando los datos del usuario se concatenan directamente a una consulta SQL sin saneamiento ni parametrización (CWE-89).",
@@ -236,7 +236,7 @@
           "title": "Pista Directa",
           "cost": 100,
           "yautja_text": "BUSCA COMILLA OR 1 IGUAL 1 GUION GUION EN EL BUSCADOR DE ESPECIMENES",
-          "plain_text": "Comando exacto: Escribe `' OR 1=1 --` en el cuadro de búsqueda de '/specimens'. Se volcará el espécimen biológico clasificado con la flag."
+          "plain_text": "Comando exacto: Escribe `' OR 1=1 --` en el cuadro de búsqueda de '/specimens'. Se volcará el espécimen biológico clasificado con la flag SKULL{THERE_IS_SOMETHING_IN_THOSE_TREES}."
         }
       ]
     },

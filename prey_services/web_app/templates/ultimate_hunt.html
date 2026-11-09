@@ -1,50 +1,51 @@
 {% extends "base.html" %}
 
-{% block title %}OWLF - Protocolo Defensivo Supremo // Ultimate Hunt{% endblock %}
+{% block title %}Weyland-Yutani - Protocolo de Desactivación de Emergencia // Sub-Núcleo{% endblock %}
 
 {% block content %}
 <div class="card" style="border-top: 3px solid var(--mil-red); box-shadow: 0 0 35px rgba(255, 51, 68, 0.25);">
   <div class="card-header" style="border-bottom-color: rgba(255, 51, 68, 0.3);">
     <div class="card-title-group">
       <span class="card-title-prefix" style="color: var(--mil-red); border-color: var(--mil-red); background: rgba(255, 51, 68, 0.12);">
-        BUNKER // OVERRIDE
+        SUB-NÚCLEO // OVERRIDE
       </span>
-      <h2>CONSOLA MAESTRA DE ULTIMA LINEA // OUTPOST 74</h2>
+      <h2>CONSOLA MAESTRA DE DESACTIVACIÓN FINAL // OUTPOST 74</h2>
     </div>
-    <span class="badge-skull">DEFCON 1 &bull; FALLA DE CONTENCION</span>
+    <span class="badge-warning" style="border-color: var(--mil-red); color: var(--mil-red); background: rgba(255, 51, 68, 0.15);">
+      DEFCON 1 &bull; FALLA TOTAL DE CONTENCIÓN
+    </span>
   </div>
 
   <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin-top: 0;">
-    El perimetro defensivo humano del <strong>Puesto Avanzado 74</strong> ha sucumbido. Las compuertas blindadas de titanio han sido rasgadas, 
-    los generadores de plasma han detonado y las fuerzas de la presa humana se encuentran en retirada total.
-    Para forzar la rendicion de la consola militar y obtener el <strong>Craneo Supremo de Caceria (Skull 15)</strong>, ingrese la secuencia de coordenadas ancestrales recuperada tras sobrecargar el nucleo del reactor.
+    El perímetro defensivo del <strong>Outpost 74</strong> ha colapsado. Los generadores de plasma han detonado y los protocolos de bioseguridad de Weyland-Yutani se encuentran desbordados.
+    Para autorizar la secuencia de desactivación total del complejo subterráneo y recuperar el código final de contención, ingrese la secuencia criptográfica de coordenadas recuperada tras sobrecargar el núcleo del reactor.
   </p>
 
   <form method="POST" action="/ultimate_hunt" style="margin: 2rem 0;">
     <label class="mil-label" style="color: #ff6677;">
-      SECUENCIA DE COORDENADAS ANCESTRALES // OVERRIDE CODE:
+      SECUENCIA CRIPTOGRÁFICA DE ANULACIÓN // OVERRIDE CODE:
     </label>
     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
       <input type="text" name="ancestral_code" value="{{ entered_code }}" placeholder="ej: YAUTJA_PRIME_ELDER_COORDINATES_X87" required style="flex: 1; min-width: 280px; border-color: rgba(255, 51, 68, 0.4);">
       <button type="submit" class="btn" style="background: linear-gradient(180deg, #3d1016 0%, #1e080b 100%); border-color: var(--mil-red); color: #ff6677; white-space: nowrap;">
-        VERIFICAR HONOR ANCESTRAL
+        [ AUTORIZAR DESACTIVACIÓN TOTAL ]
       </button>
     </div>
     <div style="font-family: var(--mil-font-mono); font-size: 0.75rem; color: #8fa0b5; margin-top: 6px;">
-      [DIRECTIVA ANCESTRAL]: Solo un cazador que haya vencido las 14 pruebas previas posee la sabiduria para activar esta secuencia.
+      [DIRECTIVA DE SEGURIDAD]: Requiere la clave de autorización recuperada del reactor térmico.
     </div>
   </form>
 
   {% if success %}
     <div style="background: rgba(0, 255, 136, 0.08); border: 2px solid var(--mil-green); padding: 1.8rem; border-radius: 4px; margin-top: 2rem; text-align: center; box-shadow: 0 0 30px rgba(0, 255, 136, 0.2);">
       <div style="font-family: var(--mil-font-mono); font-size: 0.85rem; color: var(--mil-green); letter-spacing: 2px; margin-bottom: 6px;">
-        [+] CACERIA DEFINITIVA COMPLETADA // PROTOCOLO DE HONOR ACTIVADO
+        [+] ANULACIÓN TOTAL AUTORIZADA // INSTALACIÓN DESACTIVADA CON ÉXITO
       </div>
       <h3 style="color: #fff; margin: 0 0 10px 0; font-size: 1.35rem; font-family: var(--mil-font-mono); letter-spacing: 1px;">
-        OUTPOST 74 NEUTRALIZADO &bull; LA PRESA HUMANA HA CAIDO
+        OUTPOST 74 // CONTENCIÓN BIOLÓGICA ANULADA
       </h3>
       <p style="color: #cbd5e1; font-size: 0.95rem; line-height: 1.5; max-width: 680px; margin: 0 auto 1.25rem auto;">
-        Has cobrado cada trofeo y doblegado la tecnologia del hombre. Tu nombre ha sido tallado con sangre en el monolito de honor de Yautja Prime.
+        Los subsistemas de contención han caído. Código maestro de anulación recuperado:
       </p>
       
       <div style="font-family: var(--mil-font-mono); font-size: 1.4rem; color: var(--mil-green); font-weight: 900; letter-spacing: 2.5px; padding: 12px 24px; background: #030806; border: 1px dashed var(--mil-green); border-radius: 3px; display: inline-block; margin: 0.5rem 0 1.25rem 0;">
@@ -52,12 +53,12 @@
       </div>
 
       <p style="color: #8fa0b5; font-size: 0.85rem; margin: 0; font-family: var(--mil-font-mono);">
-        Ingresa este ultimo craneo en tu Consola Yautja para consumar tu consagracion como <strong>Cazador Ancestral (+1000 Honor)</strong>.
+        Ingresa este código final en la Consola Yautja para consumar tu consagración como <strong>Cazador Ancestral (+1000 Honor)</strong>.
       </p>
     </div>
   {% elif error %}
     <div style="background: rgba(255, 51, 68, 0.12); border: 1px solid var(--mil-red); padding: 1rem 1.25rem; border-radius: 4px; color: #ff8090; font-family: var(--mil-font-mono); font-size: 0.88rem; margin-top: 1.5rem;">
-      [ERROR DE AUTORIZACION]: {{ error }}
+      [ERROR DE AUTORIZACIÓN]: {{ error }}
     </div>
   {% endif %}
 </div>

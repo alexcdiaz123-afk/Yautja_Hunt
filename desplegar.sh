@@ -46,7 +46,7 @@ EOF
 echo -e "${NC}"
 
 echo -e "${RED}╔════════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${RED}║${NC}   ${YELLOW}OWLF OUTPOST 74 — PROYECTO STARGAZER // LAB CTF DE HACKING${NC}   ${RED}║${NC}"
+echo -e "${RED}║${NC}   ${YELLOW}WEYLAND-YUTANI OUTPOST 74 — PROYECTO STARGAZER // LAB CTF${NC}    ${RED}║${NC}"
 echo -e "${RED}╚════════════════════════════════════════════════════════════════╝${NC}"
 echo ""
 
@@ -93,7 +93,7 @@ echo -e "  ${YELLOW}🛸 CONSOLA DEL CAZADOR (Brazalete Yautja y Gestión de Ret
 echo -e "     --> ${CYAN}http://localhost:8000${NC}       ${ORANGE}(Navegador dentro de Kali)${NC}"
 echo -e "     --> ${CYAN}http://$PRIMARY_IP:8000${NC}    ${ORANGE}(IP de la máquina virtual)${NC}"
 echo ""
-echo -e "  ${RED}🎯 PORTAL MILITAR DE LA PRESA (OWLF Outpost 74 - Stargazer):${NC}"
+echo -e "  ${RED}🎯 PORTAL CIENTÍFICO DE LA PRESA (Weyland-Yutani Outpost 74):${NC}"
 echo -e "     --> ${CYAN}http://localhost:8080${NC}       ${ORANGE}(Navegador dentro de Kali)${NC}"
 echo -e "     --> ${CYAN}http://$PRIMARY_IP:8080${NC}    ${ORANGE}(IP de la máquina virtual)${NC}"
 echo ""

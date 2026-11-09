@@ -3,47 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}OWLF Project Stargazer - Outpost 74{% endblock %}</title>
+  <title>{% block title %}Weyland-Yutani Projects &amp; US Military - Outpost 74{% endblock %}</title>
   <link rel="stylesheet" href="/static/css/owlf_theme.css">
 </head>
 <body>
-  <!-- Top Classification Banner (DoD Standard) -->
+  <!-- Top Classification Banner (Weyland-Yutani & DoD Standard) -->
   <div class="military-top-strip">
     <div style="display: flex; align-items: center; gap: 12px;">
-      <span class="classification-tag">TOP SECRET // OWLF EYES ONLY</span>
-      <span>U.S. DEPT OF DEFENSE // SPECIAL OPERATIONS // OUTPOST 74</span>
+      <span class="classification-tag">TOP SECRET // WEYLAND-YUTANI CORP &amp; US MILITARY</span>
+      <span>SPECIAL RESEARCH PROJECTS // JOINT TASKFORCE // OUTPOST 74</span>
     </div>
     <div class="system-ticker">
-      SEC-LEVEL: COSMIC // PROTOCOL: STANAG-4586 // SECTOR: VAL VERDE
+      SEC-LEVEL: CORPORATE-COSMIC // PROTOCOL: W-Y-BIO // SECTOR: VAL VERDE
     </div>
   </div>
 
-  <!-- Primary Military Header -->
+  <!-- Primary Military-Corporate Header -->
   <header class="military-header">
     <div class="brand-wrapper">
-      <div class="mil-insignia-box">
-        OWLF
+      <div class="mil-insignia-box" style="background: #111a24; border: 1px solid #00d2ff; color: #00d2ff; font-weight: 900; letter-spacing: 2px;">
+        W-Y
       </div>
       <div class="brand-titles">
         <div class="brand-title-main">
-          <span>PROJECT STARGAZER</span>
-          <span style="font-size: 0.75rem; color: var(--mil-cyan); font-weight: normal;">[OUTPOST 74]</span>
+          <span style="color: #00d2ff;">WEYLAND-YUTANI PROJECTS</span>
+          <span style="font-size: 0.75rem; color: #88a0b8; font-weight: normal;">&amp; US MILITARY // OUTPOST 74</span>
         </div>
-        <div class="brand-title-sub">
-          DIVISION DE INVESTIGACION Y RECUPERACION XENOBIOLOGICA
+        <div class="brand-title-sub" style="color: #6688aa;">
+          DIVISIÓN CIENTÍFICA DE INVESTIGACIÓN XENOBIOLÓGICA &bull; "BUILDING BETTER WORLDS"
         </div>
       </div>
     </div>
 
     <nav class="military-nav">
-      <a id="linkToHunter" href="http://127.0.0.1:8000" target="_blank" style="border-color: #ff9900; color: #ffaa00; background: rgba(255, 153, 0, 0.1);" title="Abrir consola de cacería Yautja">
-        CONSOLA YAUTJA (:8000) &#8599;
-      </a>
       <a href="/" {% if request.path == '/' %}class="active"{% endif %}>ESTADO BASE</a>
+      <a href="/specimens" {% if request.path == '/specimens' %}class="active"{% endif %}>CATALOGO ESPECIMENES</a>
       <a href="/telemetry_vault/" {% if request.path == '/telemetry_vault/' %}class="active"{% endif %}>TELEMETRIA</a>
       {% if session.get('user') %}
         <a href="/dashboard" {% if request.path == '/dashboard' %}class="active"{% endif %}>PANEL CONTROL</a>
-        <a href="/specimens" {% if request.path == '/specimens' %}class="active"{% endif %}>ESPECIMENES</a>
         <a href="/diagnostic" {% if request.path == '/diagnostic' %}class="active"{% endif %}>DIAGNOSTICO</a>
         <a href="/logout" class="nav-logout">SALIR [{{ session.get('user') }}]</a>
       {% else %}
@@ -78,7 +75,7 @@
         {% for category, message in messages %}
           <div class="card" style="border-left: 4px solid {% if category == 'error' %}var(--mil-red){% else %}var(--mil-green){% endif %}; padding: 1rem 1.4rem; margin-bottom: 1.5rem; font-family: var(--mil-font-mono); font-size: 0.9rem;">
             <span style="font-weight: 900; color: {% if category == 'error' %}var(--mil-red){% else %}var(--mil-green){% endif %}; margin-right: 8px;">
-              {% if category == 'error' %}[!] ALERTA DE SEGURIDAD:{% else %}[+] SISTEMA MILITAR:{% endif %}
+              {% if category == 'error' %}[!] ALERTA DE SEGURIDAD:{% else %}[+] SISTEMA MILITAR-CORPORATIVO:{% endif %}
             </span>
             {{ message }}
           </div>
@@ -90,18 +87,9 @@
   </div>
 
   <footer class="military-footer">
-    UNITED STATES DEPARTMENT OF DEFENSE &bull; OTHER WORLD LIFEFORM TASKFORCE (OWLF)<br>
-    PROJECT STARGAZER // CLASSIFIED SCIENTIFIC OUTPOST 74 &bull; VAL VERDE SURVEILLANCE SECTOR<br>
-    <span style="color: #3b5068; font-size: 0.7rem;">ADVERTENCIA: ACCESO NO AUTORIZADO ES PUNIBLE BAJO LA LEY FEDERAL DE SEGURIDAD NACIONAL &bull; TERMINAL AUDITADA</span>
+    WEYLAND-YUTANI CORP &bull; SPECIAL RESEARCH PROJECTS &amp; UNITED STATES DEPARTMENT OF DEFENSE<br>
+    PROJECT STARGAZER &bull; VAL VERDE RESEARCH SECTOR &bull; "BUILDING BETTER WORLDS"<br>
+    <span style="color: #3b5068; font-size: 0.7rem;">TERMINAL CORPORATIVA AUDITADA &bull; PROPIEDAD CONFIDENCIAL DE WEYLAND-YUTANI CORPORATION &bull; ACCESO RESTRINGIDO</span>
   </footer>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var hunterLink = document.getElementById('linkToHunter');
-      if (hunterLink) {
-        var currentHost = window.location.hostname || '127.0.0.1';
-        hunterLink.href = 'http://' + currentHost + ':8000/';
-      }
-    });
-  </script>
 </body>
 </html>

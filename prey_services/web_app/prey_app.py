@@ -37,8 +37,8 @@ if not os.path.exists(DB_PATH):
 
 @app.after_request
 def add_custom_headers(response):
-    response.headers['Server'] = 'OWLF-Research-Httpd/2.4.52 (Stargazer-OS)'
-    response.headers['X-OWLF-Project'] = 'Stargazer-1987'
+    response.headers['Server'] = 'Weyland-Yutani-Httpd/2.4.52 (Stargazer-OS)'
+    response.headers['X-Weyland-Yutani-Project'] = 'Building-Better-Worlds-Stargazer'
     # Skull 02 Banner Grabbing Flag!
     response.headers['X-Specimen-Traces'] = 'SKULL{PAINLESS_OLD_MINIGUN_DEFENSE}'
     return response
@@ -84,7 +84,7 @@ def backup_index():
     html += """
       </ul>
       <hr style="border-color: #30363d;">
-      <address style="color: #8b949e;">OWLF Stargazer Backup Server 1.8.7</address>
+      <address style="color: #8b949e;">Weyland-Yutani Projects Backup Server 1.8.7</address>
     </body>
     </html>
     """
